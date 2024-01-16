@@ -24,8 +24,7 @@ public class FlowWork {
     private FlowNode flow;
 
 
-    public FlowWork(int id, String title, String description, IFlowUser creator, FlowNode flow) {
-        this.id = id;
+    public FlowWork(String title, String description, IFlowUser creator, FlowNode flow) {
         this.title = title;
         this.description = description;
         this.creator = creator;
@@ -33,8 +32,8 @@ public class FlowWork {
         this.flow = flow;
     }
 
-    public FlowWork(int id, String title, IFlowUser creator, FlowNode flow) {
-        this(id, title, "", creator, flow);
+    public FlowWork(String title, IFlowUser creator, FlowNode flow) {
+        this(title, "", creator, flow);
     }
 
 }

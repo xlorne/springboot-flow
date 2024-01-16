@@ -7,7 +7,7 @@ import com.codingapi.flow.domain.em.FlowType;
 import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
 import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
 import com.codingapi.flow.exception.FlowBuilderException;
-import com.codingapi.flow.gennerate.IdGeneratorRegister;
+import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ class FlowBuildTest {
 
     @BeforeAll
     static void registerIdGenerator() {
-        new IdGeneratorRegister(System::nanoTime);
+        new FlowIdGeneratorRegister(System::nanoTime);
     }
 
     /**
@@ -31,9 +31,9 @@ class FlowBuildTest {
             FlowNode flow =
                     FlowNodeBuilder.builder()
                             .addNodes(
-                                    FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                    FlowNode.create(2, "manager", "经理审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                    FlowNode.create(3, "end", "结束", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic())
+                                    FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                    FlowNode.create( "manager", "经理审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                    FlowNode.create( "end", "结束", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic())
                             )
                             .relations()
                             .build();
@@ -51,10 +51,10 @@ class FlowBuildTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager1", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.create(3, "manager2", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.create(4, "end", "结束", FlowType.OVER, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic())
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager1", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager2", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.create( "end", "结束", FlowType.OVER, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic())
                         )
                         .relations()
 
@@ -81,9 +81,9 @@ class FlowBuildTest {
             FlowNode flow =
                     FlowNodeBuilder.builder()
                             .addNodes(
-                                    FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                    FlowNode.create(2, "manager", "经理审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                    FlowNode.create(3, "end", "结束", FlowType.OVER, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic())
+                                    FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                    FlowNode.create( "manager", "经理审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                    FlowNode.create( "end", "结束", FlowType.OVER, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic())
                             )
                             .relations()
                             .start("start").addNext("manager").addNext("end").addNext("manager")

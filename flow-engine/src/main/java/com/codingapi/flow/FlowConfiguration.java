@@ -1,4 +1,4 @@
-package com.codingapi.flow.config;
+package com.codingapi.flow;
 
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
@@ -7,7 +7,8 @@ import com.codingapi.flow.domain.em.FlowState;
 import com.codingapi.flow.domain.user.IFlowUser;
 import com.codingapi.flow.gateway.FlowGateway;
 import com.codingapi.flow.gateway.FlowGatewayContextRegister;
-import com.codingapi.flow.gennerate.IdGeneratorRegister;
+import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;
+import com.codingapi.flow.gennerate.SnowflakeIDGenerator;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import com.codingapi.flow.repository.FlowWorkRepository;
 import com.codingapi.flow.service.FlowService;
@@ -127,8 +128,9 @@ public class FlowConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public IdGeneratorRegister idGeneratorRegister() {
-        return new IdGeneratorRegister(() -> UUID.randomUUID().getMostSignificantBits());
+    public FlowIdGeneratorRegister flowIdGeneratorRegister() {
+        SnowflakeIDGenerator snowflakeIDGenerator = new SnowflakeIDGenerator(1);
+        return new FlowIdGeneratorRegister(snowflakeIDGenerator::getId);
     }
 
 

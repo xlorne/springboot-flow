@@ -18,12 +18,10 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository {
 
     @Override
     public void save(FlowWork flowWork) {
-        //todo 保存时next与pre的关系可能会丢失
-        flowNodeEntityRepository.saveAll(FlowNodeConvertor.convert(flowWork));
-
         FlowWorkEntity entity = FlowWorkConvertor.convert(flowWork);
         entity = flowWorkEntityRepository.save(entity);
         flowWork.setId(entity.getId());
+        flowNodeEntityRepository.saveAll(FlowNodeConvertor.convert(flowWork));
     }
 
     @Override

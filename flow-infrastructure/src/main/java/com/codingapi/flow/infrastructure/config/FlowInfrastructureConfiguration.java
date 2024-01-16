@@ -32,4 +32,5 @@ public class FlowInfrastructureConfiguration {
     public FlowNodeContextRegister flowNodeContextRegister(FlowNodeEntityRepository flowNodeEntityRepository) {
         return new FlowNodeContextRegister(flowNodeEntityRepository);
     }
+
 }

@@ -6,6 +6,7 @@ import com.codingapi.flow.domain.trigger.IFlowTrigger;
 import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
 import com.codingapi.flow.domain.user.IFlowUser;
 import com.codingapi.flow.domain.user.IFlowUserMatcher;
+import com.codingapi.flow.gennerate.IdGeneratorContext;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -117,7 +118,15 @@ public class FlowNode {
 
 
     public FlowNode copyNew() {
-        return create(this.id, this.code, this.name, this.flowType, this.userMatcher, this.flowTrigger, this.count);
+        FlowNode flowNode = new FlowNode();
+        flowNode.setId(id);
+        flowNode.setCode(code);
+        flowNode.setName(name);
+        flowNode.setFlowType(flowType);
+        flowNode.setCount(count);
+        flowNode.setUserMatcher(userMatcher);
+        flowNode.setFlowTrigger(flowTrigger);
+        return flowNode;
     }
 
     public List<FlowNode> getNextByCode(String code) {
@@ -130,9 +139,9 @@ public class FlowNode {
         return nodes;
     }
 
-    public static FlowNode create(long id, String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger, int count) {
+    public static FlowNode create(String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger, int count) {
         FlowNode flowNode = new FlowNode();
-        flowNode.setId(id);
+        flowNode.setId(IdGeneratorContext.getInstance().nextId());
         flowNode.setCode(code);
         flowNode.setName(name);
         flowNode.setFlowType(flowType);
@@ -143,17 +152,16 @@ public class FlowNode {
     }
 
 
-    public static FlowNode create(long id, String code, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
-        return create(id, code, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
+    public static FlowNode create(String code, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
+        return create(code, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
     }
 
-    public static FlowNode create(long id, String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
-        return create(id, code, name, flowType, userMatcher, flowTrigger, 1);
+    public static FlowNode create(String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
+        return create(code, name, flowType, userMatcher, flowTrigger, 1);
     }
 
-
-    public static FlowNode over(long id, String code, String name) {
-        return create(id, code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
+    public static FlowNode over(String code, String name) {
+        return create(code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
     }
 
 }

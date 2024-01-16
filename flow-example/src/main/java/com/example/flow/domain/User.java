@@ -14,7 +14,7 @@ import lombok.Setter;
 public class User implements IFlowUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private String role;

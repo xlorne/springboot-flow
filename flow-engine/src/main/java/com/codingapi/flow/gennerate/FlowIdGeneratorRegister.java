@@ -1,8 +1,8 @@
 package com.codingapi.flow.gennerate;
 
-public class IdGeneratorRegister {
+public class FlowIdGeneratorRegister {
 
-    public IdGeneratorRegister(IdGenerator idGenerator) {
+    public FlowIdGeneratorRegister(IdGenerator idGenerator) {
         IdGeneratorContext.getInstance().register(idGenerator);
     }
 }

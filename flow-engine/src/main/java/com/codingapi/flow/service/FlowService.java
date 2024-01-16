@@ -34,9 +34,10 @@ public class FlowService {
 
     private final FlowRecordRepository flowRecordRepository;
 
-    public void save(FlowWork flowWork) {
+    public long save(FlowWork flowWork) {
         flowWorkRepository.save(flowWork);
         log.info("save flowWork:{}", flowWork);
+        return flowWork.getId();
     }
 
 

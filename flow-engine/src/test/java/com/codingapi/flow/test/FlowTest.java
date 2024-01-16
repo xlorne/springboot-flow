@@ -1,6 +1,6 @@
 package com.codingapi.flow.test;
 
-import com.codingapi.flow.config.FlowConfiguration;
+import com.codingapi.flow.FlowConfiguration;
 import com.codingapi.flow.domain.*;
 import com.codingapi.flow.domain.builder.FlowNodeBuilder;
 import com.codingapi.flow.domain.em.FlowType;
@@ -8,7 +8,7 @@ import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
 import com.codingapi.flow.domain.trigger.IFlowTrigger;
 import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
 import com.codingapi.flow.exception.FlowServiceException;
-import com.codingapi.flow.gennerate.IdGeneratorRegister;
+import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;
 import com.codingapi.flow.service.FlowService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ class FlowTest {
 
     @BeforeAll
     static void registerIdGenerator() {
-        new IdGeneratorRegister(System::nanoTime);
+        new FlowIdGeneratorRegister(System::nanoTime);
     }
 
     /**
@@ -38,21 +38,20 @@ class FlowTest {
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
         long processId = flowService.createFlow(workId, user);
@@ -87,22 +86,21 @@ class FlowTest {
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
         long processId = flowService.createFlow(workId, user);
@@ -137,25 +135,24 @@ class FlowTest {
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
-        long processId =flowService.createFlow(workId, user);
+        long processId = flowService.createFlow(workId, user);
 
 
         List<FlowRecord> userTodos = flowService.todos(processId, user);
@@ -186,25 +183,24 @@ class FlowTest {
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
-        long processId =flowService.createFlow(workId, user);
+        long processId = flowService.createFlow(workId, user);
 
 
         List<FlowRecord> userTodos = flowService.todos(processId, user);
@@ -234,25 +230,24 @@ class FlowTest {
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
-        long processId =flowService.createFlow(workId, user);
+        long processId = flowService.createFlow(workId, user);
 
 
         List<FlowRecord> managerTodos = flowService.todos(processId, manager);
@@ -285,25 +280,24 @@ class FlowTest {
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
-        long processId =flowService.createFlow(workId, user);
+        long processId = flowService.createFlow(workId, user);
 
 
         List<FlowRecord> userTodos = flowService.todos(processId, user);
@@ -330,25 +324,24 @@ class FlowTest {
         User manager1 = new User(2, "经理1", "manager");
         User manager2 = new User(2, "经理2", "manager");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager1, manager2), FlowTriggerFactory.basic()),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager",  FlowUserMatcherFactory.users(manager1, manager2), FlowTriggerFactory.basic()),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
-        long processId =flowService.createFlow(workId, user);
+        long processId = flowService.createFlow(workId, user);
 
 
         List<FlowRecord> userTodos = flowService.todos(processId, user);
@@ -380,26 +373,24 @@ class FlowTest {
         User user = new User(1, "小明");
         User manager = new User(2, "经理1", "manager");
 
-        int workId = 1;
-
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.PARALLEL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.rate(0.6f), 5),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowType.PARALLEL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.rate(0.6f), 5),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
-        long processId =flowService.createFlow(workId, user);
+        long processId = flowService.createFlow(workId, user);
 
 
         List<FlowRecord> userTodos = flowService.todos(processId, user);
@@ -435,25 +426,24 @@ class FlowTest {
         User user = new User(1, "小明");
         User manager = new User(2, "经理1", "manager");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.PARALLEL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.rate(0.6f), 5),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowType.PARALLEL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.rate(0.6f), 5),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
-        long processId =flowService.createFlow(workId, user);
+        long processId = flowService.createFlow(workId, user);
 
 
         List<FlowRecord> userTodos = flowService.todos(processId, user);
@@ -492,12 +482,11 @@ class FlowTest {
         User manager1 = new User(2, "经理1", "manager");
         User manager2 = new User(3, "经理2", "manager");
 
-        int workId = 1;
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), new IFlowTrigger() {
+                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), new IFlowTrigger() {
                                     @Override
                                     public List<FlowNode> next(FlowNode node, FlowRecord... records) {
                                         FlowRecord current = records[0];
@@ -509,9 +498,9 @@ class FlowTest {
                                         }
                                     }
                                 }),
-                                FlowNode.create(2, "manager1", "manager1", FlowType.SERIAL, FlowUserMatcherFactory.users(manager1), FlowTriggerFactory.basic()),
-                                FlowNode.create(3, "manager2", "manager2", FlowType.SERIAL, FlowUserMatcherFactory.users(manager2), FlowTriggerFactory.basic()),
-                                FlowNode.over(4, "end", "结束")
+                                FlowNode.create( "manager1", "manager1", FlowType.SERIAL, FlowUserMatcherFactory.users(manager1), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager2", "manager2", FlowType.SERIAL, FlowUserMatcherFactory.users(manager2), FlowTriggerFactory.basic()),
+                                FlowNode.over("end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager1").over("end")
@@ -519,11 +508,11 @@ class FlowTest {
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
 
-        long processId =flowService.createFlow(workId, user);
+        long processId = flowService.createFlow(workId, user);
 
 
         List<FlowRecord> userTodos = flowService.todos(processId, user);
@@ -560,13 +549,11 @@ class FlowTest {
         User manager1 = new User(2, "经理1", "manager");
         User manager2 = new User(3, "经理2", "manager");
 
-        int workId = 1;
-
 
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), new IFlowTrigger() {
+                                FlowNode.create( "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), new IFlowTrigger() {
                                     @Override
                                     public List<FlowNode> next(FlowNode node, FlowRecord... records) {
                                         FlowRecord current = records[0];
@@ -578,9 +565,9 @@ class FlowTest {
                                         }
                                     }
                                 }),
-                                FlowNode.create(2, "manager1", "manager1", FlowType.SERIAL, FlowUserMatcherFactory.users(manager1), FlowTriggerFactory.basic()),
-                                FlowNode.create(3, "manager2", "manager2", FlowType.SERIAL, FlowUserMatcherFactory.users(manager2), FlowTriggerFactory.basic()),
-                                FlowNode.over(4, "end", "结束")
+                                FlowNode.create( "manager1", "manager1", FlowType.SERIAL, FlowUserMatcherFactory.users(manager1), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager2", "manager2", FlowType.SERIAL, FlowUserMatcherFactory.users(manager2), FlowTriggerFactory.basic()),
+                                FlowNode.over( "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager1").over("end")
@@ -588,12 +575,12 @@ class FlowTest {
                         .build();
 
 
-        FlowWork work = new FlowWork(workId, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
 
         Leave leave = new Leave(1, "请假", user, 10);
 
-        long processId =flowService.createFlow(workId, user, leave);
+        long processId = flowService.createFlow(workId, user, leave);
 
 
         List<FlowRecord> userTodos = flowService.todos(processId, user);

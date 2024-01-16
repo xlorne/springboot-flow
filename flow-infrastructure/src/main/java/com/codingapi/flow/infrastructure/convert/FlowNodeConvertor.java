@@ -35,7 +35,7 @@ public class FlowNodeConvertor {
     }
 
 
-    public static FlowNodeEntity convert(FlowNode node) {
+    public static FlowNodeEntity convert(FlowNode node, long workId) {
         if (node == null) {
             return null;
         }
@@ -43,12 +43,13 @@ public class FlowNodeConvertor {
         entity.setId(node.getId());
         entity.setName(node.getName());
         entity.setFlowType(node.getFlowType());
-        entity.setPrev(node.getPrev()!=null?node.getPrev().getId():null);
+        entity.setPrev(node.getPrev() != null ? node.getPrev().getId() : null);
         entity.setNext(node.getNext().stream().map(FlowNode::getId).collect(Collectors.toList()));
         entity.setFlowTrigger(node.getFlowTrigger());
         entity.setUserMatcher(node.getUserMatcher());
         entity.setCode(node.getCode());
         entity.setCount(node.getCount());
+        entity.setWorkId(workId);
 
 
         return entity;
@@ -56,18 +57,19 @@ public class FlowNodeConvertor {
 
     public static List<FlowNodeEntity> convert(FlowWork flowWork) {
         FlowNode root = flowWork.getFlow();
+        long workId = flowWork.getId();
         List<FlowNodeEntity> entities = new ArrayList<>();
 
         Consumer<FlowNode> consumer = new Consumer<>() {
             @Override
             public void accept(FlowNode flowNode) {
                 flowNode.getNext().forEach(this);
-                entities.add(convert(flowNode));
+                entities.add(convert(flowNode, workId));
             }
         };
 
         root.getNext().forEach(consumer);
-        entities.add(convert(root));
-        return entities;
+        entities.add(convert(root, workId));
+        return entities.stream().sorted((o1, o2) -> (int) (o1.getId() - o2.getId())).collect(Collectors.toList());
     }
 }

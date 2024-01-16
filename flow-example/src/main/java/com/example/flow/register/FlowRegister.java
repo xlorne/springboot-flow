@@ -3,7 +3,6 @@ package com.example.flow.register;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowWork;
 import com.codingapi.flow.domain.builder.FlowNodeBuilder;
-import com.codingapi.flow.domain.em.FlowType;
 import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
 import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
 import com.codingapi.flow.domain.user.IFlowUser;
@@ -11,14 +10,17 @@ import com.codingapi.flow.service.FlowService;
 import com.example.flow.domain.User;
 import com.example.flow.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.InitializingBean;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Slf4j
 @Repository
 @AllArgsConstructor
-public class FlowRegister implements InitializingBean {
+public class FlowRegister implements ApplicationRunner {
 
     private final UserRepository userRepository;
 
@@ -58,21 +60,22 @@ public class FlowRegister implements InitializingBean {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create(2, "manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic()),
-                                FlowNode.over(3, "end", "结束")
+                                FlowNode.create("start", "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "manager", FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic()),
+                                FlowNode.over("end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
-        FlowWork work = new FlowWork(1, "请假流程", admin, flow);
-        flowService.save(work);
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
+        log.info("workId:{}", workId);
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
-        this.initUser();
-        this.initFlow();
+    public void run(ApplicationArguments args) throws Exception {
+        initUser();
+        initFlow();
     }
 }
