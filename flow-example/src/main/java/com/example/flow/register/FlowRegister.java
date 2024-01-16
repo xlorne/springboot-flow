@@ -45,7 +45,7 @@ public class FlowRegister implements InitializingBean {
         userRepository.save(manager2);
 
         User admin = new User();
-        admin.setId(100L);
+        admin.setId(4L);
         admin.setName("admin");
         admin.setRole("admin");
         userRepository.save(admin);

@@ -54,12 +54,16 @@ public class FlowNodeEntity {
     /**
      * 流程触发条件
      */
+    @Lob
+    @Column(length = Integer.MAX_VALUE)
     private IFlowTrigger flowTrigger;
 
 
     /**
      * 可见节点用户列表
      */
+    @Lob
+    @Column(length = Integer.MAX_VALUE)
     private IFlowUserMatcher userMatcher;
 
 

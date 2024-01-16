@@ -43,7 +43,7 @@ public class FlowNodeConvertor {
         entity.setId(node.getId());
         entity.setName(node.getName());
         entity.setFlowType(node.getFlowType());
-        entity.setPrev(node.getPrev().getId());
+        entity.setPrev(node.getPrev()!=null?node.getPrev().getId():null);
         entity.setNext(node.getNext().stream().map(FlowNode::getId).collect(Collectors.toList()));
         entity.setFlowTrigger(node.getFlowTrigger());
         entity.setUserMatcher(node.getUserMatcher());

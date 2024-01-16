@@ -1,6 +1,7 @@
 package com.codingapi.flow.infrastructure.entity.converter;
 
 import jakarta.persistence.AttributeConverter;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ListLongConverter implements AttributeConverter<List<Long>, String>
 
     @Override
     public List<Long> convertToEntityAttribute(String dbData) {
-        if (dbData == null) {
+        if (!StringUtils.hasLength(dbData)) {
             return null;
         }
         String[] split = dbData.split(",");

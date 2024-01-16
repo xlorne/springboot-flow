@@ -1,9 +1,11 @@
 package com.codingapi.flow.domain.user;
 
+import java.io.Serializable;
+
 /**
  * 流程用户
  */
-public interface IFlowUser {
+public interface IFlowUser extends Serializable {
 
     /**
      * 获取用户id
