@@ -21,7 +21,10 @@ public class FlowNodeContext {
 
 
     public FlowNode getFlowNode(Long nodeId) {
-        return FlowNodeConvertor.convert(flowNodeEntityRepository.getReferenceById(nodeId));
+        if(nodeId==null){
+            return null;
+        }
+        return FlowNodeConvertor.convert(flowNodeEntityRepository.getFlowNodeEntityById(nodeId));
     }
 
 }

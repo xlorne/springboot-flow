@@ -26,6 +26,6 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository {
 
     @Override
     public FlowWork get(long workId) {
-        return FlowWorkConvertor.convert(flowWorkEntityRepository.getReferenceById(workId));
+        return FlowWorkConvertor.convert(flowWorkEntityRepository.getFlowWorkEntityById(workId));
     }
 }
