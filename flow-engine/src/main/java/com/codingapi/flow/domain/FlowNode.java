@@ -50,6 +50,15 @@ public class FlowNode {
      */
     private List<FlowNode> next;
 
+    public void setNext(List<FlowNode> next) {
+        this.next = next;
+        if(next!=null) {
+            for (FlowNode node : next) {
+                node.setPrev(this);
+            }
+        }
+    }
+
     /**
      * 上一个节点
      */
@@ -96,6 +105,7 @@ public class FlowNode {
      * @param flowNode 下一个节点
      */
     public void addNext(FlowNode flowNode) {
+        flowNode.setPrev(this);
         this.next.add(flowNode);
     }
 

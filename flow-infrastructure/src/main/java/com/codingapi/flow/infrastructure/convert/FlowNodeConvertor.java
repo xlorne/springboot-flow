@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public class FlowNodeConvertor {
 
 
-    //todo 这里存在递归调用，需要优化
     public static FlowNode convert(FlowNodeEntity entity) {
         if (entity == null || entity.getId() == null) {
             return null;
@@ -24,8 +23,7 @@ public class FlowNodeConvertor {
         flowNode.setId(entity.getId());
         flowNode.setName(entity.getName());
         flowNode.setFlowType(entity.getFlowType());
-        flowNode.setPrev(FlowNodeContext.getInstance().getFlowNode(entity.getPrev()));
-        flowNode.setNext(entity.getNext().stream().map(FlowNodeContext.getInstance()::getFlowNode).collect(Collectors.toList()));
+        flowNode.setNext(entity.getNext() != null ? entity.getNext().stream().map(FlowNodeContext.getInstance()::getFlowNode).collect(Collectors.toList()) : null);
         flowNode.setFlowTrigger(entity.getFlowTrigger());
         flowNode.setUserMatcher(entity.getUserMatcher());
         flowNode.setCode(entity.getCode());
@@ -37,7 +35,7 @@ public class FlowNodeConvertor {
 
 
     public static FlowNodeEntity convert(FlowNode node, long workId) {
-        if (node == null ) {
+        if (node == null) {
             return null;
         }
         FlowNodeEntity entity = new FlowNodeEntity();
