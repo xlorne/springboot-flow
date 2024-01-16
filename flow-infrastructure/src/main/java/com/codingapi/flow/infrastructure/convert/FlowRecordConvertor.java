@@ -26,8 +26,8 @@ public class FlowRecordConvertor {
         record.setProcessId(entity.getProcessId());
         record.setState(entity.getState());
         record.setWorkId(entity.getWorkId());
-        record.setBind(FlowGatewayContext.getInstance().getBind(entity.getBindId(), entity.getBindClass()));
-        record.setUsers(entity.getUsers().stream().map(userId -> FlowGatewayContext.getInstance().getUser(userId, entity.getUserClass())).collect(Collectors.toList()));
+        record.setBind(entity.getBindId()!=null?FlowGatewayContext.getInstance().getBind(entity.getBindId(), entity.getBindClass()):null);
+        record.setUsers(entity.getUsers()!=null?entity.getUsers().stream().map(userId -> FlowGatewayContext.getInstance().getUser(userId, entity.getUserClass())).collect(Collectors.toList()):null);
         record.setOpinion(entity.getOpinion());
         record.setNode(FlowNodeContext.getInstance().getFlowNode(entity.getNodeId()));
 

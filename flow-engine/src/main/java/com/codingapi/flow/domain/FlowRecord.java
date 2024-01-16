@@ -2,6 +2,7 @@ package com.codingapi.flow.domain;
 
 import com.codingapi.flow.domain.em.FlowState;
 import com.codingapi.flow.domain.user.IFlowUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -38,6 +39,7 @@ public class FlowRecord {
     /**
      * 当前节点
      */
+    @JsonIgnore
     private FlowNode node;
 
     /**

@@ -26,7 +26,8 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository {
 
     @Override
     public List<FlowRecord> findToDoList(long processId, IFlowUser flowUser) {
-        return flowRecordEntityRepository.findToDoList(processId,flowUser).stream().map(FlowRecordConvertor::convert)
+        return flowRecordEntityRepository.findToDoList(processId).stream().map(FlowRecordConvertor::convert)
+                .filter(record -> record.getNode().matchUser(flowUser))
                 .collect(Collectors.toList());
     }
 
