@@ -55,6 +55,7 @@ public class FlowRecordConvertor {
         entity.setUserClass(record.getUsers().stream().map(IFlowUser::getClass).findFirst().orElse(null));
         entity.setOpinion(record.getOpinion());
         entity.setNodeId(record.getNode().getId());
+        entity.setUserMatcher(record.getNode().getUserMatcher());
 
         return entity;
     }
