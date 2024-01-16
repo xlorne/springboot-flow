@@ -19,7 +19,7 @@ public class FlowNodeSeq {
 
     public FlowNodeSeq(int id) {
         this.id = id;
-        this.nextId = id;
+        this.nextId = 0;
     }
 
     public void addNextId() {

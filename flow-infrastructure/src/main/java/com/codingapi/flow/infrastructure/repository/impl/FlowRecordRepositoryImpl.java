@@ -1,6 +1,7 @@
 package com.codingapi.flow.infrastructure.repository.impl;
 
 import com.codingapi.flow.domain.FlowRecord;
+import com.codingapi.flow.domain.user.IFlowUser;
 import com.codingapi.flow.infrastructure.convert.FlowRecordConvertor;
 import com.codingapi.flow.infrastructure.entity.FlowRecordEntity;
 import com.codingapi.flow.infrastructure.jpa.FlowRecordEntityRepository;
@@ -24,8 +25,10 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository {
     }
 
     @Override
-    public List<FlowRecord> findToDoList(long processId) {
-        return flowRecordEntityRepository.findToDoList(processId).stream().map(FlowRecordConvertor::convert).collect(Collectors.toList());
+    public List<FlowRecord> findToDoList(long processId, IFlowUser flowUser) {
+        return flowRecordEntityRepository.findToDoList(processId).stream().map(FlowRecordConvertor::convert)
+                .filter(record -> record.getNode().matchUser(flowUser))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -40,8 +43,10 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository {
 
 
     @Override
-    public List<FlowRecord> findProcessList(long processId) {
-        return flowRecordEntityRepository.findProcessList(processId).stream().map(FlowRecordConvertor::convert).collect(Collectors.toList());
+    public List<FlowRecord> findProcessList(long processId, IFlowUser flowUser) {
+        return flowRecordEntityRepository.findProcessList(processId).stream().map(FlowRecordConvertor::convert)
+                .filter(record -> record.containsUser(flowUser))
+                .collect(Collectors.toList());
     }
 
     @Override

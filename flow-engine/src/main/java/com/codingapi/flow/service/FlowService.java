@@ -24,6 +24,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -92,7 +93,11 @@ public class FlowService {
         if (current.isParallel()) {
             // 并行流程
             // 获取当前流程的所有记录
-            List<FlowRecord> recordList = flowRecordRepository.findAll(flowRecord.getWorkId(), current.getId());
+            List<FlowRecord> recordList = flowRecordRepository.findAll(flowRecord.getProcessId(), current.getId());
+
+            //recordList 安装createTime字段倒叙排序，只获取current.getCount()个记录
+            recordList = recordList.stream().sorted(Comparator.comparing(FlowRecord::getCreateTime).reversed()).limit(current.getCount()).toList();
+
             // 获取下一步流程
             next = current.trigger(recordList.toArray(new FlowRecord[]{}));
             if (next != null) {
@@ -155,8 +160,7 @@ public class FlowService {
      * @return 待办列表
      */
     public List<FlowRecord> todos(long processId, IFlowUser currentUser) {
-        List<FlowRecord> recordList = flowRecordRepository.findToDoList(processId);
-        return recordList.stream().filter(record -> record.getNode().matchUser(currentUser)).toList();
+        return flowRecordRepository.findToDoList(processId, currentUser);
     }
 
 
@@ -168,8 +172,7 @@ public class FlowService {
      * @return 已办列表
      */
     public List<FlowRecord> process(long processId, IFlowUser currentUser) {
-        List<FlowRecord> recordList = flowRecordRepository.findProcessList(processId);
-        return recordList.stream().filter(record -> record.containsUser(currentUser)).toList();
+        return flowRecordRepository.findProcessList(processId, currentUser);
     }
 
 

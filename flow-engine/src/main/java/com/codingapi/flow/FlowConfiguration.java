@@ -16,7 +16,10 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Configuration
 public class FlowConfiguration {
@@ -78,8 +81,13 @@ public class FlowConfiguration {
             }
 
             @Override
-            public List<FlowRecord> findToDoList(long processId) {
-                return cache.getOrDefault(processId, List.of()).stream().filter(record -> record.getState() == FlowState.WAIT).toList();
+            public List<FlowRecord> findToDoList(long processId, IFlowUser userId) {
+                return cache.getOrDefault(processId, List.of()).stream().filter(record -> {
+                    if (record.getState() == FlowState.WAIT) {
+                        return record.getNode().matchUser(userId);
+                    }
+                    return false;
+                }).toList();
             }
 
             @Override
@@ -95,9 +103,14 @@ public class FlowConfiguration {
 
 
             @Override
-            public List<FlowRecord> findProcessList(long processId) {
+            public List<FlowRecord> findProcessList(long processId, IFlowUser flowUser) {
                 List<FlowRecord> recordList = cache.getOrDefault(processId, List.of());
-                return recordList.stream().filter(record -> record.getState() != FlowState.WAIT).toList();
+                return recordList.stream().filter(record -> {
+                    if (record.getState() != FlowState.WAIT) {
+                        return record.containsUser(flowUser);
+                    }
+                    return false;
+                }).toList();
             }
 
             @Override
