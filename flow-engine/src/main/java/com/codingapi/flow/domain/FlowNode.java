@@ -57,7 +57,7 @@ public class FlowNode {
     /**
      * 流程触发条件
      */
-    private IFlowTrigger trigger;
+    private IFlowTrigger flowTrigger;
 
 
     /**
@@ -105,7 +105,7 @@ public class FlowNode {
      * @return 下一个节点
      */
     public List<FlowNode> trigger(FlowRecord... records) {
-        return trigger.next(this, records);
+        return flowTrigger.next(this, records);
     }
 
     /**
@@ -117,7 +117,7 @@ public class FlowNode {
 
 
     public FlowNode copyNew() {
-        return create(this.id, this.code, this.name, this.flowType, this.userMatcher, this.trigger, this.count);
+        return create(this.id, this.code, this.name, this.flowType, this.userMatcher, this.flowTrigger, this.count);
     }
 
     public List<FlowNode> getNextByCode(String code) {
@@ -138,7 +138,7 @@ public class FlowNode {
         flowNode.setFlowType(flowType);
         flowNode.setCount(count);
         flowNode.setUserMatcher(userMatcher);
-        flowNode.setTrigger(flowTrigger);
+        flowNode.setFlowTrigger(flowTrigger);
         return flowNode;
     }
 

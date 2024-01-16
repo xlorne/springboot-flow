@@ -25,7 +25,7 @@ public class FlowNodeConvertor {
         flowNode.setFlowType(entity.getFlowType());
         flowNode.setPrev(FlowNodeContext.getInstance().getFlowNode(entity.getPrev()));
         flowNode.setNext(entity.getNext().stream().map(FlowNodeContext.getInstance()::getFlowNode).collect(Collectors.toList()));
-        flowNode.setTrigger(entity.getTrigger());
+        flowNode.setFlowTrigger(entity.getFlowTrigger());
         flowNode.setUserMatcher(entity.getUserMatcher());
         flowNode.setCode(entity.getCode());
         flowNode.setCount(entity.getCount());
@@ -45,7 +45,7 @@ public class FlowNodeConvertor {
         entity.setFlowType(node.getFlowType());
         entity.setPrev(node.getPrev().getId());
         entity.setNext(node.getNext().stream().map(FlowNode::getId).collect(Collectors.toList()));
-        entity.setTrigger(node.getTrigger());
+        entity.setFlowTrigger(node.getFlowTrigger());
         entity.setUserMatcher(node.getUserMatcher());
         entity.setCode(node.getCode());
         entity.setCount(node.getCount());

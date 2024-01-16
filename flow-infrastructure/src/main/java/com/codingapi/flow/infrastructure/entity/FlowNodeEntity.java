@@ -54,7 +54,7 @@ public class FlowNodeEntity {
     /**
      * 流程触发条件
      */
-    private IFlowTrigger trigger;
+    private IFlowTrigger flowTrigger;
 
 
     /**
