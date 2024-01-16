@@ -90,6 +90,7 @@ public class FlowNodeBuilder {
             if (over == null) {
                 throw new FlowBuilderException("flow.build.error", "结束节点不存在");
             }
+            over.setPrev(this.current);
             this.current.addNext(over);
             this.current = over;
             return this;
