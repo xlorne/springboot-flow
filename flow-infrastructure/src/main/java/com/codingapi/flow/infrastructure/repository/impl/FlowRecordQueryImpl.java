@@ -1,15 +1,18 @@
 package com.codingapi.flow.infrastructure.repository.impl;
 
 import com.codingapi.flow.domain.FlowRecord;
+import com.codingapi.flow.domain.FlowWork;
 import com.codingapi.flow.domain.user.IFlowUser;
 import com.codingapi.flow.infrastructure.convert.FlowRecordConvertor;
+import com.codingapi.flow.infrastructure.convert.FlowWorkConvertor;
 import com.codingapi.flow.infrastructure.jpa.FlowRecordEntityRepository;
+import com.codingapi.flow.infrastructure.jpa.FlowWorkEntityRepository;
 import com.codingapi.flow.repository.FlowRecordQuery;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +21,8 @@ import java.util.stream.Collectors;
 public class FlowRecordQueryImpl implements FlowRecordQuery {
 
     private final FlowRecordEntityRepository flowRecordEntityRepository;
+
+    private final FlowWorkEntityRepository flowWorkEntityRepository;
 
     @Override
     public List<FlowRecord> findToDoList(long processId, IFlowUser flowUser) {
@@ -34,8 +39,14 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
 
     @Override
     public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
-        return new PageImpl<>(flowRecordEntityRepository.findToDoPage(request).map(FlowRecordConvertor::convert)
-                .filter(record -> record.getNode().matchUser(currentUser)).stream().toList());
+        List<FlowWork> flowWorks =  flowWorkEntityRepository.findAll().stream().map(FlowWorkConvertor::convert).toList();
+        List<Long> nodeIds = new ArrayList<>();
+        List<Long> wordIds = new ArrayList<>();
+        for(FlowWork flowWork:flowWorks){
+            wordIds.add(flowWork.getId());
+            nodeIds.addAll(flowWork.matchUserNodes(currentUser));
+        }
+        return flowRecordEntityRepository.findToDoPage(wordIds,nodeIds,request).map(FlowRecordConvertor::convert);
     }
 
     @Override

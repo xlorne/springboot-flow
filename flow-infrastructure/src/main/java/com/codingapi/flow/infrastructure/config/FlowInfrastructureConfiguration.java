@@ -35,8 +35,8 @@ public class FlowInfrastructureConfiguration {
     }
 
     @Bean
-    public FlowRecordQuery flowRecordQuery(FlowRecordEntityRepository flowRecordEntityRepository) {
-        return new FlowRecordQueryImpl(flowRecordEntityRepository);
+    public FlowRecordQuery flowRecordQuery(FlowRecordEntityRepository flowRecordEntityRepository, FlowWorkEntityRepository flowWorkEntityRepository) {
+        return new FlowRecordQueryImpl(flowRecordEntityRepository, flowWorkEntityRepository);
     }
 
 
