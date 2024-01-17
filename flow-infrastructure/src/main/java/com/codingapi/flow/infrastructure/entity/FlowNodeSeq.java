@@ -21,11 +21,14 @@ public class FlowNodeSeq {
 
     private long nextProcessId;
 
+    private long nextWorkId;
+
     public FlowNodeSeq(int id) {
         this.id = id;
         this.nextRecordId = 0;
         this.nextNodeId = 0;
         this.nextProcessId = 0;
+        this.nextWorkId = 0;
     }
 
     public void addNextRecordId() {
@@ -33,6 +36,10 @@ public class FlowNodeSeq {
     }
     public void addNextNodeId() {
         this.nextNodeId++;
+    }
+
+    public void addNextWorkId() {
+        this.nextWorkId++;
     }
 
     public void addNextProcessId() {

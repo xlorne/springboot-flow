@@ -16,6 +16,10 @@ public class IdGeneratorContext {
         this.idGenerator = idGenerator;
     }
 
+    public long nextWorkId() {
+        return idGenerator.nextWorkId();
+    }
+
     public long nextRecordId() {
        return idGenerator.nextRecordId();
     }

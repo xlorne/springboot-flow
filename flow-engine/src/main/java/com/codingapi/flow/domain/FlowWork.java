@@ -1,6 +1,7 @@
 package com.codingapi.flow.domain;
 
 import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.gennerate.IdGeneratorContext;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,7 @@ public class FlowWork {
 
 
     public FlowWork(String title, String description, IFlowUser creator, FlowNode flow) {
+        this.id = IdGeneratorContext.getInstance().nextWorkId();
         this.title = title;
         this.description = description;
         this.creator = creator;

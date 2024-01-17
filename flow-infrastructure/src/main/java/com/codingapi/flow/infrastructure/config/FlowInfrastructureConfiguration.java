@@ -67,6 +67,11 @@ public class FlowInfrastructureConfiguration {
             public long nextNodeId() {
                 return flowNodeSeqGenerator.getNextNodeId();
             }
+
+            @Override
+            public long nextWorkId() {
+                return flowNodeSeqGenerator.getNextWorkId();
+            }
         });
     }
 }

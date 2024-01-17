@@ -213,6 +213,11 @@ public class FlowConfiguration {
             public long nextNodeId() {
                 return snowflakeIDGenerator.getId();
             }
+
+            @Override
+            public long nextWorkId() {
+                return snowflakeIDGenerator.getId();
+            }
         });
     }
 

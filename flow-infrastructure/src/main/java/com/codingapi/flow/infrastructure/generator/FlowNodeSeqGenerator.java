@@ -13,29 +13,39 @@ public class FlowNodeSeqGenerator implements InitializingBean {
     private final FlowNodeSeqRepository flowNodeSeqRepository;
 
     public synchronized long getNextRecordId() {
-        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getReferenceById(1);
+        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getById(1);
         flowNodeSeq.addNextRecordId();
         flowNodeSeqRepository.save(flowNodeSeq);
         return flowNodeSeq.getNextRecordId();
     }
 
     public synchronized long getNextNodeId() {
-        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getReferenceById(1);
+        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getById(1);
         flowNodeSeq.addNextNodeId();
         flowNodeSeqRepository.save(flowNodeSeq);
         return flowNodeSeq.getNextNodeId();
     }
 
+    public synchronized long getNextWorkId() {
+        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getById(1);
+        flowNodeSeq.addNextWorkId();
+        flowNodeSeqRepository.save(flowNodeSeq);
+        return flowNodeSeq.getNextWorkId();
+    }
+
     public synchronized long getNextProcessId() {
-        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getReferenceById(1);
+        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getById(1);
         flowNodeSeq.addNextProcessId();
         flowNodeSeqRepository.save(flowNodeSeq);
         return flowNodeSeq.getNextProcessId();
     }
 
-
     @Override
     public void afterPropertiesSet() throws Exception {
-        flowNodeSeqRepository.saveAndFlush(new FlowNodeSeq(1));
+        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.findById(1).orElse(null);
+        if(flowNodeSeq==null) {
+            flowNodeSeq = new FlowNodeSeq(1);
+            flowNodeSeqRepository.save(flowNodeSeq);
+        }
     }
 }
