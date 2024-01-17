@@ -7,10 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 /**
  * 流程work
  */
@@ -42,21 +38,4 @@ public class FlowWork {
         this(title, "", creator, flow);
     }
 
-
-    public List<Long> matchUserNodes(IFlowUser currentUser) {
-        List<Long> nodeIds = new ArrayList<>();
-        Consumer<FlowNode> consumer = new Consumer<>() {
-            @Override
-            public void accept(FlowNode flowNode) {
-                if (flowNode.matchUser(currentUser)) {
-                    nodeIds.add(flowNode.getId());
-                }
-                if (flowNode.getNext() != null) {
-                    flowNode.getNext().forEach(this);
-                }
-            }
-        };
-        consumer.accept(flow);
-        return nodeIds;
-    }
 }

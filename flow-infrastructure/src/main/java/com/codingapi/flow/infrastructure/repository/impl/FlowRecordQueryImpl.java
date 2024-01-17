@@ -1,5 +1,6 @@
 package com.codingapi.flow.infrastructure.repository.impl;
 
+import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
 import com.codingapi.flow.domain.user.IFlowUser;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 
@@ -37,6 +39,23 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
                 .collect(Collectors.toList());
     }
 
+    private List<Long> matchUserNodes(FlowNode flow, IFlowUser currentUser) {
+        List<Long> nodeIds = new ArrayList<>();
+        Consumer<FlowNode> consumer = new Consumer<>() {
+            @Override
+            public void accept(FlowNode flowNode) {
+                if (flowNode.matchUser(currentUser)) {
+                    nodeIds.add(flowNode.getId());
+                }
+                if (flowNode.getNext() != null) {
+                    flowNode.getNext().forEach(this);
+                }
+            }
+        };
+        consumer.accept(flow);
+        return nodeIds;
+    }
+
     @Override
     public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
         List<FlowWork> flowWorks = flowWorkEntityRepository.findAll().stream().map(FlowWorkConvertor::convert).toList();
@@ -47,7 +66,7 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
                 wordIds.add(flowWork.getId());
             }
 
-            List<Long> nodeItemIds = flowWork.matchUserNodes(currentUser);
+            List<Long> nodeItemIds = matchUserNodes(flowWork.getFlow(),currentUser);
             for (Long nodeId : nodeItemIds) {
                 if (!nodeIds.contains(nodeId)) {
                     nodeIds.add(nodeId);

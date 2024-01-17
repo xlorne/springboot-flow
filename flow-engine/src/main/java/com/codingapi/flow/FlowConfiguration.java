@@ -93,19 +93,19 @@ public class FlowConfiguration {
 
             @Override
             public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
-                // 单元测试 不不许该功能
+                // 单元测试 不允许访问该功能
                 throw new RuntimeException("not support");
             }
 
             @Override
             public Page<FlowRecord> findProcessPage(PageRequest request, IFlowUser currentUser) {
-                // 单元测试 不不许该功能
+                // 单元测试 不允许访问该功能
                 throw new RuntimeException("not support");
             }
 
             @Override
             public List<FlowRecord> findByProcessId(long processId) {
-                // 单元测试 不不许该功能
+                // 单元测试 不允许访问该功能
                 throw new RuntimeException("not support");
             }
         };
@@ -197,7 +197,7 @@ public class FlowConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public FlowIdGeneratorRegister flowIdGeneratorRegister() {
-        SnowflakeIDGenerator snowflakeIDGenerator = new SnowflakeIDGenerator(1);
+        SnowflakeIDGenerator snowflakeIDGenerator = new SnowflakeIDGenerator(0);
         return new FlowIdGeneratorRegister(new IdGenerator() {
             @Override
             public long nextRecordId() {
