@@ -1,8 +1,8 @@
 package com.codingapi.flow.infrastructure.config;
 
 import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;
+import com.codingapi.flow.gennerate.IdGenerator;
 import com.codingapi.flow.infrastructure.context.FlowNodeContextRegister;
-import com.codingapi.flow.infrastructure.entity.FlowNodeSeq;
 import com.codingapi.flow.infrastructure.generator.FlowNodeSeqGenerator;
 import com.codingapi.flow.infrastructure.jpa.FlowNodeEntityRepository;
 import com.codingapi.flow.infrastructure.jpa.FlowNodeSeqRepository;
@@ -44,6 +44,21 @@ public class FlowInfrastructureConfiguration {
 
     @Bean
     public FlowIdGeneratorRegister flowIdGeneratorRegister(FlowNodeSeqGenerator flowNodeSeqGenerator) {
-        return new FlowIdGeneratorRegister(flowNodeSeqGenerator::nextId);
+        return new FlowIdGeneratorRegister(new IdGenerator() {
+            @Override
+            public long nextRecordId() {
+                return flowNodeSeqGenerator.getNextRecordId();
+            }
+
+            @Override
+            public long nextProcessId() {
+                return flowNodeSeqGenerator.getNextProcessId();
+            }
+
+            @Override
+            public long nextNodeId() {
+                return flowNodeSeqGenerator.getNextNodeId();
+            }
+        });
     }
 }

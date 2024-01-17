@@ -15,14 +15,28 @@ public class FlowNodeSeq {
     @Id
     private int id;
 
-    private long nextId;
+    private long nextRecordId;
+
+    private long nextNodeId;
+
+    private long nextProcessId;
 
     public FlowNodeSeq(int id) {
         this.id = id;
-        this.nextId = 0;
+        this.nextRecordId = 0;
+        this.nextNodeId = 0;
+        this.nextProcessId = 0;
     }
 
-    public void addNextId() {
-        this.nextId++;
+    public void addNextRecordId() {
+        this.nextRecordId++;
     }
+    public void addNextNodeId() {
+        this.nextNodeId++;
+    }
+
+    public void addNextProcessId() {
+        this.nextProcessId++;
+    }
+
 }

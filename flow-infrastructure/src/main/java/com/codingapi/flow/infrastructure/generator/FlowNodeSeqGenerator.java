@@ -12,11 +12,25 @@ public class FlowNodeSeqGenerator implements InitializingBean {
 
     private final FlowNodeSeqRepository flowNodeSeqRepository;
 
-    public synchronized long nextId() {
+    public synchronized long getNextRecordId() {
         FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getReferenceById(1);
-        flowNodeSeq.addNextId();
+        flowNodeSeq.addNextRecordId();
         flowNodeSeqRepository.save(flowNodeSeq);
-        return flowNodeSeq.getNextId();
+        return flowNodeSeq.getNextRecordId();
+    }
+
+    public synchronized long getNextNodeId() {
+        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getReferenceById(1);
+        flowNodeSeq.addNextNodeId();
+        flowNodeSeqRepository.save(flowNodeSeq);
+        return flowNodeSeq.getNextNodeId();
+    }
+
+    public synchronized long getNextProcessId() {
+        FlowNodeSeq flowNodeSeq = flowNodeSeqRepository.getReferenceById(1);
+        flowNodeSeq.addNextProcessId();
+        flowNodeSeqRepository.save(flowNodeSeq);
+        return flowNodeSeq.getNextProcessId();
     }
 
 

@@ -151,7 +151,7 @@ public class FlowNode {
 
     public static FlowNode create(String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger, int count) {
         FlowNode flowNode = new FlowNode();
-        flowNode.setId(IdGeneratorContext.getInstance().nextId());
+        flowNode.setId(IdGeneratorContext.getInstance().nextNodeId());
         flowNode.setCode(code);
         flowNode.setName(name);
         flowNode.setFlowType(flowType);

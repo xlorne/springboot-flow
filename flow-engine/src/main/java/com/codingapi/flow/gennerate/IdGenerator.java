@@ -2,6 +2,10 @@ package com.codingapi.flow.gennerate;
 
 public interface IdGenerator {
 
-    long nextId();
+    long nextRecordId();
+
+    long nextProcessId();
+
+    long nextNodeId();
 
 }

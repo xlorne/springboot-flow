@@ -3,7 +3,6 @@ package com.codingapi.flow.infrastructure.entity;
 import com.codingapi.flow.domain.IBind;
 import com.codingapi.flow.domain.em.FlowState;
 import com.codingapi.flow.domain.user.IFlowUser;
-import com.codingapi.flow.domain.user.IFlowUserMatcher;
 import com.codingapi.flow.infrastructure.entity.converter.ListLongConverter;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -76,14 +75,6 @@ public class FlowRecordEntity {
      * 绑定的数据
      */
     private Long bindId;
-
-    /**
-     * 可见节点用户列表
-     */
-    @Lob
-    @Column(length = Integer.MAX_VALUE)
-    private IFlowUserMatcher userMatcher;
-
 
     /**
      * 绑定的数据类型

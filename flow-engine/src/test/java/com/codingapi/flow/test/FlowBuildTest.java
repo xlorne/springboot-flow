@@ -1,5 +1,6 @@
 package com.codingapi.flow.test;
 
+import com.codingapi.flow.FlowConfiguration;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.User;
 import com.codingapi.flow.domain.builder.FlowNodeBuilder;
@@ -18,7 +19,8 @@ class FlowBuildTest {
 
     @BeforeAll
     static void registerIdGenerator() {
-        new FlowIdGeneratorRegister(System::nanoTime);
+        FlowConfiguration flowConfiguration = new FlowConfiguration();
+        flowConfiguration.flowIdGeneratorRegister();
     }
 
     /**

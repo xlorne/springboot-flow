@@ -10,7 +10,7 @@ public class FlowRecordConvertor {
 
     public static FlowRecord convert(long processId, long workId, FlowNode flowNode, IBind bind) {
         FlowRecord flowRecord = new FlowRecord();
-        flowRecord.setId(IdGeneratorContext.getInstance().nextId());
+        flowRecord.setId(IdGeneratorContext.getInstance().nextRecordId());
         flowRecord.setProcessId(processId);
         flowRecord.setWorkId(workId);
         flowRecord.setName(flowNode.getName());

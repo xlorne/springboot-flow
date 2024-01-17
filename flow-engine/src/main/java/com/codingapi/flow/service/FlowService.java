@@ -55,7 +55,7 @@ public class FlowService {
         if (flowNode.matchUser(user)) {
             FlowState state = FlowState.PASS;
             //创建流程记录
-            long processId = IdGeneratorContext.getInstance().nextId();
+            long processId = IdGeneratorContext.getInstance().nextProcessId();
             FlowRecord flowRecord = FlowRecordConvertor.convert(processId, workId, flowNode, bind);
             flowRecord.approval(user, state, null);
             flowRecordRepository.save(flowRecord);
