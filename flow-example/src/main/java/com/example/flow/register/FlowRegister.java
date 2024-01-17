@@ -61,7 +61,7 @@ public class FlowRegister implements ApplicationRunner {
                 FlowNodeBuilder.builder()
                         .addNodes(
                                 FlowNode.create("start", "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create( "manager", "manager", FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic()),
+                                FlowNode.create( "manager", "经理审核", FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic()),
                                 FlowNode.over("end", "结束")
                         )
                         .relations()

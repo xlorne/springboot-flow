@@ -136,7 +136,7 @@ public class FlowService {
 
                 if (node.getFlowType() == FlowType.OVER) {
                     // 流程结束
-                    List<FlowRecord> flowRecords = flowRecordRepository.findAll(flowRecord.getWorkId());
+                    List<FlowRecord> flowRecords = flowRecordRepository.findAll(flowRecord.getProcessId());
                     for (FlowRecord record : flowRecords) {
                         record.finish();
                         flowRecordRepository.save(record);
@@ -237,6 +237,9 @@ public class FlowService {
      */
     public void approval(long recordId, FlowState state, String option, IFlowUser user) {
         FlowRecord flowRecord = flowRecordRepository.get(recordId);
+        if(flowRecord==null){
+            throw new FlowServiceException("flow.approval.error", "流程不存在");
+        }
         if (!flowRecord.getNode().matchUser(user)) {
             throw new FlowServiceException("flow.approval.error", "当前用户不能审批该流程");
         }

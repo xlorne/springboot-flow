@@ -30,7 +30,7 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository {
 
     @Override
     public FlowRecord get(long recordId) {
-        return FlowRecordConvertor.convert(flowRecordEntityRepository.getReferenceById(recordId));
+        return FlowRecordConvertor.convert(flowRecordEntityRepository.getFlowRecordEntityById(recordId));
     }
 
 
