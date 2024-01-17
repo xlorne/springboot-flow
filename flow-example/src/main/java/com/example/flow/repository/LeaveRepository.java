@@ -5,4 +5,6 @@ import com.example.flow.domain.Leave;
 
 public interface LeaveRepository extends FastRepository<Leave,Long> {
 
+
+    Leave getLeaveById(long id);
 }

@@ -10,15 +10,19 @@ import com.example.flow.domain.User;
 import com.example.flow.pojo.FlowSearchRequest;
 import com.example.flow.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@Slf4j
 @RestController
 @RequestMapping("/flow")
 @AllArgsConstructor
+@Transactional
 public class FlowController {
 
     private final FlowService flowService;
@@ -49,9 +53,9 @@ public class FlowController {
     public Response pass(HttpServletRequest request) {
         String name = request.getParameter("name");
         String option = request.getParameter("option");
-        long processId = Long.parseLong(request.getParameter("processId"));
+        long recordId = Long.parseLong(request.getParameter("recordId"));
         User user = userRepository.findByName(name);
-        flowService.pass(processId, option, user);
+        flowService.pass(recordId, option, user);
         return Response.buildSuccess();
     }
 
@@ -59,18 +63,18 @@ public class FlowController {
     public Response reject(HttpServletRequest request) {
         String name = request.getParameter("name");
         String option = request.getParameter("option");
-        long processId = Long.parseLong(request.getParameter("processId"));
+        long recordId = Long.parseLong(request.getParameter("recordId"));
         User user = userRepository.findByName(name);
-        flowService.reject(processId, option, user);
+        flowService.reject(recordId, option, user);
         return Response.buildSuccess();
     }
 
     @GetMapping("/recall")
     public Response recall(HttpServletRequest request) {
         String name = request.getParameter("name");
-        long processId = Long.parseLong(request.getParameter("processId"));
+        long recordId = Long.parseLong(request.getParameter("recordId"));
         User user = userRepository.findByName(name);
-        flowService.recall(processId, user);
+        flowService.recall(recordId, user);
         return Response.buildSuccess();
     }
 
@@ -78,9 +82,9 @@ public class FlowController {
     public Response back(HttpServletRequest request) {
         String name = request.getParameter("name");
         String option = request.getParameter("option");
-        long processId = Long.parseLong(request.getParameter("processId"));
+        long recordId = Long.parseLong(request.getParameter("recordId"));
         User user = userRepository.findByName(name);
-        flowService.back(processId, option, user);
+        flowService.back(recordId, option, user);
         return Response.buildSuccess();
     }
 

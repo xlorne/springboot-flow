@@ -3,6 +3,7 @@ package com.example.flow.gateway;
 import com.codingapi.flow.domain.IBind;
 import com.codingapi.flow.domain.user.IFlowUser;
 import com.codingapi.flow.gateway.FlowGateway;
+import com.codingapi.springboot.fast.manager.EntityManagerContent;
 import com.example.flow.repository.LeaveRepository;
 import com.example.flow.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -17,11 +18,15 @@ public class FlowGatewayImpl implements FlowGateway {
 
     @Override
     public <T extends IFlowUser> T getUser(long userId, Class<T> clazz) {
-        return (T) userRepository.getReferenceById(userId);
+        T data =  (T) userRepository.getUserById(userId);
+        EntityManagerContent.getInstance().detach(data);
+        return data;
     }
 
     @Override
     public <T extends IBind> T getBind(long bindId, Class<T> clazz) {
-        return (T) leaveRepository.getReferenceById(bindId);
+        T data =  (T) leaveRepository.getLeaveById(bindId);
+        EntityManagerContent.getInstance().detach(data);
+        return data;
     }
 }

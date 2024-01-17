@@ -10,4 +10,6 @@ public interface UserRepository extends FastRepository<User,Long> {
     User findByName(String name);
 
     List<User> findByRole(String role);
+
+    User getUserById(long id);
 }
