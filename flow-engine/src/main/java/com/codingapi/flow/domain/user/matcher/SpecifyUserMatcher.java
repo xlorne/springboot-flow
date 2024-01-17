@@ -10,9 +10,9 @@ import java.util.List;
  */
 public class SpecifyUserMatcher implements IFlowUserMatcher {
 
-    private final List<IFlowUser> users;
+    private final List<? extends IFlowUser> users;
 
-    public SpecifyUserMatcher(List<IFlowUser> users) {
+    public SpecifyUserMatcher(List<? extends IFlowUser> users) {
         this.users = users;
     }
 

@@ -6,8 +6,10 @@ import com.codingapi.flow.service.FlowService;
 import com.codingapi.springboot.framework.dto.response.MultiResponse;
 import com.codingapi.springboot.framework.dto.response.Response;
 import com.codingapi.springboot.framework.dto.response.SingleResponse;
+import com.example.flow.domain.Leave;
 import com.example.flow.domain.User;
 import com.example.flow.pojo.FlowSearchRequest;
+import com.example.flow.repository.LeaveRepository;
 import com.example.flow.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -28,6 +30,7 @@ public class FlowController {
     private final FlowService flowService;
     private final FlowQuery flowQuery;
     private final UserRepository userRepository;
+    private final LeaveRepository leaveRepository;
 
     @GetMapping("/todo")
     public MultiResponse<FlowRecord> todo(FlowSearchRequest request) {
@@ -51,8 +54,10 @@ public class FlowController {
     public SingleResponse<Long> start(HttpServletRequest request) {
         String name = request.getParameter("name");
         long workId = Long.parseLong(request.getParameter("workId"));
+        long leaveId = Long.parseLong(request.getParameter("leaveId"));
         User user = userRepository.findByName(name);
-        return SingleResponse.of(flowService.createFlow(workId, user));
+        Leave leave = leaveRepository.getLeaveById(leaveId);
+        return SingleResponse.of(flowService.createFlow(workId, user, leave));
     }
 
     @GetMapping("/pass")

@@ -7,8 +7,11 @@ import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
 import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
 import com.codingapi.flow.domain.user.IFlowUser;
 import com.codingapi.flow.service.FlowService;
+import com.example.flow.domain.Leave;
 import com.example.flow.domain.User;
+import com.example.flow.repository.LeaveRepository;
 import com.example.flow.repository.UserRepository;
+import com.example.flow.trigger.LeaveFlowTrigger;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -25,6 +28,8 @@ public class FlowRegister implements ApplicationRunner {
     private final UserRepository userRepository;
 
     private final FlowService flowService;
+
+    private final LeaveRepository leaveRepository;
 
     private void initUser() {
         User user = new User();
@@ -46,8 +51,16 @@ public class FlowRegister implements ApplicationRunner {
         manager2.setRole("manager");
         userRepository.save(manager2);
 
+
+        User boss = new User();
+        boss.setId(4L);
+        boss.setName("总理");
+        boss.setRole("boss");
+        userRepository.save(boss);
+
+
         User admin = new User();
-        admin.setId(4L);
+        admin.setId(5L);
         admin.setName("admin");
         admin.setRole("admin");
         userRepository.save(admin);
@@ -57,15 +70,18 @@ public class FlowRegister implements ApplicationRunner {
     public void initFlow() {
         User admin = userRepository.findByName("admin");
         List<User> manager = userRepository.findByRole("manager");
+        List<User> boss = userRepository.findByRole("boss");
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create( "manager", "经理审核", FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic()),
+                                FlowNode.create("start", "发起请假", FlowUserMatcherFactory.anyUsers(), new LeaveFlowTrigger()),
+                                FlowNode.create("manager", "经理审核", FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic()),
+                                FlowNode.create("boss", "总理审核", FlowUserMatcherFactory.users(boss), FlowTriggerFactory.basic()),
                                 FlowNode.over("end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
+                        .start("start").addNext("boss").over("end")
                         .build();
 
         FlowWork work = new FlowWork("请假流程", admin, flow);
@@ -73,9 +89,19 @@ public class FlowRegister implements ApplicationRunner {
         log.info("workId:{}", workId);
     }
 
+    public void initLeave() {
+        Leave leave = new Leave();
+        leave.setId(1L);
+        leave.setUserId(1L);
+        leave.setDays(3.0f);
+        leave.setReason("生病了");
+        leaveRepository.save(leave);
+    }
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         initUser();
         initFlow();
+        initLeave();
     }
 }

@@ -29,4 +29,12 @@ public class FlowUserMatcherFactory {
         return new SpecifyUserMatcher(List.of(users));
     }
 
+    /**
+     * 指定用户匹配器
+     */
+    public static IFlowUserMatcher users(List<? extends IFlowUser> users) {
+        return new SpecifyUserMatcher(users);
+    }
+
+
 }
