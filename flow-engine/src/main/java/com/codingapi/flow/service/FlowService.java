@@ -47,6 +47,7 @@ public class FlowService {
      * @param workId 流程id
      * @param user   用户
      * @param bind   绑定数据
+     * @return 流程id
      */
     public long createFlow(long workId, IFlowUser user, IBind bind) {
         FlowWork flowWork = flowWorkRepository.get(workId);
@@ -65,7 +66,7 @@ public class FlowService {
             EventPusher.push(flowEvent);
             return processId;
         } else {
-            throw new FlowServiceException("user.create.error", "当前用户不能创建改流程");
+            throw new FlowServiceException("user.create.error", "当前用户无权限创建该流程");
         }
     }
 
@@ -74,6 +75,7 @@ public class FlowService {
      *
      * @param workId 流程id
      * @param user   用户
+     * @return 流程id
      */
     public long createFlow(long workId, IFlowUser user) {
         return this.createFlow(workId, user, null);
@@ -238,20 +240,18 @@ public class FlowService {
         if (flowRecord == null) {
             throw new FlowServiceException("flow.approval.error", "流程不存在");
         }
-        if (!flowRecord.getNode().matchUser(user)) {
-            throw new FlowServiceException("flow.approval.error", "当前用户不能审批该流程");
-        }
-
-        if (flowRecord.isApproval()) {
-            throw new FlowServiceException("flow.approval.error", "该流程已经被审批过了");
-        }
-
         if (flowRecord.isFinish()) {
             throw new FlowServiceException("flow.approval.error", "该流程已经结束了");
         }
+        if (!flowRecord.getNode().matchUser(user)) {
+            throw new FlowServiceException("flow.approval.error", "当前用户不能审批该流程");
+        }
+        if (flowRecord.isApproval()) {
+            throw new FlowServiceException("flow.approval.error", "该流程已经被审批过了");
+        }
         // 撤回流程的时候，只能是撤回的用户自己能够继续提交，不再验证FlowTrigger的用户匹配器
-        if(flowRecord.getUsers()!=null){
-            if(!flowRecord.containsUser(user)){
+        if (flowRecord.getUsers() != null && !flowRecord.getUsers().isEmpty()) {
+            if (!flowRecord.containsUser(user)) {
                 throw new FlowServiceException("flow.approval.error", "当前用户不能审批该流程");
             }
         }

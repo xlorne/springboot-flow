@@ -77,7 +77,6 @@ class FlowTest {
     }
 
 
-
     /**
      * 请假流程(通过)
      * 再次审批报错
@@ -123,7 +122,7 @@ class FlowTest {
         List<FlowRecord> userTodos2 = flowQuery.todos(processId, user);
         assertEquals(userTodos2.size(), 0);
 
-        assertThrows(FlowServiceException.class,()->flowService.pass(managerTodo.getId(), "同意", manager));
+        assertThrows(FlowServiceException.class, () -> flowService.pass(managerTodo.getId(), "同意", manager));
 
 
     }
@@ -168,8 +167,7 @@ class FlowTest {
         assertEquals(managerTodos.size(), 1);
 
         FlowRecord managerTodo = managerTodos.get(0);
-        assertThrows(FlowServiceException.class,()->flowService.pass(managerTodo.getId(), "同意", admin));
-
+        assertThrows(FlowServiceException.class, () -> flowService.pass(managerTodo.getId(), "同意", admin));
 
 
     }
@@ -326,6 +324,77 @@ class FlowTest {
     }
 
     /**
+     * 请假流程 非发起人异常
+     */
+    @Test
+    void test223() {
+        FlowConfiguration flowConfiguration = new FlowConfiguration();
+        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+
+        User admin = new User(100, "admin");
+        User user = new User(1, "小明");
+        User manager = new User(2, "经理");
+
+
+        FlowNode flow =
+                FlowNodeBuilder.builder()
+                        .addNodes(
+                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.users(user), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over("end", "结束")
+                        )
+                        .relations()
+                        .start("start").addNext("manager").over("end")
+                        .build();
+
+
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
+
+        assertThrows(FlowServiceException.class, () -> flowService.createFlow(workId, manager));
+
+    }
+
+
+    /**
+     * 请假流程 审批不存在的流程
+     */
+    @Test
+    void test224() {
+        FlowConfiguration flowConfiguration = new FlowConfiguration();
+        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+        User admin = new User(100, "admin");
+        User user = new User(1, "小明");
+        User manager = new User(2, "经理");
+
+
+        FlowNode flow =
+                FlowNodeBuilder.builder()
+                        .addNodes(
+                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.users(user), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over("end", "结束")
+                        )
+                        .relations()
+                        .start("start").addNext("manager").over("end")
+                        .build();
+
+
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
+
+        long processId =  flowService.createFlow(workId, user);
+
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
+        assertEquals(managerTodos.size(), 1);
+
+        FlowRecord managerTodo = managerTodos.get(0);
+        assertThrows(FlowServiceException.class, () ->  flowService.pass(managerTodo.getId()+1, "同意", manager));
+
+    }
+
+    /**
      * 请假流程 (撤回) 异常
      */
     @Test
@@ -421,6 +490,61 @@ class FlowTest {
 
     }
 
+
+    /**
+     * 请假流程 当前用户不能审批该流程
+     */
+    @Test
+    void test231() {
+        FlowConfiguration flowConfiguration = new FlowConfiguration();
+        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
+        User admin = new User(100, "admin");
+        User user = new User(1, "小明");
+        User manager = new User(2, "经理");
+
+
+        FlowNode flow =
+                FlowNodeBuilder.builder()
+                        .addNodes(
+                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over("end", "结束")
+                        )
+                        .relations()
+                        .start("start").addNext("manager").over("end")
+                        .build();
+
+
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
+
+
+        long processId = flowService.createFlow(workId, user);
+
+
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
+        assertEquals(userTodos.size(), 0);
+
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
+        assertEquals(managerTodos.size(), 1);
+
+        List<FlowRecord> userProcess = flowQuery.process(processId, user);
+        assertEquals(userProcess.size(), 1);
+
+        flowService.recall(userProcess.get(0).getId(), user);
+
+        List<FlowRecord> userTodos1 = flowQuery.todos(processId, user);
+        assertEquals(userTodos1.size(), 1);
+
+        FlowRecord userTodo = userTodos1.get(0);
+
+        assertThrows(FlowServiceException.class, () ->  flowService.pass(userTodo.getId(), "同意", manager));
+
+
+    }
+
     /**
      * 请假流程 (角色审批)
      */
@@ -472,6 +596,146 @@ class FlowTest {
         assertEquals(managerTodos2.size(), 0);
 
     }
+
+    /**
+     * 请假流程 (撤回) 异常
+     *
+     * 当前用户不能撤回该流程
+     */
+    @Test
+    void test222() {
+        FlowConfiguration flowConfiguration = new FlowConfiguration();
+        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
+        User admin = new User(100, "admin");
+        User user = new User(1, "小明");
+        User manager = new User(2, "经理");
+
+
+        FlowNode flow =
+                FlowNodeBuilder.builder()
+                        .addNodes(
+                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over("end", "结束")
+                        )
+                        .relations()
+                        .start("start").addNext("manager").over("end")
+                        .build();
+
+
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
+
+
+        long processId = flowService.createFlow(workId, user);
+
+        List<FlowRecord> userProcess = flowQuery.process(processId, user);
+        assertEquals(userProcess.size(), 1);
+
+
+        assertThrows(FlowServiceException.class, () -> {
+            flowService.recall(userProcess.get(0).getId(), manager);
+        });
+
+    }
+
+    /**
+     * 请假流程 (撤回) 异常
+     *
+     * 流程不存在
+     */
+    @Test
+    void test225() {
+        FlowConfiguration flowConfiguration = new FlowConfiguration();
+        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
+        User admin = new User(100, "admin");
+        User user = new User(1, "小明");
+        User manager = new User(2, "经理");
+
+
+        FlowNode flow =
+                FlowNodeBuilder.builder()
+                        .addNodes(
+                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over("end", "结束")
+                        )
+                        .relations()
+                        .start("start").addNext("manager").over("end")
+                        .build();
+
+
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
+
+
+        long processId = flowService.createFlow(workId, user);
+
+        List<FlowRecord> userProcess = flowQuery.process(processId, user);
+        assertEquals(userProcess.size(), 1);
+
+
+        assertThrows(FlowServiceException.class, () -> {
+            flowService.recall(0, user);
+        });
+
+    }
+
+    /**
+     * 请假流程 (撤回) 异常
+     *
+     * 流程已经被审批，无法撤回
+     */
+    @Test
+    void test226() {
+        FlowConfiguration flowConfiguration = new FlowConfiguration();
+        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
+        User admin = new User(100, "admin");
+        User user = new User(1, "小明");
+        User manager = new User(2, "经理");
+
+
+        FlowNode flow =
+                FlowNodeBuilder.builder()
+                        .addNodes(
+                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.create("boss", "boss", FlowType.SERIAL, FlowUserMatcherFactory.users(admin), FlowTriggerFactory.basic()),
+                                FlowNode.over("end", "结束")
+                        )
+                        .relations()
+                        .start("start").addNext("manager").addNext("boss").over("end")
+                        .build();
+
+
+        FlowWork work = new FlowWork("请假流程", admin, flow);
+        long workId = flowService.save(work);
+
+
+        long processId = flowService.createFlow(workId, user);
+
+        List<FlowRecord> userProcess = flowQuery.process(processId, user);
+        assertEquals(userProcess.size(), 1);
+
+
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
+        assertEquals(managerTodos.size(), 1);
+
+        FlowRecord managerTodo0 = managerTodos.get(0);
+        flowService.pass(managerTodo0.getId(), "同意", manager);
+
+        assertThrows(FlowServiceException.class, () -> {
+            flowService.recall(userProcess.get(0).getId(), user);
+        });
+
+    }
+
 
     /**
      * 请假流程 会签
