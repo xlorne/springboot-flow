@@ -39,14 +39,22 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
 
     @Override
     public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
-        List<FlowWork> flowWorks =  flowWorkEntityRepository.findAll().stream().map(FlowWorkConvertor::convert).toList();
+        List<FlowWork> flowWorks = flowWorkEntityRepository.findAll().stream().map(FlowWorkConvertor::convert).toList();
         List<Long> nodeIds = new ArrayList<>();
         List<Long> wordIds = new ArrayList<>();
-        for(FlowWork flowWork:flowWorks){
-            wordIds.add(flowWork.getId());
-            nodeIds.addAll(flowWork.matchUserNodes(currentUser));
+        for (FlowWork flowWork : flowWorks) {
+            if (!wordIds.contains(flowWork.getId())) {
+                wordIds.add(flowWork.getId());
+            }
+
+            List<Long> nodeItemIds = flowWork.matchUserNodes(currentUser);
+            for (Long nodeId : nodeItemIds) {
+                if (!nodeIds.contains(nodeId)) {
+                    nodeIds.add(nodeId);
+                }
+            }
         }
-        return flowRecordEntityRepository.findToDoPage(wordIds,nodeIds,request).map(FlowRecordConvertor::convert);
+        return flowRecordEntityRepository.findToDoPage(wordIds, nodeIds, request).map(FlowRecordConvertor::convert);
     }
 
     @Override

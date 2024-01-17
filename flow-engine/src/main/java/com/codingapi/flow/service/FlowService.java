@@ -215,7 +215,7 @@ public class FlowService {
     }
 
     /**
-     * 审批撤回
+     * 审批退回
      *
      * @param recordId 流程记录id
      * @param option   审批意见
@@ -248,6 +248,12 @@ public class FlowService {
 
         if (flowRecord.isFinish()) {
             throw new FlowServiceException("flow.approval.error", "该流程已经结束了");
+        }
+        // 撤回流程的时候，只能是撤回的用户自己能够继续提交，不再验证FlowTrigger的用户匹配器
+        if(flowRecord.getUsers()!=null){
+            if(!flowRecord.containsUser(user)){
+                throw new FlowServiceException("flow.approval.error", "当前用户不能审批该流程");
+            }
         }
 
         flowRecord.approval(user, state, option);
