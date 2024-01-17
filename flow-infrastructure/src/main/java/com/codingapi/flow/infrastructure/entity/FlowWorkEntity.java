@@ -18,6 +18,7 @@ public class FlowWorkEntity {
     private long id;
 
     private String title;
+
     private String description;
 
     private Long creator;

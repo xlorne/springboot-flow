@@ -19,6 +19,7 @@ public class FlowWorkConvertor {
         flowWork.setCreator(FlowGatewayContext.getInstance().getUser(entity.getCreator(),entity.getCreatorClass()));
         flowWork.setCreateTime(entity.getCreateTime());
         flowWork.setFlow(FlowNodeContext.getInstance().getFlowNode(entity.getFlowId()));
+        flowWork.setDescription(entity.getDescription());
 
         EntityManagerContent.getInstance().detach(entity);
         return flowWork;
@@ -36,6 +37,7 @@ public class FlowWorkConvertor {
         entity.setCreateTime(flowWork.getCreateTime());
         entity.setFlowId(flowWork.getFlow().getId());
         entity.setCreatorClass(flowWork.getCreator().getClass());
+        entity.setDescription(flowWork.getDescription());
         return entity;
     }
 
