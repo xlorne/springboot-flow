@@ -44,7 +44,9 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.script("""
+                                        return true
+                                        """), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
                                 FlowNode.over("end", "结束")
                         )

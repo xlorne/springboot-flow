@@ -3,6 +3,7 @@ package com.codingapi.flow.domain.trigger;
 import com.codingapi.flow.domain.trigger.matcher.BasicFlowTrigger;
 import com.codingapi.flow.domain.trigger.matcher.OverFlowTrigger;
 import com.codingapi.flow.domain.trigger.matcher.RatePassFlowTrigger;
+import com.codingapi.flow.domain.trigger.matcher.ScriptFlowTrigger;
 
 public class FlowTriggerFactory {
 
@@ -33,6 +34,13 @@ public class FlowTriggerFactory {
      */
     public static IFlowTrigger over() {
         return new OverFlowTrigger();
+    }
+
+    /**
+     * script触发器
+     */
+    public static IFlowTrigger script(String script) {
+        return new ScriptFlowTrigger(script);
     }
 
 
