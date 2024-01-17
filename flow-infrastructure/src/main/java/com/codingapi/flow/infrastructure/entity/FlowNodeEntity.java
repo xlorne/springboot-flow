@@ -1,8 +1,8 @@
 package com.codingapi.flow.infrastructure.entity;
 
-import com.codingapi.flow.domain.em.FlowType;
-import com.codingapi.flow.domain.trigger.IFlowTrigger;
-import com.codingapi.flow.domain.user.IFlowUserMatcher;
+import com.codingapi.flow.em.FlowType;
+import com.codingapi.flow.trigger.IFlowTrigger;
+import com.codingapi.flow.user.IFlowUserMatcher;
 import com.codingapi.flow.infrastructure.entity.converter.ListLongConverter;
 import jakarta.persistence.*;
 import lombok.Getter;

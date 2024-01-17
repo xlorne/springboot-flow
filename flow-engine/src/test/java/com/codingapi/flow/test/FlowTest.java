@@ -2,11 +2,11 @@ package com.codingapi.flow.test;
 
 import com.codingapi.flow.FlowConfiguration;
 import com.codingapi.flow.domain.*;
-import com.codingapi.flow.domain.builder.FlowNodeBuilder;
-import com.codingapi.flow.domain.em.FlowType;
-import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
-import com.codingapi.flow.domain.trigger.IFlowTrigger;
-import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
+import com.codingapi.flow.builder.FlowNodeBuilder;
+import com.codingapi.flow.em.FlowType;
+import com.codingapi.flow.trigger.FlowTriggerFactory;
+import com.codingapi.flow.trigger.IFlowTrigger;
+import com.codingapi.flow.user.FlowUserMatcherFactory;
 import com.codingapi.flow.exception.FlowServiceException;
 import com.codingapi.flow.service.FlowQuery;
 import com.codingapi.flow.service.FlowService;

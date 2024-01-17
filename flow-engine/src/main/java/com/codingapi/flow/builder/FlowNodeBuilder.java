@@ -1,4 +1,4 @@
-package com.codingapi.flow.domain.builder;
+package com.codingapi.flow.builder;
 
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.exception.FlowBuilderException;

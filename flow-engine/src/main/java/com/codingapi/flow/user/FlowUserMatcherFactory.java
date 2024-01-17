@@ -1,9 +1,9 @@
-package com.codingapi.flow.domain.user;
+package com.codingapi.flow.user;
 
-import com.codingapi.flow.domain.user.matcher.AnyUserMatcher;
-import com.codingapi.flow.domain.user.matcher.NoUserMatcher;
-import com.codingapi.flow.domain.user.matcher.ScriptUserMatcher;
-import com.codingapi.flow.domain.user.matcher.SpecifyUserMatcher;
+import com.codingapi.flow.user.impl.AnyUserMatcher;
+import com.codingapi.flow.user.impl.NoUserMatcher;
+import com.codingapi.flow.user.impl.ScriptUserMatcher;
+import com.codingapi.flow.user.impl.SpecifyUserMatcher;
 
 import java.util.List;
 

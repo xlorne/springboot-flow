@@ -1,6 +1,6 @@
 package com.codingapi.flow.infrastructure.entity;
 
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.user.IFlowUser;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

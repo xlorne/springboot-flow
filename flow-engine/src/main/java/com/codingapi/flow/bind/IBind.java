@@ -1,4 +1,4 @@
-package com.codingapi.flow.domain;
+package com.codingapi.flow.bind;
 
 import java.io.Serializable;
 

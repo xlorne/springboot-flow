@@ -1,5 +1,6 @@
 package com.codingapi.flow.domain;
 
+import com.codingapi.flow.bind.IBind;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

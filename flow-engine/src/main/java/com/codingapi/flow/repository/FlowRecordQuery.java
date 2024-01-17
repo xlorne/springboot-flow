@@ -1,7 +1,7 @@
 package com.codingapi.flow.repository;
 
 import com.codingapi.flow.domain.FlowRecord;
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.user.IFlowUser;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

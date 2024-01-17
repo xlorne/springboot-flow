@@ -1,7 +1,7 @@
 package com.example.flow.gateway;
 
-import com.codingapi.flow.domain.IBind;
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.bind.IBind;
+import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.gateway.FlowGateway;
 import com.codingapi.springboot.fast.manager.EntityManagerContent;
 import com.example.flow.repository.LeaveRepository;

@@ -2,9 +2,9 @@ package com.codingapi.flow;
 
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
-import com.codingapi.flow.domain.IBind;
-import com.codingapi.flow.domain.em.FlowState;
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.bind.IBind;
+import com.codingapi.flow.em.FlowState;
+import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.gateway.FlowGateway;
 import com.codingapi.flow.gateway.FlowGatewayContextRegister;
 import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;

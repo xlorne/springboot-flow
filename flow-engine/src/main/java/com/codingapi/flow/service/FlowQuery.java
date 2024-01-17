@@ -2,7 +2,7 @@ package com.codingapi.flow.service;
 
 
 import com.codingapi.flow.domain.FlowRecord;
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.repository.FlowRecordQuery;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

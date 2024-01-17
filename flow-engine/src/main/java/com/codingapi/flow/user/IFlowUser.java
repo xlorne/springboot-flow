@@ -1,4 +1,4 @@
-package com.codingapi.flow.domain.user;
+package com.codingapi.flow.user;
 
 import java.io.Serializable;
 

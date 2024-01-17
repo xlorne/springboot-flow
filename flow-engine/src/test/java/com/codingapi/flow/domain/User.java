@@ -1,6 +1,6 @@
 package com.codingapi.flow.domain;
 
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.user.IFlowUser;
 import lombok.Getter;
 import lombok.Setter;
 

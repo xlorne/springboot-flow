@@ -1,11 +1,11 @@
 package com.codingapi.flow.domain;
 
-import com.codingapi.flow.domain.em.FlowType;
-import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
-import com.codingapi.flow.domain.trigger.IFlowTrigger;
-import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
-import com.codingapi.flow.domain.user.IFlowUser;
-import com.codingapi.flow.domain.user.IFlowUserMatcher;
+import com.codingapi.flow.em.FlowType;
+import com.codingapi.flow.trigger.FlowTriggerFactory;
+import com.codingapi.flow.trigger.IFlowTrigger;
+import com.codingapi.flow.user.FlowUserMatcherFactory;
+import com.codingapi.flow.user.IFlowUser;
+import com.codingapi.flow.user.IFlowUserMatcher;
 import com.codingapi.flow.gennerate.IdGeneratorContext;
 import lombok.Getter;
 import lombok.Setter;

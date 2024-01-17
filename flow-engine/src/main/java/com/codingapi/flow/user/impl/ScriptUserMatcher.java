@@ -1,7 +1,7 @@
-package com.codingapi.flow.domain.user.matcher;
+package com.codingapi.flow.user.impl;
 
-import com.codingapi.flow.domain.user.IFlowUser;
-import com.codingapi.flow.domain.user.IFlowUserMatcher;
+import com.codingapi.flow.user.IFlowUser;
+import com.codingapi.flow.user.IFlowUserMatcher;
 import com.codingapi.flow.script.ScriptRuntime;
 
 /**

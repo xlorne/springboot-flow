@@ -1,4 +1,4 @@
-package com.codingapi.flow.domain.em;
+package com.codingapi.flow.em;
 
 import com.codingapi.springboot.framework.em.IEnum;
 import lombok.Getter;

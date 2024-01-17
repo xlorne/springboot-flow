@@ -1,6 +1,6 @@
 package com.example.flow.domain;
 
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.user.IFlowUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

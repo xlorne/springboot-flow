@@ -1,6 +1,6 @@
 package com.example.flow.domain;
 
-import com.codingapi.flow.domain.IBind;
+import com.codingapi.flow.bind.IBind;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

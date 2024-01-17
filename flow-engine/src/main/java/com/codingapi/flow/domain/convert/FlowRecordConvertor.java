@@ -2,8 +2,8 @@ package com.codingapi.flow.domain.convert;
 
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
-import com.codingapi.flow.domain.IBind;
-import com.codingapi.flow.domain.em.FlowState;
+import com.codingapi.flow.bind.IBind;
+import com.codingapi.flow.em.FlowState;
 import com.codingapi.flow.gennerate.IdGeneratorContext;
 
 public class FlowRecordConvertor {

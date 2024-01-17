@@ -1,4 +1,4 @@
-package com.codingapi.flow.domain.trigger;
+package com.codingapi.flow.trigger;
 
 
 import com.codingapi.flow.domain.FlowNode;

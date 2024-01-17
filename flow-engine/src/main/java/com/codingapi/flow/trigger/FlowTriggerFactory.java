@@ -1,9 +1,9 @@
-package com.codingapi.flow.domain.trigger;
+package com.codingapi.flow.trigger;
 
-import com.codingapi.flow.domain.trigger.matcher.BasicFlowTrigger;
-import com.codingapi.flow.domain.trigger.matcher.OverFlowTrigger;
-import com.codingapi.flow.domain.trigger.matcher.RatePassFlowTrigger;
-import com.codingapi.flow.domain.trigger.matcher.ScriptFlowTrigger;
+import com.codingapi.flow.trigger.impl.BasicFlowTrigger;
+import com.codingapi.flow.trigger.impl.OverFlowTrigger;
+import com.codingapi.flow.trigger.impl.RatePassFlowTrigger;
+import com.codingapi.flow.trigger.impl.ScriptFlowTrigger;
 
 public class FlowTriggerFactory {
 

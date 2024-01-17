@@ -2,10 +2,10 @@ package com.example.flow.register;
 
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowWork;
-import com.codingapi.flow.domain.builder.FlowNodeBuilder;
-import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
-import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.builder.FlowNodeBuilder;
+import com.codingapi.flow.trigger.FlowTriggerFactory;
+import com.codingapi.flow.user.FlowUserMatcherFactory;
+import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.service.FlowService;
 import com.example.flow.domain.Leave;
 import com.example.flow.domain.User;

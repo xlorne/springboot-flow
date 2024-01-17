@@ -1,8 +1,8 @@
 package com.codingapi.flow.infrastructure.entity;
 
-import com.codingapi.flow.domain.IBind;
-import com.codingapi.flow.domain.em.FlowState;
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.bind.IBind;
+import com.codingapi.flow.em.FlowState;
+import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.infrastructure.entity.converter.ListLongConverter;
 import jakarta.persistence.*;
 import lombok.Getter;

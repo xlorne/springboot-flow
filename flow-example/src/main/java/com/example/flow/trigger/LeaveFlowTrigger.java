@@ -2,7 +2,7 @@ package com.example.flow.trigger;
 
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
-import com.codingapi.flow.domain.trigger.IFlowTrigger;
+import com.codingapi.flow.trigger.IFlowTrigger;
 import com.codingapi.flow.exception.FlowServiceException;
 import com.example.flow.domain.Leave;
 

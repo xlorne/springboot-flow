@@ -3,7 +3,7 @@ package com.codingapi.flow.infrastructure.repository.impl;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
-import com.codingapi.flow.domain.user.IFlowUser;
+import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.infrastructure.convert.FlowRecordConvertor;
 import com.codingapi.flow.infrastructure.convert.FlowWorkConvertor;
 import com.codingapi.flow.infrastructure.jpa.FlowRecordEntityRepository;
