@@ -9,7 +9,7 @@ public class ListLongConverter implements AttributeConverter<List<Long>, String>
 
     @Override
     public String convertToDatabaseColumn(List<Long> attribute) {
-        if (attribute == null) {
+        if (attribute == null || attribute.isEmpty()) {
             return null;
         }
         StringBuilder sb = new StringBuilder();

@@ -29,8 +29,8 @@ public interface FlowRecordEntityRepository extends FastRepository<FlowRecordEnt
     Page<FlowRecordEntity> findProcessPage(long userId, PageRequest request);
 
 
-    @Query(value = "select r from FlowRecordEntity r where r.state = com.codingapi.flow.domain.em.FlowState.WAIT and r.workId in (?1) and r.nodeId in (?2)")
-    Page<FlowRecordEntity> findToDoPage(List<Long> workIds, List<Long> nodeIds,PageRequest request);
+    @Query(value = "select r from FlowRecordEntity r where (r.state = com.codingapi.flow.domain.em.FlowState.WAIT and r.workId in (?1) and r.nodeId in (?2) and r.users = null) or (r.state = com.codingapi.flow.domain.em.FlowState.WAIT and ?3 in (r.users))")
+    Page<FlowRecordEntity> findToDoPage(List<Long> workIds, List<Long> nodeIds,long userId,PageRequest request);
 
 
     FlowRecordEntity getFlowRecordEntityById(long id);

@@ -54,7 +54,7 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
                 }
             }
         }
-        return flowRecordEntityRepository.findToDoPage(wordIds, nodeIds, request).map(FlowRecordConvertor::convert);
+        return flowRecordEntityRepository.findToDoPage(wordIds, nodeIds,currentUser.getId(), request).map(FlowRecordConvertor::convert);
     }
 
     @Override
