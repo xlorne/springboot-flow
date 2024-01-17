@@ -8,7 +8,6 @@ import com.codingapi.flow.domain.em.FlowType;
 import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
 import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
 import com.codingapi.flow.exception.FlowBuilderException;
-import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

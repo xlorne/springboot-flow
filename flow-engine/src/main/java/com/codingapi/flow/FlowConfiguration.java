@@ -10,9 +10,12 @@ import com.codingapi.flow.gateway.FlowGatewayContextRegister;
 import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;
 import com.codingapi.flow.gennerate.IdGenerator;
 import com.codingapi.flow.gennerate.SnowflakeIDGenerator;
+import com.codingapi.flow.repository.FlowRecordQuery;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import com.codingapi.flow.repository.FlowWorkRepository;
+import com.codingapi.flow.service.FlowQuery;
 import com.codingapi.flow.service.FlowService;
+import lombok.Getter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,13 +47,58 @@ public class FlowConfiguration {
         };
     }
 
+    private static class FlowRecordCache {
+        private final Map<Long, List<FlowRecord>> cache;
+
+        @Getter
+        private final static FlowRecordCache instance = new FlowRecordCache();
+
+        private FlowRecordCache() {
+            this.cache = new HashMap<>();
+        }
+
+        public void put(long processId, List<FlowRecord> recordList) {
+            cache.put(processId, recordList);
+        }
+
+        public List<FlowRecord> get(long processId, List<FlowRecord> defaultList) {
+            return cache.getOrDefault(processId, defaultList);
+        }
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public FlowRecordQuery flowRecordQuery() {
+        return new FlowRecordQuery() {
+
+            @Override
+            public List<FlowRecord> findToDoList(long processId, IFlowUser userId) {
+                return FlowRecordCache.getInstance().get(processId, List.of()).stream().filter(record -> {
+                    if (record.getState() == FlowState.WAIT) {
+                        return record.getNode().matchUser(userId);
+                    }
+                    return false;
+                }).toList();
+            }
+
+            @Override
+            public List<FlowRecord> findProcessList(long processId, IFlowUser flowUser) {
+                List<FlowRecord> recordList = FlowRecordCache.getInstance().get(processId, List.of());
+                return recordList.stream().filter(record -> {
+                    if (record.getState() != FlowState.WAIT) {
+                        return record.containsUser(flowUser);
+                    }
+                    return false;
+                }).toList();
+            }
+        };
+    }
+
     @Bean
     @ConditionalOnMissingBean
     public FlowRecordRepository flowRecordRepository() {
         return new FlowRecordRepository() {
-            private final Map<Long, List<FlowRecord>> cache = new HashMap<>();
             private final Map<Long, FlowRecord> records = new HashMap<>();
-
 
             private boolean hasRecord(FlowRecord record, List<FlowRecord> recordList) {
                 for (FlowRecord flowRecord : recordList) {
@@ -63,7 +111,7 @@ public class FlowConfiguration {
 
             @Override
             public void save(FlowRecord record) {
-                List<FlowRecord> recordList = cache.getOrDefault(record.getProcessId(), new ArrayList<>());
+                List<FlowRecord> recordList = FlowRecordCache.getInstance().get(record.getProcessId(), new ArrayList<>());
                 if (hasRecord(record, recordList)) {
                     List<FlowRecord> newRecordList = new ArrayList<>();
                     for (FlowRecord flowRecord : recordList) {
@@ -72,24 +120,15 @@ public class FlowConfiguration {
                         }
                         newRecordList.add(flowRecord);
                     }
-                    cache.put(record.getWorkId(), newRecordList);
+                    FlowRecordCache.getInstance().put(record.getWorkId(), newRecordList);
                     records.put(record.getId(), record);
                 } else {
                     recordList.add(record);
-                    cache.put(record.getProcessId(), recordList);
+                    FlowRecordCache.getInstance().put(record.getProcessId(), recordList);
                     records.put(record.getId(), record);
                 }
             }
 
-            @Override
-            public List<FlowRecord> findToDoList(long processId, IFlowUser userId) {
-                return cache.getOrDefault(processId, List.of()).stream().filter(record -> {
-                    if (record.getState() == FlowState.WAIT) {
-                        return record.getNode().matchUser(userId);
-                    }
-                    return false;
-                }).toList();
-            }
 
             @Override
             public FlowRecord get(long recordId) {
@@ -98,38 +137,27 @@ public class FlowConfiguration {
 
             @Override
             public List<FlowRecord> findAll(long processId, long nodeId) {
-                List<FlowRecord> recordList = cache.getOrDefault(processId, List.of());
+                List<FlowRecord> recordList = FlowRecordCache.getInstance().get(processId, List.of());
                 return recordList.stream().filter(record -> record.getNode().getId() == nodeId).toList();
             }
 
 
             @Override
-            public List<FlowRecord> findProcessList(long processId, IFlowUser flowUser) {
-                List<FlowRecord> recordList = cache.getOrDefault(processId, List.of());
-                return recordList.stream().filter(record -> {
-                    if (record.getState() != FlowState.WAIT) {
-                        return record.containsUser(flowUser);
-                    }
-                    return false;
-                }).toList();
-            }
-
-            @Override
             public void delete(FlowRecord record) {
-                List<FlowRecord> recordList = cache.getOrDefault(record.getProcessId(), List.of());
+                List<FlowRecord> recordList = FlowRecordCache.getInstance().get(record.getProcessId(), List.of());
                 List<FlowRecord> newRecordList = new ArrayList<>();
                 for (FlowRecord flowRecord : recordList) {
                     if (flowRecord.getId() != record.getId()) {
                         newRecordList.add(flowRecord);
                     }
                 }
-                cache.put(record.getProcessId(), newRecordList);
+                FlowRecordCache.getInstance().put(record.getProcessId(), newRecordList);
                 records.remove(record.getId());
             }
 
             @Override
             public List<FlowRecord> findAll(long processId) {
-                return cache.getOrDefault(processId, List.of());
+                return FlowRecordCache.getInstance().get(processId, List.of());
             }
         };
     }
@@ -137,6 +165,11 @@ public class FlowConfiguration {
     @Bean
     public FlowService flowService(FlowWorkRepository flowWorkRepository, FlowRecordRepository flowRecordRepository) {
         return new FlowService(flowWorkRepository, flowRecordRepository);
+    }
+
+    @Bean
+    public FlowQuery flowQuery(FlowRecordQuery flowRecordQuery) {
+        return new FlowQuery(flowRecordQuery);
     }
 
 

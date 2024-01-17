@@ -1,6 +1,7 @@
 package com.example.flow.controller;
 
 import com.codingapi.flow.domain.FlowRecord;
+import com.codingapi.flow.service.FlowQuery;
 import com.codingapi.flow.service.FlowService;
 import com.codingapi.springboot.framework.dto.response.MultiResponse;
 import com.codingapi.springboot.framework.dto.response.SingleResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FlowController {
 
     private final FlowService flowService;
+    private final FlowQuery flowQuery;
     private final UserRepository userRepository;
 
     @GetMapping("/todo")
@@ -26,7 +28,7 @@ public class FlowController {
         String name = request.getParameter("name");
         long processId = Long.parseLong(request.getParameter("processId"));
         User user = userRepository.findByName(name);
-        return MultiResponse.of(flowService.todos(processId, user));
+        return MultiResponse.of(flowQuery.todos(processId, user));
     }
 
     @GetMapping("/process")
@@ -34,7 +36,7 @@ public class FlowController {
         String name = request.getParameter("name");
         long processId = Long.parseLong(request.getParameter("processId"));
         User user = userRepository.findByName(name);
-        return MultiResponse.of(flowService.process(processId, user));
+        return MultiResponse.of(flowQuery.process(processId, user));
     }
 
     @GetMapping("/start")

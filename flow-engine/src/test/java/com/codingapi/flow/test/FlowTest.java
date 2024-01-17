@@ -8,6 +8,7 @@ import com.codingapi.flow.domain.trigger.FlowTriggerFactory;
 import com.codingapi.flow.domain.trigger.IFlowTrigger;
 import com.codingapi.flow.domain.user.FlowUserMatcherFactory;
 import com.codingapi.flow.exception.FlowServiceException;
+import com.codingapi.flow.service.FlowQuery;
 import com.codingapi.flow.service.FlowService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ class FlowTest {
     void test1() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -57,19 +59,19 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> managerTodos = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
         assertEquals(managerTodos.size(), 1);
 
         FlowRecord managerTodo = managerTodos.get(0);
         flowService.pass(managerTodo.getId(), "同意", manager);
 
-        List<FlowRecord> userTodos2 = flowService.todos(processId, user);
+        List<FlowRecord> userTodos2 = flowQuery.todos(processId, user);
         assertEquals(userTodos2.size(), 0);
 
-        List<FlowRecord> managerTodos2 = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos2 = flowQuery.todos(processId, manager);
         assertEquals(managerTodos2.size(), 0);
 
     }
@@ -82,6 +84,8 @@ class FlowTest {
     void test2() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
@@ -106,19 +110,19 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> managerTodos = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
         assertEquals(managerTodos.size(), 1);
 
         FlowRecord managerTodo = managerTodos.get(0);
         flowService.reject(managerTodo.getId(), "不同意", manager);
 
-        List<FlowRecord> userTodos2 = flowService.todos(processId, user);
+        List<FlowRecord> userTodos2 = flowQuery.todos(processId, user);
         assertEquals(userTodos2.size(), 0);
 
-        List<FlowRecord> managerTodos2 = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos2 = flowQuery.todos(processId, manager);
         assertEquals(managerTodos2.size(), 0);
 
     }
@@ -131,6 +135,8 @@ class FlowTest {
     void test21() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
@@ -155,19 +161,19 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> managerTodos = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
         assertEquals(managerTodos.size(), 1);
 
         FlowRecord managerTodo = managerTodos.get(0);
         flowService.back(managerTodo.getId(), "不同意", manager);
 
-        List<FlowRecord> userTodos2 = flowService.todos(processId, user);
+        List<FlowRecord> userTodos2 = flowQuery.todos(processId, user);
         assertEquals(userTodos2.size(), 1);
 
-        List<FlowRecord> managerTodos2 = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos2 = flowQuery.todos(processId, manager);
         assertEquals(managerTodos2.size(), 0);
 
     }
@@ -179,6 +185,8 @@ class FlowTest {
     void test22() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
@@ -203,18 +211,18 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> userProcess = flowService.process(processId, user);
+        List<FlowRecord> userProcess = flowQuery.process(processId, user);
         assertEquals(userProcess.size(), 1);
 
         flowService.recall(userProcess.get(0).getId(), user);
 
-        List<FlowRecord> userProcess2 = flowService.process(processId, user);
+        List<FlowRecord> userProcess2 = flowQuery.process(processId, user);
         assertEquals(userProcess2.size(), 0);
 
-        List<FlowRecord> userTodos1 = flowService.todos(processId, user);
+        List<FlowRecord> userTodos1 = flowQuery.todos(processId, user);
         assertEquals(userTodos1.size(), 1);
 
     }
@@ -226,6 +234,8 @@ class FlowTest {
     void test221() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
@@ -250,16 +260,16 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> managerTodos = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
         assertEquals(managerTodos.size(), 1);
 
         FlowRecord managerTodo = managerTodos.get(0);
         flowService.pass(managerTodo.getId(), "同意", manager);
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> managerProcess = flowService.process(processId, manager);
+        List<FlowRecord> managerProcess = flowQuery.process(processId, manager);
         assertEquals(managerProcess.size(), 1);
 
         assertThrows(FlowServiceException.class, () -> {
@@ -276,6 +286,8 @@ class FlowTest {
     void test23() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
@@ -300,10 +312,10 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> managerTodos = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
         assertEquals(managerTodos.size(), 1);
 
         FlowRecord managerTodo = managerTodos.get(0);
@@ -318,6 +330,8 @@ class FlowTest {
     void test3() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
 
         User user = new User(1, "小明");
@@ -344,19 +358,19 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> managerTodos = flowService.todos(processId, manager1);
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager1);
         assertEquals(managerTodos.size(), 1);
 
         FlowRecord managerTodo = managerTodos.get(0);
         flowService.reject(managerTodo.getId(), "不同意", manager2);
 
-        List<FlowRecord> userTodos2 = flowService.todos(processId, user);
+        List<FlowRecord> userTodos2 = flowQuery.todos(processId, user);
         assertEquals(userTodos2.size(), 0);
 
-        List<FlowRecord> managerTodos2 = flowService.todos(processId, manager1);
+        List<FlowRecord> managerTodos2 = flowQuery.todos(processId, manager1);
         assertEquals(managerTodos2.size(), 0);
 
     }
@@ -368,6 +382,8 @@ class FlowTest {
     void test4() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
 
         User user = new User(1, "小明");
@@ -393,10 +409,10 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> managerTodos = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
         assertEquals(managerTodos.size(), 5);
 
         FlowRecord managerTodo0 = managerTodos.get(0);
@@ -407,7 +423,7 @@ class FlowTest {
         flowService.pass(managerTodo1.getId(), "同意", manager);
         flowService.pass(managerTodo2.getId(), "同意", manager);
 
-        List<FlowRecord> userTodos2 = flowService.todos(processId, manager);
+        List<FlowRecord> userTodos2 = flowQuery.todos(processId, manager);
         assertEquals(userTodos2.size(), 0);
 
 
@@ -421,6 +437,8 @@ class FlowTest {
     void test41() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
 
         User user = new User(1, "小明");
@@ -446,10 +464,10 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
-        List<FlowRecord> managerTodos = flowService.todos(processId, manager);
+        List<FlowRecord> managerTodos = flowQuery.todos(processId, manager);
         assertEquals(managerTodos.size(), 5);
 
         FlowRecord managerTodo0 = managerTodos.get(0);
@@ -460,10 +478,10 @@ class FlowTest {
         flowService.pass(managerTodo1.getId(), "同意", manager);
         flowService.back(managerTodo2.getId(), "不同意", manager);
 
-        List<FlowRecord> userTodos2 = flowService.todos(processId, manager);
+        List<FlowRecord> userTodos2 = flowQuery.todos(processId, manager);
         assertEquals(userTodos2.size(), 0);
 
-        List<FlowRecord> newUserTodos = flowService.todos(processId, user);
+        List<FlowRecord> newUserTodos = flowQuery.todos(processId, user);
         assertEquals(newUserTodos.size(), 1);
 
     }
@@ -476,6 +494,8 @@ class FlowTest {
     void test5() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
 
         User user = new User(1, "小明");
@@ -515,22 +535,22 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
 
-        List<FlowRecord> manager1Todos = flowService.todos(processId, manager1);
+        List<FlowRecord> manager1Todos = flowQuery.todos(processId, manager1);
         assertEquals(manager1Todos.size(), 1);
 
-        List<FlowRecord> manager2Todos = flowService.todos(processId, manager2);
+        List<FlowRecord> manager2Todos = flowQuery.todos(processId, manager2);
         assertEquals(manager2Todos.size(), 0);
 
         flowService.pass(manager1Todos.get(0).getId(), "同意", manager1);
 
-        List<FlowRecord> newManager1Todos = flowService.todos(processId, manager1);
+        List<FlowRecord> newManager1Todos = flowQuery.todos(processId, manager1);
         assertEquals(newManager1Todos.size(), 0);
 
-        List<FlowRecord> newManager2Todos = flowService.todos(processId, manager2);
+        List<FlowRecord> newManager2Todos = flowQuery.todos(processId, manager2);
         assertEquals(newManager2Todos.size(), 0);
 
     }
@@ -543,6 +563,8 @@ class FlowTest {
     void test51() {
         FlowConfiguration flowConfiguration = new FlowConfiguration();
         FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
+        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
+
         User admin = new User(100, "admin");
 
         User user = new User(1, "小明");
@@ -583,14 +605,14 @@ class FlowTest {
         long processId = flowService.createFlow(workId, user, leave);
 
 
-        List<FlowRecord> userTodos = flowService.todos(processId, user);
+        List<FlowRecord> userTodos = flowQuery.todos(processId, user);
         assertEquals(userTodos.size(), 0);
 
 
-        List<FlowRecord> manager1Todos = flowService.todos(processId, manager1);
+        List<FlowRecord> manager1Todos = flowQuery.todos(processId, manager1);
         assertEquals(manager1Todos.size(), 0);
 
-        List<FlowRecord> manager2Todos = flowService.todos(processId, manager2);
+        List<FlowRecord> manager2Todos = flowQuery.todos(processId, manager2);
         assertEquals(manager2Todos.size(), 1);
 
         long recordId = manager2Todos.get(0).getId();
@@ -600,10 +622,10 @@ class FlowTest {
         // 提交审批
         flowService.pass(recordId, "同意", manager2);
 
-        List<FlowRecord> newManager1Todos = flowService.todos(processId, manager1);
+        List<FlowRecord> newManager1Todos = flowQuery.todos(processId, manager1);
         assertEquals(newManager1Todos.size(), 0);
 
-        List<FlowRecord> newManager2Todos = flowService.todos(processId, manager2);
+        List<FlowRecord> newManager2Todos = flowQuery.todos(processId, manager2);
         assertEquals(newManager2Todos.size(), 0);
 
         assertEquals(leave.getDays(), 5);

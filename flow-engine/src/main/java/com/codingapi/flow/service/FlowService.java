@@ -151,31 +151,6 @@ public class FlowService {
 
     }
 
-
-    /**
-     * 获取待办列表
-     *
-     * @param processId   流程id
-     * @param currentUser 当前用户
-     * @return 待办列表
-     */
-    public List<FlowRecord> todos(long processId, IFlowUser currentUser) {
-        return flowRecordRepository.findToDoList(processId, currentUser);
-    }
-
-
-    /**
-     * 获取已办列表
-     *
-     * @param processId   流程id
-     * @param currentUser 当前用户
-     * @return 已办列表
-     */
-    public List<FlowRecord> process(long processId, IFlowUser currentUser) {
-        return flowRecordRepository.findProcessList(processId, currentUser);
-    }
-
-
     /**
      * 审批通过
      *
@@ -274,6 +249,7 @@ public class FlowService {
         EventPusher.push(flowEvent);
 
     }
+
 
 
 }

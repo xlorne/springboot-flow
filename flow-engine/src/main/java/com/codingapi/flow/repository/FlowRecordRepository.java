@@ -10,9 +10,11 @@ import java.util.List;
  */
 public interface FlowRecordRepository {
 
+    /**
+     * 保存流程记录
+     * @param record 流程记录
+     */
     void save(FlowRecord record);
-
-    List<FlowRecord> findToDoList(long processId, IFlowUser flowUser);
 
     /**
      * 查询当前步骤的所有记录，用于执行流程的会签条件判断。
@@ -23,9 +25,15 @@ public interface FlowRecordRepository {
      */
     List<FlowRecord> findAll(long processId, long nodeId);
 
+
+    /**
+     * 查询流程记录
+     * @param recordId 流程记录id
+     * @return 流程记录
+     */
     FlowRecord get(long recordId);
 
-    List<FlowRecord> findProcessList(long processId, IFlowUser flowUser);
+
 
     /**
      * 查询流程的所有记录,用于结束流程
@@ -35,6 +43,13 @@ public interface FlowRecordRepository {
      */
     List<FlowRecord> findAll(long processId);
 
+    /**
+     *  删除流程记录
+     * @param record 流程记录
+     */
     void delete(FlowRecord record);
+
+
+
 
 }
