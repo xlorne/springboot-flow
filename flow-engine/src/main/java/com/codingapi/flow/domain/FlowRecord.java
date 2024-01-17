@@ -102,12 +102,14 @@ public class FlowRecord {
      * @param user 审批用户
      * @return true 已经审批 false 未被审批
      */
-    public boolean isApproval(IFlowUser user) {
+    public boolean canApproval(IFlowUser user) {
         if (this.state != FlowState.WAIT) {
             return containsUser(user);
         }
         return false;
     }
+
+
 
     /**
      * 是否包含审批用户
@@ -135,5 +137,9 @@ public class FlowRecord {
 
     public void finish() {
         this.finish = true;
+    }
+
+    public boolean isApproval() {
+        return this.state != FlowState.WAIT;
     }
 }

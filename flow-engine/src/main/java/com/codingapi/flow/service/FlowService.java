@@ -177,7 +177,7 @@ public class FlowService {
         if (flowRecord.isFinish()) {
             throw new FlowServiceException("flow.recall.error", "流程已经结束");
         }
-        if (!flowRecord.isApproval(user)) {
+        if (!flowRecord.canApproval(user)) {
             throw new FlowServiceException("flow.recall.error", "当前用户不能撤回该流程");
         }
         // 当前记录已经被自己审批过了
@@ -240,6 +240,11 @@ public class FlowService {
         if (!flowRecord.getNode().matchUser(user)) {
             throw new FlowServiceException("flow.approval.error", "当前用户不能审批该流程");
         }
+
+        if(flowRecord.isApproval()){
+            throw new FlowServiceException("flow.approval.error", "该流程已经被审批过了");
+        }
+
         flowRecord.approval(user, state, option);
         flowRecordRepository.save(flowRecord);
         //触发流程
