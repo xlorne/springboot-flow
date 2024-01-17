@@ -44,17 +44,17 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.script("""
+                                FlowNode.create(1,"start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.script("""
                                         return true
-                                        """), FlowTriggerFactory.basic()),
-                                FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                        """), FlowTriggerFactory.basic(),1),
+                                FlowNode.create(2,"manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic(),1),
+                                FlowNode.over(3,"end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .build();
 
-        FlowWork work = new FlowWork("请假流程", admin, flow);
+        FlowWork work = new FlowWork(1,"请假流程","这是说明", admin, flow);
         long workId = flowService.save(work);
 
 

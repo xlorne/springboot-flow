@@ -14,22 +14,22 @@ public interface FlowRecordEntityRepository extends FastRepository<FlowRecordEnt
     @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 order by r.createTime desc")
     List<FlowRecordEntity> findByProcessId(long processId);
 
-    @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 and r.state = com.codingapi.flow.domain.em.FlowState.WAIT")
+    @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 and r.state = com.codingapi.flow.em.FlowState.WAIT")
     List<FlowRecordEntity> findToDoList(long processId);
 
 
     @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 and r.nodeId = ?2 order by r.createTime desc")
     List<FlowRecordEntity> findByProcessIdAndNodeId(long processId, long nodeId, PageRequest request);
 
-    @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 and r.state != com.codingapi.flow.domain.em.FlowState.WAIT and ?2 in (r.users) ")
+    @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 and r.state != com.codingapi.flow.em.FlowState.WAIT and ?2 in (r.users) ")
     List<FlowRecordEntity> findProcessList(long processId, long userId);
 
 
-    @Query(value = "select r from FlowRecordEntity r where r.state != com.codingapi.flow.domain.em.FlowState.WAIT and ?1 in (r.users) ")
+    @Query(value = "select r from FlowRecordEntity r where r.state != com.codingapi.flow.em.FlowState.WAIT and ?1 in (r.users) ")
     Page<FlowRecordEntity> findProcessPage(long userId, PageRequest request);
 
 
-    @Query(value = "select r from FlowRecordEntity r where (r.state = com.codingapi.flow.domain.em.FlowState.WAIT and r.workId in (?1) and r.nodeId in (?2) and r.users = null) or (r.state = com.codingapi.flow.domain.em.FlowState.WAIT and ?3 in (r.users))")
+    @Query(value = "select r from FlowRecordEntity r where (r.state = com.codingapi.flow.em.FlowState.WAIT and r.workId in (?1) and r.nodeId in (?2) and r.users = null) or (r.state = com.codingapi.flow.em.FlowState.WAIT and ?3 in (r.users))")
     Page<FlowRecordEntity> findToDoPage(List<Long> workIds, List<Long> nodeIds,long userId,PageRequest request);
 
 

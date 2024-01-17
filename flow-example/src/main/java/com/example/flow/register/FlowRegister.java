@@ -1,12 +1,13 @@
 package com.example.flow.register;
 
+import com.codingapi.flow.builder.FlowNodeBuilder;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowWork;
-import com.codingapi.flow.builder.FlowNodeBuilder;
+import com.codingapi.flow.em.FlowType;
+import com.codingapi.flow.service.FlowService;
 import com.codingapi.flow.trigger.FlowTriggerFactory;
 import com.codingapi.flow.user.FlowUserMatcherFactory;
 import com.codingapi.flow.user.IFlowUser;
-import com.codingapi.flow.service.FlowService;
 import com.example.flow.domain.Leave;
 import com.example.flow.domain.User;
 import com.example.flow.repository.LeaveRepository;
@@ -74,17 +75,17 @@ public class FlowRegister implements ApplicationRunner {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowUserMatcherFactory.anyUsers(), new LeaveFlowTrigger()),
-                                FlowNode.create("manager", "经理审核", FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic()),
-                                FlowNode.create("boss", "总理审核", FlowUserMatcherFactory.users(boss), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), new LeaveFlowTrigger(), 1),
+                                FlowNode.create(2, "manager", "经理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic(), 1),
+                                FlowNode.create(3, "boss", "总理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(boss), FlowTriggerFactory.basic(), 1),
+                                FlowNode.over(4, "end", "结束")
                         )
                         .relations()
                         .start("start").addNext("manager").over("end")
                         .start("start").addNext("boss").over("end")
                         .build();
 
-        FlowWork work = new FlowWork("请假流程", admin, flow);
+        FlowWork work = new FlowWork(1,"请假流程","这是流程说明", admin, flow);
         long workId = flowService.save(work);
         log.info("workId:{}", workId);
     }
