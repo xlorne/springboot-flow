@@ -127,22 +127,25 @@ public class FlowService {
                     node.setUserMatcher(backUserMatcher);
                 }
 
-
-                // 创建下一步流程记录。即添加todo记录
-                for (int i = 0; i < node.getCount(); i++) {
-                    FlowRecord nextRecord = FlowRecordConvertor.convert(flowRecord.getProcessId(), flowRecord.getWorkId(), node, flowRecord.getBind());
-                    flowRecordRepository.save(nextRecord);
-                }
-
                 if (node.getFlowType() == FlowType.OVER) {
+                    FlowRecord nextRecord = FlowRecordConvertor.convert(flowRecord.getProcessId(), flowRecord.getWorkId(), node, flowRecord.getBind());
+                    nextRecord.finish();
+                    flowRecordRepository.save(nextRecord);
+
                     // 流程结束
                     List<FlowRecord> flowRecords = flowRecordRepository.findAll(flowRecord.getProcessId());
                     for (FlowRecord record : flowRecords) {
-                        record.finish();
+                        record.setFinish(true);
                         flowRecordRepository.save(record);
 
                         FlowFinishEvent flowEvent = new FlowFinishEvent(node, record);
                         EventPusher.push(flowEvent);
+                    }
+                }else {
+                    // 创建下一步流程记录。即添加todo记录
+                    for (int i = 0; i < node.getCount(); i++) {
+                        FlowRecord nextRecord = FlowRecordConvertor.convert(flowRecord.getProcessId(), flowRecord.getWorkId(), node, flowRecord.getBind());
+                        flowRecordRepository.save(nextRecord);
                     }
                 }
             });

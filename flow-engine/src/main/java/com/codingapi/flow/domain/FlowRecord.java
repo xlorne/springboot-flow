@@ -134,12 +134,18 @@ public class FlowRecord {
     }
 
 
+    /**
+     * 流程结束完成
+     */
     public void finish() {
         this.finish = true;
-        this.state = FlowState.PASS;
         this.updateTime = System.currentTimeMillis();
+        this.state = FlowState.PASS;
     }
 
+    /**
+     * 是否已经审批
+     */
     public boolean isApproval() {
         return this.state != FlowState.WAIT;
     }
