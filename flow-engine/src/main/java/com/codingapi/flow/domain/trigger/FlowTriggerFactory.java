@@ -10,7 +10,14 @@ public class FlowTriggerFactory {
      * 基础条件触发器
      */
     public static IFlowTrigger basic() {
-        return new BasicFlowTrigger();
+        return new BasicFlowTrigger(BasicFlowTrigger.TYPE_REJECT_NEXT);
+    }
+
+    /**
+     * 基础条件触发器
+     */
+    public static IFlowTrigger basic(int type) {
+        return new BasicFlowTrigger(type);
     }
 
     /**
