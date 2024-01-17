@@ -110,7 +110,6 @@ public class FlowRecord {
     }
 
 
-
     /**
      * 是否包含审批用户
      *
@@ -137,6 +136,8 @@ public class FlowRecord {
 
     public void finish() {
         this.finish = true;
+        this.state = FlowState.PASS;
+        this.updateTime = System.currentTimeMillis();
     }
 
     public boolean isApproval() {

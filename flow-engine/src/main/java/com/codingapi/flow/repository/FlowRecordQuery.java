@@ -42,4 +42,11 @@ public interface FlowRecordQuery {
      */
     Page<FlowRecord> findProcessPage(PageRequest request, IFlowUser currentUser);
 
+    /**
+     * 查询流程记录
+     * @param processId 流程id
+     * @return 流程记录
+     */
+    List<FlowRecord> findByProcessId(long processId);
+
 }

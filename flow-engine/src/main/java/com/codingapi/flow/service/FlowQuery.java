@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -67,4 +68,12 @@ public class FlowQuery {
     }
 
 
+    /**
+     * 获取流程详情
+     * @param processId 流程id
+     * @return 流程详情
+     */
+    public List<FlowRecord> detail(long processId) {
+        return flowRecordQuery.findByProcessId(processId);
+    }
 }

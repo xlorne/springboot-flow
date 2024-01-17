@@ -245,6 +245,10 @@ public class FlowService {
             throw new FlowServiceException("flow.approval.error", "该流程已经被审批过了");
         }
 
+        if(flowRecord.isFinish()){
+            throw new FlowServiceException("flow.approval.error", "该流程已经结束了");
+        }
+
         flowRecord.approval(user, state, option);
         flowRecordRepository.save(flowRecord);
         //触发流程

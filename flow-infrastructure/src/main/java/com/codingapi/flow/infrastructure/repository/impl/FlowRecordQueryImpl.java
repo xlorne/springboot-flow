@@ -53,4 +53,9 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
     public Page<FlowRecord> findProcessPage(PageRequest request, IFlowUser currentUser) {
         return flowRecordEntityRepository.findProcessPage(currentUser.getId(), request).map(FlowRecordConvertor::convert);
     }
+
+    @Override
+    public List<FlowRecord> findByProcessId(long processId) {
+        return flowRecordEntityRepository.findByProcessId(processId).stream().map(FlowRecordConvertor::convert).collect(Collectors.toList());
+    }
 }

@@ -96,13 +96,19 @@ public class FlowConfiguration {
 
             @Override
             public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
-                // 单元测试不支持分页
+                // 单元测试 不不许该功能
                 throw new RuntimeException("not support");
             }
 
             @Override
             public Page<FlowRecord> findProcessPage(PageRequest request, IFlowUser currentUser) {
-                // 单元测试不支持分页
+                // 单元测试 不不许该功能
+                throw new RuntimeException("not support");
+            }
+
+            @Override
+            public List<FlowRecord> findByProcessId(long processId) {
+                // 单元测试 不不许该功能
                 throw new RuntimeException("not support");
             }
         };

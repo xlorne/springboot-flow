@@ -11,6 +11,7 @@ import java.util.List;
 public interface FlowRecordEntityRepository extends FastRepository<FlowRecordEntity, Long> {
 
 
+    @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 order by r.createTime desc")
     List<FlowRecordEntity> findByProcessId(long processId);
 
     @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 and r.state = com.codingapi.flow.domain.em.FlowState.WAIT")

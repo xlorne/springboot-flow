@@ -41,6 +41,12 @@ public class FlowController {
         return MultiResponse.of(flowQuery.process(request.toPage(), user));
     }
 
+    @GetMapping("/detail")
+    public MultiResponse<FlowRecord> detail(HttpServletRequest request) {
+        long processId = Long.parseLong(request.getParameter("processId"));
+        return MultiResponse.of(flowQuery.detail(processId));
+    }
+
     @GetMapping("/start")
     public SingleResponse<Long> start(HttpServletRequest request) {
         String name = request.getParameter("name");
