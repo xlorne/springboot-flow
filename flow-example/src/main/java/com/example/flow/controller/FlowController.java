@@ -9,6 +9,7 @@ import com.example.flow.domain.User;
 import com.example.flow.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,17 +27,15 @@ public class FlowController {
     @GetMapping("/todo")
     public MultiResponse<FlowRecord> todo(HttpServletRequest request) {
         String name = request.getParameter("name");
-        long processId = Long.parseLong(request.getParameter("processId"));
         User user = userRepository.findByName(name);
-        return MultiResponse.of(flowQuery.todos(processId, user));
+        return MultiResponse.of(flowQuery.todos(PageRequest.of(0, 10), user));
     }
 
     @GetMapping("/process")
     public MultiResponse<FlowRecord> process(HttpServletRequest request) {
         String name = request.getParameter("name");
-        long processId = Long.parseLong(request.getParameter("processId"));
         User user = userRepository.findByName(name);
-        return MultiResponse.of(flowQuery.process(processId, user));
+        return MultiResponse.of(flowQuery.process(PageRequest.of(0, 10), user));
     }
 
     @GetMapping("/start")

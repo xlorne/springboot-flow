@@ -19,6 +19,8 @@ import lombok.Getter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,6 +92,16 @@ public class FlowConfiguration {
                     }
                     return false;
                 }).toList();
+            }
+
+            @Override
+            public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
+                return null;
+            }
+
+            @Override
+            public Page<FlowRecord> findProcessPage(PageRequest request, IFlowUser currentUser) {
+                return null;
             }
         };
     }

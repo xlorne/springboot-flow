@@ -6,6 +6,9 @@ import com.codingapi.flow.infrastructure.convert.FlowRecordConvertor;
 import com.codingapi.flow.infrastructure.jpa.FlowRecordEntityRepository;
 import com.codingapi.flow.repository.FlowRecordQuery;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,4 +32,14 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
+        return new PageImpl<>(flowRecordEntityRepository.findToDoPage(request).map(FlowRecordConvertor::convert)
+                .filter(record -> record.getNode().matchUser(currentUser)).stream().toList());
+    }
+
+    @Override
+    public Page<FlowRecord> findProcessPage(PageRequest request, IFlowUser currentUser) {
+        return flowRecordEntityRepository.findProcessPage(currentUser.getId(), request).map(FlowRecordConvertor::convert);
+    }
 }
