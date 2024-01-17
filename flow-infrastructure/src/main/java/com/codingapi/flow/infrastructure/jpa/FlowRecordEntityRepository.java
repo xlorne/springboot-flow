@@ -18,7 +18,8 @@ public interface FlowRecordEntityRepository extends FastRepository<FlowRecordEnt
     List<FlowRecordEntity> findToDoList(long processId);
 
 
-    List<FlowRecordEntity> findByProcessIdAndNodeId(long processId, long nodeId);
+    @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 and r.nodeId = ?2 order by r.createTime desc")
+    List<FlowRecordEntity> findByProcessIdAndNodeId(long processId, long nodeId, PageRequest request);
 
     @Query(value = "select r from FlowRecordEntity r where r.processId = ?1 and r.state != com.codingapi.flow.domain.em.FlowState.WAIT and ?2 in (r.users) ")
     List<FlowRecordEntity> findProcessList(long processId, long userId);

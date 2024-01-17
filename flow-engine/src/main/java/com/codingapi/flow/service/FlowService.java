@@ -24,7 +24,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -93,10 +92,7 @@ public class FlowService {
         if (current.isParallel()) {
             // 并行流程
             // 获取当前流程的所有记录
-            List<FlowRecord> recordList = flowRecordRepository.findAll(flowRecord.getProcessId(), current.getId());
-
-            //recordList 安装createTime字段倒叙排序，只获取current.getCount()个记录
-            recordList = recordList.stream().sorted(Comparator.comparing(FlowRecord::getCreateTime).reversed()).limit(current.getCount()).toList();
+            List<FlowRecord> recordList = flowRecordRepository.findByProcessIdOrderByCreateTimeDesc(flowRecord.getProcessId(), current.getId(), current.getCount());
 
             // 获取下一步流程
             next = current.trigger(recordList.toArray(new FlowRecord[]{}));
@@ -118,7 +114,7 @@ public class FlowService {
             next.forEach(node -> {
                 // 如果是回退，则需要指定回退用户。
                 if (state == FlowState.BACK) {
-                    List<FlowRecord> flowRecordList = flowRecordRepository.findAll(flowRecord.getProcessId(), node.getId());
+                    List<FlowRecord> flowRecordList = flowRecordRepository.findByProcessIdOrderByCreateTimeDesc(flowRecord.getProcessId(), node.getId(), node.getCount());
                     List<IFlowUser> backUsers = new ArrayList<>();
                     for (FlowRecord record : flowRecordList) {
                         backUsers.addAll(record.getUsers());
@@ -133,7 +129,7 @@ public class FlowService {
                     flowRecordRepository.save(nextRecord);
 
                     // 流程结束
-                    List<FlowRecord> flowRecords = flowRecordRepository.findAll(flowRecord.getProcessId());
+                    List<FlowRecord> flowRecords = flowRecordRepository.findByProcessIdOrderByCreateTimeDesc(flowRecord.getProcessId());
                     for (FlowRecord record : flowRecords) {
                         record.setFinish(true);
                         flowRecordRepository.save(record);
@@ -141,7 +137,7 @@ public class FlowService {
                         FlowFinishEvent flowEvent = new FlowFinishEvent(node, record);
                         EventPusher.push(flowEvent);
                     }
-                }else {
+                } else {
                     // 创建下一步流程记录。即添加todo记录
                     for (int i = 0; i < node.getCount(); i++) {
                         FlowRecord nextRecord = FlowRecordConvertor.convert(flowRecord.getProcessId(), flowRecord.getWorkId(), node, flowRecord.getBind());
@@ -188,8 +184,7 @@ public class FlowService {
         // 获取下一步流程的记录状态
         List<FlowNode> flowNodes = flowRecord.getNode().getNext();
         for (FlowNode flowNode : flowNodes) {
-
-            List<FlowRecord> flowRecords = flowRecordRepository.findAll(flowRecord.getWorkId(), flowNode.getId());
+            List<FlowRecord> flowRecords = flowRecordRepository.findByProcessIdOrderByCreateTimeDesc(flowRecord.getProcessId(), flowNode.getId(), flowNode.getCount());
             for (FlowRecord record : flowRecords) {
                 if (record.getState() != FlowState.WAIT) {
                     throw new FlowServiceException("flow.recall.error", "流程已经被审批，无法撤回");
@@ -240,18 +235,18 @@ public class FlowService {
      */
     public void approval(long recordId, FlowState state, String option, IFlowUser user) {
         FlowRecord flowRecord = flowRecordRepository.get(recordId);
-        if(flowRecord==null){
+        if (flowRecord == null) {
             throw new FlowServiceException("flow.approval.error", "流程不存在");
         }
         if (!flowRecord.getNode().matchUser(user)) {
             throw new FlowServiceException("flow.approval.error", "当前用户不能审批该流程");
         }
 
-        if(flowRecord.isApproval()){
+        if (flowRecord.isApproval()) {
             throw new FlowServiceException("flow.approval.error", "该流程已经被审批过了");
         }
 
-        if(flowRecord.isFinish()){
+        if (flowRecord.isFinish()) {
             throw new FlowServiceException("flow.approval.error", "该流程已经结束了");
         }
 
@@ -264,7 +259,6 @@ public class FlowService {
         EventPusher.push(flowEvent);
 
     }
-
 
 
 }

@@ -22,10 +22,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Configuration
 public class FlowConfiguration {
@@ -156,9 +153,13 @@ public class FlowConfiguration {
             }
 
             @Override
-            public List<FlowRecord> findAll(long processId, long nodeId) {
+            public List<FlowRecord> findByProcessIdOrderByCreateTimeDesc(long processId, long nodeId, int top) {
                 List<FlowRecord> recordList = FlowRecordCache.getInstance().get(processId, List.of());
-                return recordList.stream().filter(record -> record.getNode().getId() == nodeId).toList();
+                return recordList.stream()
+                        .filter(record -> record.getNode().getId() == nodeId)
+                        .sorted(Comparator.comparing(FlowRecord::getCreateTime).reversed())
+                        .limit(top)
+                        .toList();
             }
 
 
@@ -176,7 +177,7 @@ public class FlowConfiguration {
             }
 
             @Override
-            public List<FlowRecord> findAll(long processId) {
+            public List<FlowRecord> findByProcessIdOrderByCreateTimeDesc(long processId) {
                 return FlowRecordCache.getInstance().get(processId, List.of());
             }
         };

@@ -6,6 +6,7 @@ import com.codingapi.flow.infrastructure.entity.FlowRecordEntity;
 import com.codingapi.flow.infrastructure.jpa.FlowRecordEntityRepository;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +25,8 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository {
 
 
     @Override
-    public List<FlowRecord> findAll(long processId, long nodeId) {
-        return flowRecordEntityRepository.findByProcessIdAndNodeId(processId, nodeId).stream().map(FlowRecordConvertor::convert).collect(Collectors.toList());
+    public List<FlowRecord> findByProcessIdOrderByCreateTimeDesc(long processId, long nodeId, int top) {
+        return flowRecordEntityRepository.findByProcessIdAndNodeId(processId, nodeId, PageRequest.of(0, top)).stream().map(FlowRecordConvertor::convert).collect(Collectors.toList());
     }
 
     @Override
@@ -35,7 +36,7 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository {
 
 
     @Override
-    public List<FlowRecord> findAll(long processId) {
+    public List<FlowRecord> findByProcessIdOrderByCreateTimeDesc(long processId) {
         return flowRecordEntityRepository.findByProcessId(processId).stream().map(FlowRecordConvertor::convert).collect(Collectors.toList());
     }
 

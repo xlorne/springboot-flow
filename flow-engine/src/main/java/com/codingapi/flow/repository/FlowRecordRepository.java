@@ -1,7 +1,6 @@
 package com.codingapi.flow.repository;
 
 import com.codingapi.flow.domain.FlowRecord;
-import com.codingapi.flow.domain.user.IFlowUser;
 
 import java.util.List;
 
@@ -12,6 +11,7 @@ public interface FlowRecordRepository {
 
     /**
      * 保存流程记录
+     *
      * @param record 流程记录
      */
     void save(FlowRecord record);
@@ -21,18 +21,19 @@ public interface FlowRecordRepository {
      *
      * @param processId 流程id
      * @param nodeId    节点id
+     * @param top       查询数量
      * @return 流程记录
      */
-    List<FlowRecord> findAll(long processId, long nodeId);
+    List<FlowRecord> findByProcessIdOrderByCreateTimeDesc(long processId, long nodeId, int top);
 
 
     /**
      * 查询流程记录
+     *
      * @param recordId 流程记录id
      * @return 流程记录
      */
     FlowRecord get(long recordId);
-
 
 
     /**
@@ -41,15 +42,14 @@ public interface FlowRecordRepository {
      * @param processId 流程id
      * @return 流程记录
      */
-    List<FlowRecord> findAll(long processId);
+    List<FlowRecord> findByProcessIdOrderByCreateTimeDesc(long processId);
 
     /**
-     *  删除流程记录
+     * 删除流程记录
+     *
      * @param record 流程记录
      */
     void delete(FlowRecord record);
-
-
 
 
 }
