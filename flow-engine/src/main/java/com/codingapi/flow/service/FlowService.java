@@ -238,14 +238,14 @@ public class FlowService {
         if (flowRecord == null) {
             throw new FlowServiceException("flow.approval.error", "流程不存在");
         }
+        if (flowRecord.isApproval()) {
+            throw new FlowServiceException("flow.approval.error", "该流程已经被审批过了");
+        }
         if (flowRecord.isFinish()) {
             throw new FlowServiceException("flow.approval.error", "该流程已经结束了");
         }
         if (!flowRecord.getNode().matchUser(user)) {
             throw new FlowServiceException("flow.approval.error", "当前用户不能审批该流程");
-        }
-        if (flowRecord.isApproval()) {
-            throw new FlowServiceException("flow.approval.error", "该流程已经被审批过了");
         }
         // 撤回流程的时候，只能是撤回的用户自己能够继续提交，不再验证FlowTrigger的用户匹配器
         if (flowRecord.getUsers() != null && !flowRecord.getUsers().isEmpty()) {
