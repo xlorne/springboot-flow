@@ -264,7 +264,11 @@ export const Flow = () => {
             <Flowchart
                 onSave={(d) => {
                     console.log(d);
+                    console.log(JSON.stringify(d));
                 }}
+                data={
+                    {"nodes":[{"id":"node-5069d23a-80ab-4fd5-946b-a53ece4f12d8","renderKey":"custom-node-indicator","name":"custom-node-indicator","label":"自定义节点","width":120,"height":50,"ports":{"items":[{"group":"top","id":"84715c5d-ab1a-49f3-b274-af0a33f5f304"},{"group":"right","id":"3d3b22fe-e316-4a57-bd4d-2cc9f2bc8fc3"},{"group":"bottom","id":"4c1aa84f-aeb7-47ef-b586-b611b5c2161d"},{"group":"left","id":"42ba87fe-5f7e-4069-beaf-382050e91070"}],"groups":{"top":{"position":{"name":"top"},"attrs":{"circle":{"r":4,"magnet":true,"stroke":"#31d0c6","strokeWidth":2,"fill":"#fff","style":{"visibility":"hidden"}}},"zIndex":10},"right":{"position":{"name":"right"},"attrs":{"circle":{"r":4,"magnet":true,"stroke":"#31d0c6","strokeWidth":2,"fill":"#fff","style":{"visibility":"hidden"}}},"zIndex":10},"bottom":{"position":{"name":"bottom"},"attrs":{"circle":{"r":4,"magnet":true,"stroke":"#31d0c6","strokeWidth":2,"fill":"#fff","style":{"visibility":"hidden"}}},"zIndex":10},"left":{"position":{"name":"left"},"attrs":{"circle":{"r":4,"magnet":true,"stroke":"#31d0c6","strokeWidth":2,"fill":"#fff","style":{"visibility":"hidden"}}},"zIndex":10}}},"originData":{"name":"custom-node-indicator","width":120,"height":50,"label":"自定义节点","parentKey":"custom"},"isCustom":true,"parentKey":"custom","x":490,"y":140,"zIndex":10}],"edges":[]}
+                }
                 toolbarPanelProps={{
                     position: {
                         top: 0,
