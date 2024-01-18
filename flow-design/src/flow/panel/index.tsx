@@ -1,7 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {CanvasService, EdgeService, EditorPanels, FormWrapper, GroupService} from '@ant-design/flowchart';
+import {CanvasService, EdgeService, EditorPanels, FormWrapper, GroupService, NodeService} from '@ant-design/flowchart';
 
-const {InputFiled, ColorPicker, Position, InputNumberFiled, Size} = EditorPanels;
+const {
+    InputFiled,
+    ColorPicker,
+    Position,
+    InputNumberFiled,
+    Size
+} = EditorPanels;
 
 const PREFIX = 'flowchart-editor';
 
@@ -113,13 +119,13 @@ const NodePanel = (props: any) => {
     );
 };
 
-const NodeService = (props: any) => {
-    return (
-        <FormWrapper {...props}>
-            {(config, plugin) => <NodePanel {...props} plugin={plugin} config={config}/>}
-        </FormWrapper>
-    );
-};
+// const NodeService = (props: any) => {
+//     return (
+//         <FormWrapper {...props}>
+//             {(config, plugin) => <NodePanel {...props} plugin={plugin} config={config}/>}
+//         </FormWrapper>
+//     );
+// };
 
 export const controlMapService = (controlMap: any) => {
     controlMap.set('custom-node-service', NodeService);

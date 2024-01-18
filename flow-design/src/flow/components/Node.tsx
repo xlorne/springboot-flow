@@ -17,10 +17,22 @@ interface NodeProps {
 }
 
 export const Node: React.FC<NodeProps> = (props) => {
-    const {size = {width: 120, height: 50}, data} = props;
+    const {
+        size = {
+            width: 120,
+            height: 50
+        },
+        data
+    } = props;
     const {width, height} = size;
-    const {label = '自定义节点', stroke = '#ccc', fill = '#fff', fontFill = '#000000', fontSize = 12} = data;
-    const {script} = data;
+    const {
+        label = '自定义节点',
+        stroke = '#ccc',
+        fill = '#fff',
+        fontFill = '#000000',
+        fontSize = 12,
+        script
+    } = data;
     return (
         <div
             className="indicator-container"
