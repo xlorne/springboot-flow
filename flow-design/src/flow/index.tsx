@@ -1,72 +1,148 @@
 import React, {useEffect, useRef} from 'react';
 import {Graph} from '@antv/x6';
-import {register} from '@antv/x6-react-shape';
-import {Dropdown} from 'antd';
 import './index.less';
 
-// @ts-ignore
-const CustomComponent = ({node}) => {
-    const label = node.prop('label');
-    return (
-        <Dropdown
-            menu={{
-                items: [
-                    {key: 'copy', label: '复制'},
-                    {key: 'paste', label: '粘贴'},
-                    {key: 'delete', label: '删除'},
+Graph.registerNode(
+    'custom-node',
+    {
+        markup: [
+            {
+                tagName: 'rect',
+                selector: 'body',
+            },
+            {
+                tagName: 'text',
+                selector: 'label',
+            },
+            {
+                tagName: 'g',
+                children: [
+                    {
+                        tagName: 'text',
+                        selector: 'btnText',
+                    },
+                    {
+                        tagName: 'rect',
+                        selector: 'btn',
+                    },
                 ],
-            }}
-            trigger={['contextMenu']}
-        >
-            <div className="custom-react-node">{label}</div>
-        </Dropdown>
-    );
-};
-
-register({
-    shape: 'custom-react-node',
-    width: 100,
-    height: 40,
-    component: CustomComponent,
-});
-
-const data = {
-    nodes: [
-        {
-            id: 'node1',
-            shape: 'custom-react-node',
-            x: 40,
-            y: 40,
-            label: 'hello',
-            width: 80,
-            height: 40,
-        },
-        {
-            id: 'node2',
-            shape: 'ellipse', // 使用 ellipse 渲染
-            x: 160,
-            y: 180,
-            label: 'world',
-            width: 80,
-            height: 40,
-        },
-    ],
-    edges: [
-        {
-            shape: 'edge',
-            source: 'node1',
-            target: 'node2',
-            label: 'x6',
-            attrs: {
-                line: {
-                    stroke: '#8f8f8f',
-                    strokeWidth: 1,
-                },
+            },
+        ],
+        attrs: {
+            btn: {
+                refX: '100%',
+                refX2: -28,
+                y: 4,
+                width: 24,
+                height: 18,
+                rx: 10,
+                ry: 10,
+                fill: 'rgba(255,255,0,0.01)',
+                stroke: 'red',
+                cursor: 'pointer',
+                event: 'node:delete',
+            },
+            btnText: {
+                fontSize: 14,
+                fill: 'red',
+                text: 'x',
+                refX: '100%',
+                refX2: -19,
+                y: 17,
+                cursor: 'pointer',
+                pointerEvent: 'none',
+            },
+            body: {
+                stroke: '#8f8f8f',
+                strokeWidth: 1,
+                fill: '#fff',
+                rx: 6,
+                ry: 6,
+                refWidth: '100%',
+                refHeight: '100%',
+            },
+            label: {
+                fontSize: 14,
+                fill: '#333333',
+                refX: '50%',
+                refY: '50%',
+                textAnchor: 'middle',
+                textVerticalAnchor: 'middle',
             },
         },
-    ],
-};
-
+        ports: {
+            groups: {
+                top: {
+                    position: 'top',
+                    attrs: {
+                        circle: {
+                            r: 4,
+                            magnet: true,
+                            stroke: '#31d0c6',
+                            strokeWidth: 2,
+                            fill: '#fff',
+                        },
+                    },
+                },
+                right: {
+                    position: 'right',
+                    attrs: {
+                        circle: {
+                            r: 4,
+                            magnet: true,
+                            stroke: '#31d0c6',
+                            strokeWidth: 2,
+                            fill: '#fff',
+                        },
+                    },
+                },
+                bottom: {
+                    position: 'bottom',
+                    attrs: {
+                        circle: {
+                            r: 4,
+                            magnet: true,
+                            stroke: '#31d0c6',
+                            strokeWidth: 2,
+                            fill: '#fff',
+                        },
+                    },
+                },
+                left: {
+                    position: 'left',
+                    attrs: {
+                        circle: {
+                            r: 4,
+                            magnet: true,
+                            stroke: '#31d0c6',
+                            strokeWidth: 2,
+                            fill: '#fff',
+                        },
+                    },
+                },
+            },
+            items: [
+                {
+                    id: 'port1',
+                    group: 'top',
+                },
+                {
+                    id: 'port2',
+                    group: 'right',
+                },
+                {
+                    id: 'port3',
+                    group: 'bottom',
+                },
+                {
+                    id: 'port4',
+                    group: 'left',
+                },
+            ],
+        }
+    },
+    true,
+)
 export const Flow = () => {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -79,15 +155,58 @@ export const Flow = () => {
             background: {
                 color: '#fffbe6',
             },
+            connecting: {
+                snap: true,
+            },
             grid: {
                 size: 10,      // 网格大小 10px
                 visible: true, // 渲染网格背景
             },
         });
 
-        graph.fromJSON(data);
-        graph.centerContent();
+        //@ts-ignore
+        graph.on('node:delete', ({view, e}) => {
+            e.stopPropagation()
+            view.cell.remove()
+        })
+
+        const source = graph.addNode({
+            shape: 'custom-node',
+            x: 40,
+            y: 40,
+            width: 120,
+            height: 40,
+            attrs: {
+                label: {
+                    text: 'Source',
+                },
+            },
+        })
+
+        const target = graph.addNode({
+            shape: 'custom-node',
+            x: 160,
+            y: 240,
+            width: 120,
+            height: 40,
+            attrs: {
+                label: {
+                    text: 'Target',
+                },
+            },
+        })
+
+        // graph.centerContent();
+        // graph.fromJSON(data);
+        //@ts-ignore
+        graph.on('node:delete', ({view, e}) => {
+            e.stopPropagation()
+            view.cell.remove()
+        })
+
+
     }, []);
+
 
     return (
         <div className="react-shape-app">
