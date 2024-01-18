@@ -1,6 +1,18 @@
 import React from "react";
 import {Property} from "csstype";
 
+export const NodeDefaultConfig = {
+    name: 'test-node',
+    width: 120,
+    height: 50,
+    label: '测试节点',
+    stroke: '#ccc',
+    fill: '#fff',
+    fontFill: '#000000',
+    fontSize: 12,
+    script:'test'
+}
+
 interface NodeProps {
     data: {
         label: string,
@@ -26,12 +38,12 @@ export const Node: React.FC<NodeProps> = (props) => {
     } = props;
     const {width, height} = size;
     const {
-        label = '自定义节点',
-        stroke = '#ccc',
-        fill = '#fff',
-        fontFill = '#000000',
-        fontSize = 12,
-        script='123'
+        label =  NodeDefaultConfig.label,
+        stroke = NodeDefaultConfig.stroke,
+        fill = NodeDefaultConfig.fill,
+        fontFill = NodeDefaultConfig.fontFill,
+        fontSize = NodeDefaultConfig.fontSize,
+        script= NodeDefaultConfig.script
     } = data;
     return (
         <div

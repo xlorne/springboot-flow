@@ -37,10 +37,10 @@ const NodePanel = (props: any) => {
     return (
         <div className={`${PREFIX}-panel-body`}>
             <div className={`${PREFIX}-panel-group`}>
-                <h5>内容</h5>
+                <h5>内容</h5>               
                 <InputFiled
                     //@ts-ignore
-                    label={nodeConfig.name === 'custom-node-image' ? '图片地址' : '标题'}
+                    label={'标题'}
                     value={nodeConfig.label}
                     //@ts-ignore
                     onChange={(value) => {
@@ -55,6 +55,11 @@ const NodePanel = (props: any) => {
                     onChange={(value) => {
                         onNodeConfigChange('script', value);
                     }}
+                />
+                 <InputFiled
+                    //@ts-ignore
+                    label={'组件'}
+                    value={nodeConfig.name}
                 />
             </div>
             <div className={`${PREFIX}-panel-group`} style={{borderBottom: 'none'}}>
