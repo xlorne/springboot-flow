@@ -69,12 +69,14 @@ public class FlowConfiguration {
     @ConditionalOnMissingBean
     public FlowRecordQuery flowRecordQuery() {
         return new FlowRecordQuery() {
-
             @Override
-            public List<FlowRecord> findToDoList(long processId, IFlowUser userId) {
+            public List<FlowRecord> findToDoList(long processId, IFlowUser flowUser) {
                 return FlowRecordCache.getInstance().get(processId, List.of()).stream().filter(record -> {
                     if (record.getState() == FlowState.WAIT) {
-                        return record.getNode().matchUser(userId);
+                        if(record.getUsers()!=null && !record.getUsers().isEmpty()){
+                            return record.containsUser(flowUser);
+                        }
+                        return record.getNode().matchUser(flowUser);
                     }
                     return false;
                 }).toList();

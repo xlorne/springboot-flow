@@ -1,16 +1,13 @@
 package com.codingapi.flow.service;
 
 
+import com.codingapi.flow.bind.IBind;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
-import com.codingapi.flow.bind.IBind;
 import com.codingapi.flow.domain.convert.FlowRecordConvertor;
 import com.codingapi.flow.em.FlowState;
 import com.codingapi.flow.em.FlowType;
-import com.codingapi.flow.user.FlowUserMatcherFactory;
-import com.codingapi.flow.user.IFlowUser;
-import com.codingapi.flow.user.IFlowUserMatcher;
 import com.codingapi.flow.event.FlowApprovalEvent;
 import com.codingapi.flow.event.FlowFinishEvent;
 import com.codingapi.flow.event.FlowRecallEvent;
@@ -19,6 +16,7 @@ import com.codingapi.flow.exception.FlowServiceException;
 import com.codingapi.flow.gennerate.IdGeneratorContext;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import com.codingapi.flow.repository.FlowWorkRepository;
+import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.springboot.framework.event.EventPusher;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -114,17 +112,6 @@ public class FlowService {
         // 下一步流程记录
         if (next != null) {
             next.forEach(node -> {
-                // 如果是回退，则需要指定回退用户。
-                if (state == FlowState.BACK) {
-                    List<FlowRecord> flowRecordList = flowRecordRepository.findByProcessIdOrderByCreateTimeDesc(flowRecord.getProcessId(), node.getId(), node.getCount());
-                    List<IFlowUser> backUsers = new ArrayList<>();
-                    for (FlowRecord record : flowRecordList) {
-                        backUsers.addAll(record.getUsers());
-                    }
-                    IFlowUserMatcher backUserMatcher = FlowUserMatcherFactory.users(backUsers.toArray(new IFlowUser[]{}));
-                    node.setUserMatcher(backUserMatcher);
-                }
-
                 if (node.getFlowType() == FlowType.OVER) {
                     FlowRecord nextRecord = FlowRecordConvertor.convert(flowRecord.getProcessId(), flowRecord.getWorkId(), node, flowRecord.getBind());
                     nextRecord.finish();
@@ -143,6 +130,17 @@ public class FlowService {
                     // 创建下一步流程记录。即添加todo记录
                     for (int i = 0; i < node.getCount(); i++) {
                         FlowRecord nextRecord = FlowRecordConvertor.convert(flowRecord.getProcessId(), flowRecord.getWorkId(), node, flowRecord.getBind());
+
+                        // 如果是回退，则需要指定回退用户。
+                        if (state == FlowState.BACK) {
+                            List<FlowRecord> flowRecordList = flowRecordRepository.findByProcessIdOrderByCreateTimeDesc(flowRecord.getProcessId(), node.getId(), node.getCount());
+                            List<IFlowUser> backUsers = new ArrayList<>();
+                            for (FlowRecord record : flowRecordList) {
+                                backUsers.addAll(record.getUsers());
+                            }
+                            nextRecord.setUsers(backUsers);
+                        }
+
                         flowRecordRepository.save(nextRecord);
                     }
                 }

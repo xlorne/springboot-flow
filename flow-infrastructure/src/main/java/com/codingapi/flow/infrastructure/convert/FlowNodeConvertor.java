@@ -2,7 +2,6 @@ package com.codingapi.flow.infrastructure.convert;
 
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowWork;
-import com.codingapi.flow.infrastructure.context.FlowNodeContext;
 import com.codingapi.flow.infrastructure.entity.FlowNodeEntity;
 import com.codingapi.springboot.fast.manager.EntityManagerContent;
 
@@ -14,6 +13,7 @@ import java.util.stream.Collectors;
 public class FlowNodeConvertor {
 
 
+
     public static FlowNode convert(FlowNodeEntity entity) {
         if (entity == null || entity.getId() == null) {
             return null;
@@ -23,7 +23,6 @@ public class FlowNodeConvertor {
         flowNode.setId(entity.getId());
         flowNode.setName(entity.getName());
         flowNode.setFlowType(entity.getFlowType());
-        flowNode.setNext(entity.getNext() != null ? entity.getNext().stream().map(FlowNodeContext.getInstance()::getFlowNode).collect(Collectors.toList()) : null);
         flowNode.setFlowTrigger(entity.getFlowTrigger());
         flowNode.setUserMatcher(entity.getUserMatcher());
         flowNode.setCode(entity.getCode());
