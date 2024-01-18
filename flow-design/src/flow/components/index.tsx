@@ -1,5 +1,4 @@
 import {Node} from "./Node";
-import React from "react";
 
 export const components = [
     {
@@ -9,5 +8,10 @@ export const components = [
         width: 120,
         height: 50,
         label: '自定义节点',
+        stroke: '#ccc',
+        fill: '#fff',
+        fontFill: '#000000',
+        fontSize: 12,
+        script:'123'
     }
 ]

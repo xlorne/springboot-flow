@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {CanvasService, EdgeService, EditorPanels, FormWrapper, GroupService, NodeService} from '@ant-design/flowchart';
+import {CanvasService, EdgeService, EditorPanels, FormWrapper, GroupService} from '@ant-design/flowchart';
 
 const {
     InputFiled,
@@ -13,6 +13,7 @@ const PREFIX = 'flowchart-editor';
 
 
 const NodePanel = (props: any) => {
+    console.log(props);
     const {config, plugin = {}} = props;
     const {updateNode} = plugin;
     const [nodeConfig, setNodeConfig] = useState({
@@ -49,7 +50,7 @@ const NodePanel = (props: any) => {
                 <InputFiled
                     //@ts-ignore
                     label={'代码'}
-                    value={nodeConfig.script}
+                    value={nodeConfig.script?nodeConfig.script:config.originData.script}
                     //@ts-ignore
                     onChange={(value) => {
                         onNodeConfigChange('script', value);
@@ -79,7 +80,7 @@ const NodePanel = (props: any) => {
                 <ColorPicker
                     //@ts-ignore
                     label="填充"
-                    value={nodeConfig.fill}
+                    value={nodeConfig.fill?nodeConfig.fill:config.originData.fill }
                     //@ts-ignore
                     onChange={(value) => {
                         onNodeConfigChange('fill', value);
@@ -88,7 +89,7 @@ const NodePanel = (props: any) => {
                 <ColorPicker
                     //@ts-ignore
                     label="边框"
-                    value={nodeConfig.stroke}
+                    value={nodeConfig.stroke?nodeConfig.stroke:config.originData.stroke}
                     //@ts-ignore
                     onChange={(value) => {
                         onNodeConfigChange('stroke', value);
@@ -98,7 +99,7 @@ const NodePanel = (props: any) => {
                     <InputNumberFiled
                         //@ts-ignore
                         label="字号"
-                        value={nodeConfig.fontSize}
+                        value={nodeConfig.fontSize?nodeConfig.fontSize:config.originData.fontSize}
                         width={68}
                         //@ts-ignore
                         onChange={(value) => {
@@ -107,7 +108,7 @@ const NodePanel = (props: any) => {
                     />
                     <ColorPicker
                         //@ts-ignore
-                        value={nodeConfig.fontFill}
+                        value={nodeConfig.fontFill?nodeConfig.fontFill:config.originData.fontFill}
                         //@ts-ignore
                         onChange={(value) => {
                             onNodeConfigChange('fontFill', value);
@@ -119,13 +120,13 @@ const NodePanel = (props: any) => {
     );
 };
 
-// const NodeService = (props: any) => {
-//     return (
-//         <FormWrapper {...props}>
-//             {(config, plugin) => <NodePanel {...props} plugin={plugin} config={config}/>}
-//         </FormWrapper>
-//     );
-// };
+const NodeService = (props:any) => {
+    return (
+        <FormWrapper {...props}>
+            {(config, plugin) => <NodePanel {...props} plugin={plugin} config={config}/>}
+        </FormWrapper>
+    );
+};
 
 export const controlMapService = (controlMap: any) => {
     controlMap.set('custom-node-service', NodeService);

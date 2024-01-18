@@ -31,7 +31,7 @@ export const Node: React.FC<NodeProps> = (props) => {
         fill = '#fff',
         fontFill = '#000000',
         fontSize = 12,
-        script
+        script='123'
     } = data;
     return (
         <div
