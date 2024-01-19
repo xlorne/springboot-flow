@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Button, Divider, Form, Input, InputNumber, Select} from "antd";
+import {Button, Divider, Form, Input, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {PanelStyle} from "./PanelStyle";
-import {convertNumber, convertUsers} from "./utils";
+import {convertUsers} from "./utils";
 import {CodeEditor} from "./CodeEditor";
 import {CodeSandboxOutlined} from "@ant-design/icons";
 
@@ -114,23 +114,9 @@ export const Single: React.FC = (props: any) => {
                             }}>
                             <Select.Option value="RejectBack">基础控制(拒绝返回上一阶段)</Select.Option>
                             <Select.Option value="RejectNext">基础控制(拒绝进入下一阶段)</Select.Option>
-                            <Select.Option value="Rate">会签控制(超过比例100%)</Select.Option>
                             <Select.Option value="Custom">自定义</Select.Option>
                         </Select>
 
-                        {nodeConfig.conditionType === 'Rate' && (
-                            <InputNumber
-                                placeholder={'请输入比例'}
-                                max={100}
-                                min={0}
-                                addonAfter="%"
-                                value={convertNumber(nodeConfig.conditionValue ? nodeConfig.conditionValue : config.originData.conditionValue)}
-                                onChange={(value) => {
-                                    console.log(value);
-                                    onNodeConfigChange('conditionValue', value);
-                                }}
-                            />
-                        )}
                         {nodeConfig.conditionType === 'Custom' && (
                             <Button icon={<CodeSandboxOutlined/>} onClick={() => {
                                 setCodeKey('conditionValue')

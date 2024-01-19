@@ -1,5 +1,8 @@
 export const convertUsers = (value: any) => {
     const defaultValue = '';
+    if (value == null) {
+        return defaultValue;
+    }
     if (value === 'null') {
         return defaultValue;
     }
@@ -20,6 +23,9 @@ export const convertUsers = (value: any) => {
 
 export const convertNumber = (value: any) => {
     const defaultValue = 0;
+    if (value == null) {
+        return defaultValue;
+    }
     if (value === 'null') {
         return defaultValue;
     }
