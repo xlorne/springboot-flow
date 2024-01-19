@@ -73,13 +73,13 @@ export const Over: React.FC<OverProps> = (props) => {
         >
             <div style={
                 {
-                    backgroundColor: 'blue',
+                    backgroundColor: '#b71818',
                     width: 10,
                     height: '100%',
                     marginRight: 15
                 }
             }></div>
-            <PoweroffOutlined style={{ fontSize: '24px', color: '#08c' }}/>
+            <PoweroffOutlined style={{ fontSize: '24px', color: '#b71818' }}/>
             <div style={{
                 display: 'flex',
                 flex: 1,

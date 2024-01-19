@@ -7,7 +7,6 @@ import com.codingapi.flow.em.FlowType;
 import com.codingapi.flow.service.FlowService;
 import com.codingapi.flow.trigger.FlowTriggerFactory;
 import com.codingapi.flow.user.FlowUserMatcherFactory;
-import com.codingapi.flow.user.IFlowUser;
 import com.example.flow.domain.Leave;
 import com.example.flow.domain.User;
 import com.example.flow.repository.LeaveRepository;
@@ -76,7 +75,7 @@ public class FlowRegister implements ApplicationRunner {
                 FlowNodeBuilder.builder()
                         .addNodes(
                                 FlowNode.create(1, "start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), new LeaveFlowTrigger(), 1),
-                                FlowNode.create(2, "manager", "经理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(manager.toArray(new IFlowUser[]{})), FlowTriggerFactory.basic(), 1),
+                                FlowNode.create(2, "manager", "经理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic(), 1),
                                 FlowNode.create(3, "boss", "总理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(boss), FlowTriggerFactory.basic(), 1),
                                 FlowNode.over(4, "end", "结束")
                         )

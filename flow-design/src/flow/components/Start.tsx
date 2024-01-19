@@ -73,13 +73,13 @@ export const Start: React.FC<StartProps> = (props) => {
         >
             <div style={
                 {
-                    backgroundColor: 'blue',
+                    backgroundColor: '#28b215',
                     width: 10,
                     height: '100%',
                     marginRight: 15
                 }
             }></div>
-            <SendOutlined style={{ fontSize: '24px', color: '#08c' }} />
+            <SendOutlined style={{ fontSize: '24px', color: '#28b215' }} />
             <div style={{
                 display: 'flex',
                 flex: 1,
