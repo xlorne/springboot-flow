@@ -1,6 +1,7 @@
 import React from "react";
 import { Property } from "csstype";
 import { SendOutlined, TeamOutlined, ApiOutlined } from "@ant-design/icons"
+import {NodeDefaultConfig} from "./Node";
 
 export const StartDefaultConfig = {
     name: 'flow-start',
@@ -12,8 +13,10 @@ export const StartDefaultConfig = {
     fontFill: '#000000',
     fontSize: 16,
     code: 'start',
-    users: null,
-    conditions: null,
+    userValue: null,
+    userType: 'AnyUsers',
+    conditionType: 'RejectBack',
+    conditionValue: null,
 }
 
 interface StartProps {
@@ -24,8 +27,10 @@ interface StartProps {
         fontFill: Property.BorderColor,
         fontSize: Property.FontSize,
         code: string,
-        users: string,
-        conditions: string,
+        userType: string,
+        userValue:string,
+        conditionType: string,
+        conditionValue: string,
     }
     size: {
         width: number,
@@ -49,8 +54,10 @@ export const Start: React.FC<StartProps> = (props) => {
         fontFill = StartDefaultConfig.fontFill,
         fontSize = StartDefaultConfig.fontSize,
         code = StartDefaultConfig.code,
-        users = StartDefaultConfig.users,
-        conditions = StartDefaultConfig.conditions,
+        userType = NodeDefaultConfig.userType,
+        userValue = NodeDefaultConfig.userValue,
+        conditionType = NodeDefaultConfig.conditionType,
+        conditionValue = NodeDefaultConfig.conditionValue,
     } = data;
     return (
         <div
@@ -104,10 +111,10 @@ export const Start: React.FC<StartProps> = (props) => {
                     {code && (
                         <div >{code}</div>
                     )}
-                    {users && (
+                    {userType && (
                         <TeamOutlined style={{ marginLeft: 6, color: 'green' }} />
                     )}
-                    {conditions && (
+                    {conditionType && (
                         <ApiOutlined style={{ marginLeft: 6, color: 'green' }} />
                     )}
                 </div>

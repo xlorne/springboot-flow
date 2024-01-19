@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {Flowchart} from '@ant-design/flowchart';
 import "@ant-design/flowchart/dist/index.css";
 import "antd/dist/reset.css";
+
 
 import {controlMapService, formSchemaService} from "./panel"
 import {components} from "./components";
@@ -15,6 +16,7 @@ export const Flow = () => {
 
     let hasStartNode = false;
     let hasOverNode = false;
+
 
     const initFlowNodeState = (data: any) => {
         const nodes = data.nodes;
@@ -125,7 +127,7 @@ export const Flow = () => {
                     },
                 }}
                 detailPanelProps={{
-                    position: {width: 260, top: 40, bottom: 0, right: 0},
+                    position: {width: 360, top: 40, bottom: 0, right: 0},
                     controlMapService,
                     formSchemaService
                 }}

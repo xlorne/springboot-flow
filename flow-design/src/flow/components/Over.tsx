@@ -12,8 +12,6 @@ export const OverDefaultConfig = {
     fontFill: '#000000',
     fontSize: 16,
     code: 'over',
-    users: null,
-    conditions: null,
 }
 
 interface OverProps {
@@ -24,8 +22,6 @@ interface OverProps {
         fontFill: Property.BorderColor,
         fontSize: Property.FontSize,
         code: string,
-        users: string,
-        conditions: string,
     }
     size: {
         width: number,
@@ -49,8 +45,6 @@ export const Over: React.FC<OverProps> = (props) => {
         fontFill = OverDefaultConfig.fontFill,
         fontSize = OverDefaultConfig.fontSize,
         code = OverDefaultConfig.code,
-        users = OverDefaultConfig.users,
-        conditions = OverDefaultConfig.conditions,
     } = data;
     return (
         <div
@@ -103,12 +97,6 @@ export const Over: React.FC<OverProps> = (props) => {
 
                     {code && (
                         <div >{code}</div>
-                    )}
-                    {users && (
-                        <TeamOutlined style={{ marginLeft: 6, color: 'green' }} />
-                    )}
-                    {conditions && (
-                        <ApiOutlined style={{ marginLeft: 6, color: 'green' }} />
                     )}
                 </div>
 

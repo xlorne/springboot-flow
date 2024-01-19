@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { CanvasService, EdgeService, EditorPanels, FormWrapper, GroupService } from '@ant-design/flowchart';
+import React, {useEffect, useRef, useState} from 'react';
+import {CanvasService, EdgeService, EditorPanels, FormWrapper, GroupService} from '@ant-design/flowchart';
+import {Button, Divider, Form, Input, InputNumber, Modal, Select} from "antd";
+import TextArea from "antd/es/input/TextArea";
+import {CodeEditor} from "./code";
+
 
 const {
     InputFiled,
@@ -11,14 +15,28 @@ const {
 
 const PREFIX = 'flowchart-editor';
 
+const names = new Map(
+    [
+        ['flow-start', '开始节点'],
+        ['flow-over', '结束节点'],
+        ['flow-node', '流程节点'],
+    ]
+);
 
 const NodePanel = (props: any) => {
-    console.log(props);
-    const { config, plugin = {} } = props;
-    const { updateNode } = plugin;
+
+    const {config, plugin = {}} = props;
+    const {updateNode} = plugin;
     const [nodeConfig, setNodeConfig] = useState({
         ...config,
     });
+
+    const [showCode, setShowCode] = useState(false);
+    const [code, setCode] = useState('');
+    const [codeKey, setCodeKey] = useState('');
+    const codeEditorRef = useRef(null);
+
+    const nodeName = names.get(nodeConfig.name);
     //@ts-ignore
     const onNodeConfigChange = (key, value) => {
         setNodeConfig({
@@ -29,6 +47,7 @@ const NodePanel = (props: any) => {
             [key]: value,
         });
     };
+
     useEffect(() => {
         setNodeConfig({
             ...config,
@@ -36,52 +55,111 @@ const NodePanel = (props: any) => {
     }, [config]);
     return (
         <div className={`${PREFIX}-panel-body`}>
-            <h4 style={{ textAlign: 'center' }}>流程节点</h4>
+            <h4 style={{textAlign: 'center'}}>{nodeName}</h4>
             <div className={`${PREFIX}-panel-group`}>
-                <h5>内容</h5>
-                <InputFiled
-                    //@ts-ignore
-                    label={'标题'}
-                    value={nodeConfig.label}
-                    //@ts-ignore
-                    onChange={(value) => {
-                        onNodeConfigChange('label', value);
-                    }}
-                />
-                <InputFiled
-                    //@ts-ignore
-                    label={'代码'}
-                    value={nodeConfig.code ? nodeConfig.code : config.originData.code}
-                    //@ts-ignore
-                    onChange={(value) => {
-                        onNodeConfigChange('code', value);
-                    }}
-                />
-                <InputFiled
-                    //@ts-ignore
-                    label={'用户'}
-                    value={nodeConfig.users ? nodeConfig.users : config.originData.users}
-                    //@ts-ignore
-                    onChange={(value) => {
-                        onNodeConfigChange('users', value);
-                    }}
-                />
-                <InputFiled
-                    //@ts-ignore
-                    label={'条件'}
-                    value={nodeConfig.conditions ? nodeConfig.conditions : config.originData.conditions}
-                    //@ts-ignore
-                    onChange={(value) => {
-                        onNodeConfigChange('conditions', value);
-                    }}
-                />
-                <InputFiled
-                    //@ts-ignore
-                    label={'组件'}
-                    value={nodeConfig.name}
-                />
+                <Form
+                    layout={"vertical"}>
+                    <Form.Item
+                        label="标题"
+                    >
+                        <Input value={nodeConfig.label} onChange={(value) => {
+                            onNodeConfigChange('label', value.target.value);
+                        }}/>
+                    </Form.Item>
+
+                    <Form.Item
+                        label="代码"
+                    >
+                        <Input
+                            value={nodeConfig.code ? nodeConfig.code : config.originData.code}
+                            disabled={nodeConfig.name !== 'flow-node'}
+                            onChange={(value) => {
+                                onNodeConfigChange('code', value.target.value);
+                            }}/>
+                    </Form.Item>
+
+                    {nodeConfig.name !== 'flow-over' && (
+                        <>
+                            <Form.Item
+                                label="用户"
+
+                            >
+                                <Select
+                                    style={{
+                                        marginBottom: 5
+                                    }}
+                                    value={nodeConfig.userType ? nodeConfig.userType : config.originData.userType}
+                                    onChange={(value, option) => {
+                                        onNodeConfigChange('userType', value);
+                                    }}>
+                                    <Select.Option value="AnyUsers">所有人可见</Select.Option>
+                                    <Select.Option value="NoUsers">所有人不可见</Select.Option>
+                                    <Select.Option value="Users">指定用户可见</Select.Option>
+                                    <Select.Option value="Custom">自定义</Select.Option>
+                                </Select>
+
+                                {nodeConfig.userType === 'Custom' && (
+                                    <Button onClick={() =>{
+                                        setCodeKey('userValue')
+                                        setCode(nodeConfig.userValue ? nodeConfig.userValue : config.originData.userValue)
+                                        setShowCode(true);
+                                    }}>自定义代码</Button>
+                                )}
+                                {nodeConfig.userType === 'Users' && (
+                                    <TextArea
+                                        rows={5}
+                                        value={nodeConfig.userValue ? nodeConfig.userValue : config.originData.userValue}
+                                        onChange={(value) => {
+                                            onNodeConfigChange('userValue', value.target.value);
+                                        }}
+                                    />
+                                )}
+
+                            </Form.Item>
+
+
+                            <Form.Item
+                                label="条件"
+                            >
+                                <Select
+                                    style={{
+                                        marginBottom: 5
+                                    }}
+                                    value={nodeConfig.conditionType ? nodeConfig.conditionType : config.originData.conditionType}
+                                    onChange={(value, option) => {
+                                        onNodeConfigChange('conditionType', value);
+                                    }}>
+                                    <Select.Option value="RejectBack">基础控制(拒绝返回上一阶段)</Select.Option>
+                                    <Select.Option value="RejectNext">基础控制(拒绝进入下一阶段)</Select.Option>
+                                    <Select.Option value="Rate">会签控制(超过比例)</Select.Option>
+                                    <Select.Option value="Custom">自定义</Select.Option>
+                                </Select>
+
+                                {nodeConfig.conditionType === 'Rate' && (
+                                    <InputNumber
+                                        value={nodeConfig.conditionValue ? nodeConfig.conditionValue : config.originData.conditionValue}
+                                        onChange={(value) => {
+                                            onNodeConfigChange('conditionValue', value);
+                                        }}
+                                    />
+                                )}
+                                {nodeConfig.conditionType === 'Custom' && (
+                                    <Button onClick={() =>{
+                                        setCodeKey('conditionValue')
+                                        setCode(nodeConfig.conditionValue ? nodeConfig.conditionValue : config.originData.conditionValue)
+                                        setShowCode(true);
+                                    }}>自定义代码</Button>
+                                )}
+
+                            </Form.Item>
+                        </>
+                    )}
+
+
+                </Form>
             </div>
-            <div className={`${PREFIX}-panel-group`} style={{ borderBottom: 'none' }}>
+            <Divider/>
+            <div className={`${PREFIX}-panel-group`} style={{borderBottom: 'none'}}>
                 <h5>样式</h5>
                 <Position
                     //@ts-ignore
@@ -140,6 +218,26 @@ const NodePanel = (props: any) => {
                     />
                 </div>
             </div>
+
+            <Modal
+                open={showCode}
+                width={800}
+                onCancel={() => {
+                    setShowCode(false)
+                }}
+                okText="确认"
+                cancelText="取消"
+
+                title="自定义代码"
+                onOk={()=>{
+                    // @ts-ignore
+                    const code = codeEditorRef.current?.getValue();
+                    onNodeConfigChange(codeKey, code);
+                    setShowCode(false);
+                }}
+            >
+                <CodeEditor value={code} ref={codeEditorRef}/>
+            </Modal>
         </div>
     );
 };
@@ -147,7 +245,7 @@ const NodePanel = (props: any) => {
 const NodeService = (props: any) => {
     return (
         <FormWrapper {...props}>
-            {(config, plugin) => <NodePanel {...props} plugin={plugin} config={config} />}
+            {(config, plugin) => <NodePanel {...props} plugin={plugin} config={config}/>}
         </FormWrapper>
     );
 };
@@ -162,7 +260,7 @@ export const controlMapService = (controlMap: any) => {
 
 
 export const formSchemaService = async (args: any) => {
-    const { targetType } = args;
+    const {targetType} = args;
     const isGroup = args.targetData?.isGroup;
     const groupSchema = {
         tabs: [

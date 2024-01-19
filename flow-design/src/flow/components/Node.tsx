@@ -11,9 +11,11 @@ export const NodeDefaultConfig = {
     fill: '#fff',
     fontFill: '#000000',
     fontSize: 16,
-    code: 'test',
-    users: null,
-    conditions: null,
+    code: 'code',
+    userValue: null,
+    userType: 'AnyUsers',
+    conditionType: 'RejectBack',
+    conditionValue: null,
 }
 
 interface NodeProps {
@@ -24,8 +26,10 @@ interface NodeProps {
         fontFill: Property.BorderColor,
         fontSize: Property.FontSize,
         code: string,
-        users: string,
-        conditions: string,
+        userType: string,
+        userValue:string,
+        conditionType: string,
+        conditionValue: string,
     }
     size: {
         width: number,
@@ -49,8 +53,10 @@ export const Node: React.FC<NodeProps> = (props) => {
         fontFill = NodeDefaultConfig.fontFill,
         fontSize = NodeDefaultConfig.fontSize,
         code = NodeDefaultConfig.code,
-        users = NodeDefaultConfig.users,
-        conditions = NodeDefaultConfig.conditions,
+        userType = NodeDefaultConfig.userType,
+        userValue = NodeDefaultConfig.userValue,
+        conditionType = NodeDefaultConfig.conditionType,
+        conditionValue = NodeDefaultConfig.conditionValue,
     } = data;
     return (
         <div
@@ -104,10 +110,10 @@ export const Node: React.FC<NodeProps> = (props) => {
                     {code && (
                         <div >{code}</div>
                     )}
-                    {users && (
+                    {userType && (
                         <TeamOutlined style={{ marginLeft: 6, color: 'green' }} />
                     )}
-                    {conditions && (
+                    {conditionType && (
                         <ApiOutlined style={{ marginLeft: 6, color: 'green' }} />
                     )}
                 </div>
