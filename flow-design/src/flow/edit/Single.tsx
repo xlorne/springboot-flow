@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {Button, Divider, Form, Input, InputNumber, Select} from "antd";
+import React, {useEffect, useRef, useState} from "react";
+import {Button, Divider, Form, Input, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import {PanelStyle} from "./PanelStyle";
-import {convertNumber, convertUsers} from "./utils";
-import {CodeEditor} from "./CodeEditor";
+import {PanelStyle} from "./components/PanelStyle";
+import {convertUsers} from "./utils";
+import {CodeEditor} from "./components/CodeEditor";
 import {CodeSandboxOutlined} from "@ant-design/icons";
+
 
 const PREFIX = 'flowchart-editor';
 
-export const Multiple: React.FC = (props: any) => {
+export const Single: React.FC = (props: any) => {
 
     const {config, plugin = {}} = props;
     const {updateNode} = plugin;
@@ -19,6 +20,7 @@ export const Multiple: React.FC = (props: any) => {
     const [showCode, setShowCode] = useState(false);
     const [code, setCode] = useState('');
     const [codeKey, setCodeKey] = useState('');
+    const codeEditorRef = useRef(null);
 
     //@ts-ignore
     const onNodeConfigChange = (key, value) => {
@@ -58,19 +60,6 @@ export const Multiple: React.FC = (props: any) => {
                             value={nodeConfig.code ? nodeConfig.code : config.originData.code}
                             onChange={(value) => {
                                 onNodeConfigChange('code', value.target.value);
-                            }}/>
-                    </Form.Item>
-
-                    <Form.Item
-                        label="数量"
-                    >
-                        <InputNumber
-                            placeholder={'请输入数量'}
-                            max={1000}
-                            min={1}
-                            value={nodeConfig.count ? nodeConfig.count : config.originData.count}
-                            onChange={(value) => {
-                                onNodeConfigChange('count', value);
                             }}/>
                     </Form.Item>
 
@@ -125,22 +114,9 @@ export const Multiple: React.FC = (props: any) => {
                             }}>
                             <Select.Option value="RejectBack">基础控制(拒绝返回上一阶段)</Select.Option>
                             <Select.Option value="RejectNext">基础控制(拒绝进入下一阶段)</Select.Option>
-                            <Select.Option value="Rate">会签控制(超过比例100%)</Select.Option>
                             <Select.Option value="Custom">自定义</Select.Option>
                         </Select>
 
-                        {nodeConfig.conditionType === 'Rate' && (
-                            <InputNumber
-                                placeholder={'请输入比例'}
-                                max={100}
-                                min={0}
-                                addonAfter="%"
-                                value={convertNumber(nodeConfig.conditionValue ? nodeConfig.conditionValue : config.originData.conditionValue)}
-                                onChange={(value) => {
-                                    onNodeConfigChange('conditionValue', value);
-                                }}
-                            />
-                        )}
                         {nodeConfig.conditionType === 'Custom' && (
                             <Button icon={<CodeSandboxOutlined/>} onClick={() => {
                                 setCodeKey('conditionValue')

@@ -1,15 +1,15 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Divider, Form, Input, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import {PanelStyle} from "./PanelStyle";
+import {PanelStyle} from "./components/PanelStyle";
 import {convertUsers} from "./utils";
-import {CodeEditor} from "./CodeEditor";
+import {CodeEditor} from "./components/CodeEditor";
 import {CodeSandboxOutlined} from "@ant-design/icons";
 
 
 const PREFIX = 'flowchart-editor';
 
-export const Single: React.FC = (props: any) => {
+export const Start: React.FC = (props: any) => {
 
     const {config, plugin = {}} = props;
     const {updateNode} = plugin;
@@ -20,7 +20,6 @@ export const Single: React.FC = (props: any) => {
     const [showCode, setShowCode] = useState(false);
     const [code, setCode] = useState('');
     const [codeKey, setCodeKey] = useState('');
-    const codeEditorRef = useRef(null);
 
     //@ts-ignore
     const onNodeConfigChange = (key, value) => {
@@ -38,8 +37,6 @@ export const Single: React.FC = (props: any) => {
             ...config,
         });
     }, [config]);
-
-
     return (
         <div className={`${PREFIX}-panel-body`}>
             <div className={`${PREFIX}-panel-group`}>
@@ -58,6 +55,7 @@ export const Single: React.FC = (props: any) => {
                     >
                         <Input
                             value={nodeConfig.code ? nodeConfig.code : config.originData.code}
+                            disabled={true}
                             onChange={(value) => {
                                 onNodeConfigChange('code', value.target.value);
                             }}/>
@@ -65,6 +63,7 @@ export const Single: React.FC = (props: any) => {
 
                     <Form.Item
                         label="用户"
+
                     >
                         <Select
                             style={{
@@ -129,6 +128,7 @@ export const Single: React.FC = (props: any) => {
                 </Form>
             </div>
             <Divider/>
+
             <PanelStyle
                 {...props}
             />

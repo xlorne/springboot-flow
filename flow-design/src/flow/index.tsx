@@ -2,9 +2,8 @@ import React from 'react';
 import {Flowchart} from '@ant-design/flowchart';
 import "@ant-design/flowchart/dist/index.css";
 import "antd/dist/reset.css";
-
 import {controlMapService, formSchemaService} from "./panel"
-import {components} from "./components";
+import {components} from "./node";
 import {message} from "antd";
 
 interface FlowProps {
@@ -118,9 +117,7 @@ export const Flow: React.FC<FlowProps> = (props) => {
                     },
                     style: {
                         height: 40,
-                    },
-
-
+                    }
                 }}
                 scaleToolbarPanelProps={{
                     layout: 'horizontal',

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Divider, Form, Input} from "antd";
-import {PanelStyle} from "./PanelStyle";
+import {PanelStyle} from "./components/PanelStyle";
 
 
 const PREFIX = 'flowchart-editor';
