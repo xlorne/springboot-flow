@@ -9,8 +9,10 @@ import {components} from "./components";
 import {message} from "antd";
 
 interface FlowProps {
-    title?: string;
-    data?: any;
+    data?: {
+        title: string,
+        data: any
+    };
     onSave?: (data: any) => void;
 }
 
@@ -39,7 +41,7 @@ export const Flow:React.FC<FlowProps> = (props) => {
         return data;
     }
 
-    const data = initFlowNodeState(props.data);
+    const data = initFlowNodeState(props.data?.data);
 
     return (
         <div style={{height: '100vh'}}>
@@ -61,12 +63,16 @@ export const Flow:React.FC<FlowProps> = (props) => {
                     fontSize: 16,
                     fontWeight: 400,
                 }}>
-                    {props.title}
+                    {props.data?.title}
                 </div>
             </div>
             <Flowchart
                 onSave={async (d) => {
-                    props.onSave && props.onSave(d);
+                    const data = {
+                        title: props.data?.title,
+                        data: d
+                    }
+                    props.onSave && props.onSave(data);
                 }}
                 onReady={async (graph, app) => {
                     flowApp = app;
