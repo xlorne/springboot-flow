@@ -10,16 +10,15 @@ export const components = [
         ...StartDefaultConfig
     },
     {
-        component: Multiple,
-        popover: () => <div>会签节点</div>,
-        ...MultipleDefaultConfig
-    },
-    {
         component: Single,
         popover: () => <div>或签节点</div>,
         ...SingleDefaultConfig
     },
-
+    {
+        component: Multiple,
+        popover: () => <div>会签节点</div>,
+        ...MultipleDefaultConfig
+    },
     {
         component: Over,
         popover: () => <div>结束</div>,

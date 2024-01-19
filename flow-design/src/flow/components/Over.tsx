@@ -4,7 +4,7 @@ import {PoweroffOutlined} from "@ant-design/icons"
 
 export const OverDefaultConfig = {
     name: 'flow-over',
-    width: 160,
+    width: 200,
     height: 60,
     label: '结束',
     stroke: '#ccc',
@@ -48,7 +48,6 @@ export const Over: React.FC<OverProps> = (props) => {
     } = data;
     return (
         <div
-            className="indicator-container"
             style={{
                 position: 'relative',
                 borderRadius: '6px',
@@ -73,7 +72,7 @@ export const Over: React.FC<OverProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <PoweroffOutlined style={{ fontSize: '24px', color: '#b71818' }}/>
+            <PoweroffOutlined style={{fontSize: '24px', color: '#b71818'}}/>
             <div style={{
                 display: 'flex',
                 flex: 1,
@@ -84,22 +83,25 @@ export const Over: React.FC<OverProps> = (props) => {
                 marginTop: 6
 
             }}>
-                <div style={{ color: fontFill, fontWeight: 'bold', marginBottom: 6 }}>{label}</div>
-
-                <div style={
-                    {
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: fontFill,
-                        fontSize: 14
-                    }}>
-
-                    {code && (
-                        <div >{code}</div>
-                    )}
-                </div>
-
+                <div style={{
+                    color: fontFill,
+                    fontWeight: 'bold',
+                    marginBottom: 6,
+                    width: '100px',
+                    textAlign: 'center'
+                }}>{label}</div>
+                {code && (
+                    <div style={
+                        {
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: fontFill,
+                            fontSize: 14
+                        }}>
+                        {code}
+                    </div>
+                )}
             </div>
         </div>
     );

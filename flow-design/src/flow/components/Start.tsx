@@ -4,7 +4,7 @@ import {ApiOutlined, SendOutlined, UserSwitchOutlined} from "@ant-design/icons"
 
 export const StartDefaultConfig = {
     name: 'flow-start',
-    width: 160,
+    width: 200,
     height: 60,
     label: '开始',
     stroke: '#ccc',
@@ -27,7 +27,7 @@ interface StartProps {
         fontSize: Property.FontSize,
         code: string,
         userType: string,
-        userValue:string,
+        userValue: string,
         conditionType: string,
         conditionValue: string,
     }
@@ -45,7 +45,7 @@ export const Start: React.FC<StartProps> = (props) => {
         },
         data
     } = props;
-    const { width, height } = size;
+    const {width, height} = size;
     const {
         label = StartDefaultConfig.label,
         stroke = StartDefaultConfig.stroke,
@@ -60,7 +60,6 @@ export const Start: React.FC<StartProps> = (props) => {
     } = data;
     return (
         <div
-            className="indicator-container"
             style={{
                 position: 'relative',
                 borderRadius: '6px',
@@ -85,7 +84,7 @@ export const Start: React.FC<StartProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <SendOutlined style={{ fontSize: '24px', color: '#47e533' }} />
+            <SendOutlined style={{fontSize: '24px', color: '#47e533'}}/>
             <div style={{
                 display: 'flex',
                 flex: 1,
@@ -96,28 +95,50 @@ export const Start: React.FC<StartProps> = (props) => {
                 marginTop: 6
 
             }}>
-                <div style={{ color: fontFill, fontWeight: 'bold', marginBottom: 6 }}>{label}</div>
+                <div style={{
+                    color: fontFill,
+                    fontWeight: 'bold',
+                    marginBottom: 6,
+                    width: '100px',
+                    textAlign: 'center'
+                }}>{label}</div>
+                {code && (
+                    <div style={
+                        {
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: fontFill,
+                            fontSize: 14
+                        }}>
+                        {code}
+                    </div>
+                )}
+            </div>
 
-                <div style={
-                    {
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: fontFill,
-                        fontSize: 14
-                    }}>
-
-                    {code && (
-                        <div >{code}</div>
-                    )}
-                    {userType && (
-                        <UserSwitchOutlined style={{ marginLeft: 6, color: 'green' }} />
-                    )}
-                    {conditionType && (
-                        <ApiOutlined style={{ marginLeft: 6, color: 'green' }} />
-                    )}
-                </div>
-
+            <div style={
+                {
+                    width: '20px',
+                    height: '100%',
+                    display: 'flex',
+                    flex: 1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: 3
+                }
+            }>
+                {userType && (
+                    <UserSwitchOutlined style={{
+                        color: '#9fab20',
+                    }}/>
+                )}
+                {conditionType && (
+                    <ApiOutlined style={{
+                        color: '#9fab20',
+                        marginTop: '10px'
+                    }}/>
+                )}
             </div>
         </div>
     );

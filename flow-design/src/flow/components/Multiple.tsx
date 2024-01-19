@@ -4,7 +4,7 @@ import {ApiOutlined, TeamOutlined, UserSwitchOutlined} from "@ant-design/icons"
 
 export const MultipleDefaultConfig = {
     name: 'flow-multiple',
-    width: 160,
+    width: 200,
     height: 60,
     label: '会签节点',
     stroke: '#ccc',
@@ -63,7 +63,6 @@ export const Multiple: React.FC<MultipleProps> = (props) => {
     } = data;
     return (
         <div
-            className="indicator-container"
             style={{
                 position: 'relative',
                 borderRadius: '6px',
@@ -88,7 +87,7 @@ export const Multiple: React.FC<MultipleProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <TeamOutlined   style={{ fontSize: '24px', color: '#0623b9' }} />
+            <TeamOutlined style={{fontSize: '24px', color: '#0623b9'}}/>
             <div style={{
                 display: 'flex',
                 flex: 1,
@@ -99,28 +98,49 @@ export const Multiple: React.FC<MultipleProps> = (props) => {
                 marginTop: 6
 
             }}>
-                <div style={{ color: fontFill, fontWeight: 'bold', marginBottom: 6 }}>{label}</div>
-
-                <div style={
-                    {
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        color: fontFill,
-                        fontSize: 14
-                    }}>
-
-                    {code && (
-                        <div >{code}</div>
-                    )}
-                    {userType && (
-                        <UserSwitchOutlined  style={{ marginLeft: 6, color: 'green' }} />
-                    )}
-                    {conditionType && (
-                        <ApiOutlined style={{ marginLeft: 6, color: 'green' }} />
-                    )}
-                </div>
-
+                <div style={{
+                    color: fontFill,
+                    fontWeight: 'bold',
+                    marginBottom: 6,
+                    width: '100px',
+                    textAlign: 'center'
+                }}>{label}</div>
+                {code && (
+                    <div style={
+                        {
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: fontFill,
+                            fontSize: 14
+                        }}>
+                        {code}
+                    </div>
+                )}
+            </div>
+            <div style={
+                {
+                    width: '20px',
+                    height: '100%',
+                    display: 'flex',
+                    flex: 1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: 3
+                }
+            }>
+                {userType && (
+                    <UserSwitchOutlined style={{
+                        color: '#9fab20',
+                    }}/>
+                )}
+                {conditionType && (
+                    <ApiOutlined style={{
+                        color: '#9fab20',
+                        marginTop: '10px'
+                    }}/>
+                )}
             </div>
         </div>
     );
