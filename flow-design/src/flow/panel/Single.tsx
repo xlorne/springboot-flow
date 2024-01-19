@@ -1,15 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {Button, Divider, Form, Input, Select} from "antd";
+import React, {useEffect, useRef, useState} from "react";
+import {Button, Divider, Form, Input, InputNumber, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {PanelStyle} from "./PanelStyle";
-import {convertUsers} from "./utils";
+import {convertNumber, convertUsers} from "./utils";
 import {CodeEditor} from "./CodeEditor";
 import {CodeSandboxOutlined} from "@ant-design/icons";
 
 
 const PREFIX = 'flowchart-editor';
 
-export const Start: React.FC = (props: any) => {
+export const Single: React.FC = (props: any) => {
 
     const {config, plugin = {}} = props;
     const {updateNode} = plugin;
@@ -20,6 +20,7 @@ export const Start: React.FC = (props: any) => {
     const [showCode, setShowCode] = useState(false);
     const [code, setCode] = useState('');
     const [codeKey, setCodeKey] = useState('');
+    const codeEditorRef = useRef(null);
 
     //@ts-ignore
     const onNodeConfigChange = (key, value) => {
@@ -37,6 +38,8 @@ export const Start: React.FC = (props: any) => {
             ...config,
         });
     }, [config]);
+
+
     return (
         <div className={`${PREFIX}-panel-body`}>
             <div className={`${PREFIX}-panel-group`}>
@@ -55,7 +58,6 @@ export const Start: React.FC = (props: any) => {
                     >
                         <Input
                             value={nodeConfig.code ? nodeConfig.code : config.originData.code}
-                            disabled={true}
                             onChange={(value) => {
                                 onNodeConfigChange('code', value.target.value);
                             }}/>
@@ -63,7 +65,6 @@ export const Start: React.FC = (props: any) => {
 
                     <Form.Item
                         label="用户"
-
                     >
                         <Select
                             style={{
@@ -113,11 +114,25 @@ export const Start: React.FC = (props: any) => {
                             }}>
                             <Select.Option value="RejectBack">基础控制(拒绝返回上一阶段)</Select.Option>
                             <Select.Option value="RejectNext">基础控制(拒绝进入下一阶段)</Select.Option>
+                            <Select.Option value="Rate">会签控制(超过比例100%)</Select.Option>
                             <Select.Option value="Custom">自定义</Select.Option>
                         </Select>
 
+                        {nodeConfig.conditionType === 'Rate' && (
+                            <InputNumber
+                                placeholder={'请输入比例'}
+                                max={100}
+                                min={0}
+                                addonAfter="%"
+                                value={convertNumber(nodeConfig.conditionValue ? nodeConfig.conditionValue : config.originData.conditionValue)}
+                                onChange={(value) => {
+                                    console.log(value);
+                                    onNodeConfigChange('conditionValue', value);
+                                }}
+                            />
+                        )}
                         {nodeConfig.conditionType === 'Custom' && (
-                            <Button  icon={<CodeSandboxOutlined />} onClick={() => {
+                            <Button icon={<CodeSandboxOutlined/>} onClick={() => {
                                 setCodeKey('conditionValue')
                                 setCode(nodeConfig.conditionValue ? nodeConfig.conditionValue : config.originData.conditionValue)
                                 setShowCode(true);
@@ -128,7 +143,6 @@ export const Start: React.FC = (props: any) => {
                 </Form>
             </div>
             <Divider/>
-
             <PanelStyle
                 {...props}
             />

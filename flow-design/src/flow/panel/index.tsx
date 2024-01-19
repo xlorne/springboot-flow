@@ -1,8 +1,9 @@
 import React from 'react';
 import {CanvasService, EdgeService, FormWrapper, GroupService} from '@ant-design/flowchart';
-import {Node} from "./Node";
 import {Start} from "./Start";
 import {Over} from "./Over";
+import {Single} from "./Single";
+import {Multiple} from "./Multiple";
 
 
 const components = [
@@ -11,13 +12,18 @@ const components = [
         component: Start,
     },
     {
-        name: 'flow-node',
-        component: Node,
-    },
-    {
         name: 'flow-over',
         component: Over,
+    },
+    {
+        name: 'flow-single',
+        component: Single,
+    },
+    {
+        name: 'flow-multiple',
+        component: Multiple,
     }
+
 ]
 
 

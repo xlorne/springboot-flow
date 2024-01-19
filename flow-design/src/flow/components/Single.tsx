@@ -1,24 +1,24 @@
 import React from "react";
-import { Property } from "csstype";
-import { SettingOutlined, TeamOutlined, ApiOutlined } from "@ant-design/icons"
+import {Property} from "csstype";
+import {ApiOutlined, UserOutlined, UserSwitchOutlined} from "@ant-design/icons"
 
-export const NodeDefaultConfig = {
-    name: 'flow-node',
+export const SingleDefaultConfig = {
+    name: 'flow-single',
     width: 160,
     height: 60,
-    label: '流程节点',
+    label: '或签节点',
     stroke: '#ccc',
     fill: '#fff',
     fontFill: '#000000',
     fontSize: 14,
-    code: 'code',
+    code: 'single',
     userValue: null,
     userType: 'AnyUsers',
     conditionType: 'RejectBack',
     conditionValue: null,
 }
 
-interface NodeProps {
+interface SingleProps {
     data: {
         label: string,
         stroke: Property.BorderColor,
@@ -37,26 +37,26 @@ interface NodeProps {
     }
 }
 
-export const Node: React.FC<NodeProps> = (props) => {
+export const Single: React.FC<SingleProps> = (props) => {
     const {
         size = {
-            width: NodeDefaultConfig.width,
-            height: NodeDefaultConfig.height
+            width: SingleDefaultConfig.width,
+            height: SingleDefaultConfig.height
         },
         data
     } = props;
     const { width, height } = size;
     const {
-        label = NodeDefaultConfig.label,
-        stroke = NodeDefaultConfig.stroke,
-        fill = NodeDefaultConfig.fill,
-        fontFill = NodeDefaultConfig.fontFill,
-        fontSize = NodeDefaultConfig.fontSize,
-        code = NodeDefaultConfig.code,
-        userType = NodeDefaultConfig.userType,
-        userValue = NodeDefaultConfig.userValue,
-        conditionType = NodeDefaultConfig.conditionType,
-        conditionValue = NodeDefaultConfig.conditionValue,
+        label = SingleDefaultConfig.label,
+        stroke = SingleDefaultConfig.stroke,
+        fill = SingleDefaultConfig.fill,
+        fontFill = SingleDefaultConfig.fontFill,
+        fontSize = SingleDefaultConfig.fontSize,
+        code = SingleDefaultConfig.code,
+        userType = SingleDefaultConfig.userType,
+        userValue = SingleDefaultConfig.userValue,
+        conditionType = SingleDefaultConfig.conditionType,
+        conditionValue = SingleDefaultConfig.conditionValue,
     } = data;
     return (
         <div
@@ -79,13 +79,13 @@ export const Node: React.FC<NodeProps> = (props) => {
         >
             <div style={
                 {
-                    backgroundColor: 'blue',
+                    backgroundColor: '#405bec',
                     width: 10,
                     height: '100%',
                     marginRight: 15
                 }
             }></div>
-            <SettingOutlined style={{ fontSize: '24px', color: '#08c' }} />
+            <UserOutlined  style={{ fontSize: '24px', color: '#08c' }} />
             <div style={{
                 display: 'flex',
                 flex: 1,
@@ -111,7 +111,7 @@ export const Node: React.FC<NodeProps> = (props) => {
                         <div >{code}</div>
                     )}
                     {userType && (
-                        <TeamOutlined style={{ marginLeft: 6, color: 'green' }} />
+                        <UserSwitchOutlined style={{ marginLeft: 6, color: 'green' }} />
                     )}
                     {conditionType && (
                         <ApiOutlined style={{ marginLeft: 6, color: 'green' }} />

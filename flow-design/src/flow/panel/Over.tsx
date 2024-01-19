@@ -48,7 +48,7 @@ export const Over: React.FC = (props: any) => {
                     >
                         <Input
                             value={nodeConfig.code ? nodeConfig.code : config.originData.code}
-                            disabled={nodeConfig.name !== 'flow-node'}
+                            disabled={true}
                             onChange={(value) => {
                                 onNodeConfigChange('code', value.target.value);
                             }}/>

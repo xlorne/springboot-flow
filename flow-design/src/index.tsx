@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import {Flow} from "./flow";
+import {App} from "./App";
 import {ConfigProvider} from 'antd';
 
 const root = ReactDOM.createRoot(
@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <ConfigProvider>
-        <Flow/>
+        <App/>
     </ConfigProvider>
 );
 

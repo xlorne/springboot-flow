@@ -7,9 +7,14 @@ import "antd/dist/reset.css";
 import {controlMapService, formSchemaService} from "./panel"
 import {components} from "./components";
 import {message} from "antd";
-import * as initData from "./data/data.json";
 
-export const Flow = () => {
+interface FlowProps {
+    title?: string;
+    data?: any;
+    onSave?: (data: any) => void;
+}
+
+export const Flow:React.FC<FlowProps> = (props) => {
 
     let flowApp: any = null;
     let flowGraph: any = null;
@@ -19,6 +24,9 @@ export const Flow = () => {
 
 
     const initFlowNodeState = (data: any) => {
+        if(data==null){
+            return {};
+        }
         const nodes = data.nodes;
         for (const node of nodes) {
             if (node.name === 'flow-start') {
@@ -31,7 +39,7 @@ export const Flow = () => {
         return data;
     }
 
-    const data = initFlowNodeState(initData);
+    const data = initFlowNodeState(props.data);
 
     return (
         <div style={{height: '100vh'}}>
@@ -40,7 +48,7 @@ export const Flow = () => {
                     position: 'absolute',
                     zIndex: 100,
                     height: 40,
-                    left: '35%',
+                    left: '40%',
                     width: '300px',
                     minWidth: '100px',
                     textAlign: 'center',
@@ -53,12 +61,12 @@ export const Flow = () => {
                     fontSize: 16,
                     fontWeight: 400,
                 }}>
-                    请假流程设计
+                    {props.title}
                 </div>
             </div>
             <Flowchart
                 onSave={async (d) => {
-                    console.log(JSON.stringify(d));
+                    props.onSave && props.onSave(d);
                 }}
                 onReady={async (graph, app) => {
                     flowApp = app;
@@ -133,9 +141,9 @@ export const Flow = () => {
                     edgeConfig: {
                         attrs: {
                             line: {
-                                stroke: 'green',
+                                stroke: '#9fab20',
                                 strokeDasharray: '0',
-                                strokeWidth: 3,
+                                strokeWidth: 2,
                             },
                         },
                     }

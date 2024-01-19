@@ -6,10 +6,9 @@ import {convertNumber, convertUsers} from "./utils";
 import {CodeEditor} from "./CodeEditor";
 import {CodeSandboxOutlined} from "@ant-design/icons";
 
-
 const PREFIX = 'flowchart-editor';
 
-export const Node: React.FC = (props: any) => {
+export const Multiple: React.FC = (props: any) => {
 
     const {config, plugin = {}} = props;
     const {updateNode} = plugin;
@@ -58,9 +57,21 @@ export const Node: React.FC = (props: any) => {
                     >
                         <Input
                             value={nodeConfig.code ? nodeConfig.code : config.originData.code}
-                            disabled={nodeConfig.name !== 'flow-node'}
                             onChange={(value) => {
                                 onNodeConfigChange('code', value.target.value);
+                            }}/>
+                    </Form.Item>
+
+                    <Form.Item
+                        label="数量"
+                    >
+                        <InputNumber
+                            placeholder={'请输入数量'}
+                            max={1000}
+                            min={1}
+                            value={nodeConfig.count ? nodeConfig.count : config.originData.count}
+                            onChange={(value) => {
+                                onNodeConfigChange('count', value);
                             }}/>
                     </Form.Item>
 
@@ -127,7 +138,6 @@ export const Node: React.FC = (props: any) => {
                                 addonAfter="%"
                                 value={convertNumber(nodeConfig.conditionValue ? nodeConfig.conditionValue : config.originData.conditionValue)}
                                 onChange={(value) => {
-                                    console.log(value);
                                     onNodeConfigChange('conditionValue', value);
                                 }}
                             />

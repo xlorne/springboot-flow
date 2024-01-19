@@ -1,24 +1,25 @@
 import React from "react";
 import {Property} from "csstype";
-import {ApiOutlined, SendOutlined, UserSwitchOutlined} from "@ant-design/icons"
+import {ApiOutlined, TeamOutlined, UserSwitchOutlined} from "@ant-design/icons"
 
-export const StartDefaultConfig = {
-    name: 'flow-start',
+export const MultipleDefaultConfig = {
+    name: 'flow-multiple',
     width: 160,
     height: 60,
-    label: '开始',
+    label: '会签节点',
     stroke: '#ccc',
     fill: '#fff',
     fontFill: '#000000',
     fontSize: 14,
-    code: 'start',
+    code: 'multiple',
     userValue: null,
     userType: 'AnyUsers',
     conditionType: 'RejectBack',
     conditionValue: null,
+    count: 1,
 }
 
-interface StartProps {
+interface MultipleProps {
     data: {
         label: string,
         stroke: Property.BorderColor,
@@ -30,6 +31,7 @@ interface StartProps {
         userValue:string,
         conditionType: string,
         conditionValue: string,
+        count: number,
     }
     size: {
         width: number,
@@ -37,26 +39,27 @@ interface StartProps {
     }
 }
 
-export const Start: React.FC<StartProps> = (props) => {
+export const Multiple: React.FC<MultipleProps> = (props) => {
     const {
         size = {
-            width: StartDefaultConfig.width,
-            height: StartDefaultConfig.height
+            width: MultipleDefaultConfig.width,
+            height: MultipleDefaultConfig.height
         },
         data
     } = props;
     const { width, height } = size;
     const {
-        label = StartDefaultConfig.label,
-        stroke = StartDefaultConfig.stroke,
-        fill = StartDefaultConfig.fill,
-        fontFill = StartDefaultConfig.fontFill,
-        fontSize = StartDefaultConfig.fontSize,
-        code = StartDefaultConfig.code,
-        userType = StartDefaultConfig.userType,
-        userValue = StartDefaultConfig.userValue,
-        conditionType = StartDefaultConfig.conditionType,
-        conditionValue = StartDefaultConfig.conditionValue,
+        label = MultipleDefaultConfig.label,
+        stroke = MultipleDefaultConfig.stroke,
+        fill = MultipleDefaultConfig.fill,
+        fontFill = MultipleDefaultConfig.fontFill,
+        fontSize = MultipleDefaultConfig.fontSize,
+        code = MultipleDefaultConfig.code,
+        userType = MultipleDefaultConfig.userType,
+        userValue = MultipleDefaultConfig.userValue,
+        conditionType = MultipleDefaultConfig.conditionType,
+        conditionValue = MultipleDefaultConfig.conditionValue,
+        count = MultipleDefaultConfig.count,
     } = data;
     return (
         <div
@@ -79,13 +82,13 @@ export const Start: React.FC<StartProps> = (props) => {
         >
             <div style={
                 {
-                    backgroundColor: '#47e533',
+                    backgroundColor: '#0623b9',
                     width: 10,
                     height: '100%',
                     marginRight: 15
                 }
             }></div>
-            <SendOutlined style={{ fontSize: '24px', color: '#47e533' }} />
+            <TeamOutlined   style={{ fontSize: '24px', color: '#0623b9' }} />
             <div style={{
                 display: 'flex',
                 flex: 1,
@@ -111,7 +114,7 @@ export const Start: React.FC<StartProps> = (props) => {
                         <div >{code}</div>
                     )}
                     {userType && (
-                        <UserSwitchOutlined style={{ marginLeft: 6, color: 'green' }} />
+                        <UserSwitchOutlined  style={{ marginLeft: 6, color: 'green' }} />
                     )}
                     {conditionType && (
                         <ApiOutlined style={{ marginLeft: 6, color: 'green' }} />

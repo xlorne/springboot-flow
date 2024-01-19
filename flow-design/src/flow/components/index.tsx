@@ -1,6 +1,7 @@
-import {Node, NodeDefaultConfig} from "./Node";
 import {Start, StartDefaultConfig} from "./Start";
 import {Over, OverDefaultConfig} from "./Over";
+import {Single, SingleDefaultConfig} from "./Single";
+import {Multiple, MultipleDefaultConfig} from "./Multiple";
 
 export const components = [
     {
@@ -9,13 +10,18 @@ export const components = [
         ...StartDefaultConfig
     },
     {
+        component: Single,
+        popover: () => <div>或签节点</div>,
+        ...SingleDefaultConfig
+    },
+    {
+        component: Multiple,
+        popover: () => <div>会签节点</div>,
+        ...MultipleDefaultConfig
+    },
+    {
         component: Over,
         popover: () => <div>结束</div>,
         ...OverDefaultConfig
-    },
-    {
-        component: Node,
-        popover: () => <div>流程节点</div>,
-        ...NodeDefaultConfig
     },
 ]

@@ -1,6 +1,6 @@
 import React from "react";
-import { Property } from "csstype";
-import { PoweroffOutlined, TeamOutlined, ApiOutlined } from "@ant-design/icons"
+import {Property} from "csstype";
+import {PoweroffOutlined} from "@ant-design/icons"
 
 export const OverDefaultConfig = {
     name: 'flow-over',
