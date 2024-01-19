@@ -6,7 +6,6 @@ import {convertUsers} from "./utils";
 import {CodeEditor} from "./components/CodeEditor";
 import {CodeSandboxOutlined} from "@ant-design/icons";
 
-
 const PREFIX = 'flowchart-editor';
 
 export const Start: React.FC = (props: any) => {

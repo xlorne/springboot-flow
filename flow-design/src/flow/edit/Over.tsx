@@ -2,9 +2,7 @@ import React, {useEffect, useState} from "react";
 import {Divider, Form, Input} from "antd";
 import {PanelStyle} from "./components/PanelStyle";
 
-
 const PREFIX = 'flowchart-editor';
-
 
 export const Over: React.FC = (props: any) => {
 
