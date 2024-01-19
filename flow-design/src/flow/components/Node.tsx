@@ -10,7 +10,7 @@ export const NodeDefaultConfig = {
     stroke: '#ccc',
     fill: '#fff',
     fontFill: '#000000',
-    fontSize: 16,
+    fontSize: 14,
     code: 'code',
     userValue: null,
     userType: 'AnyUsers',

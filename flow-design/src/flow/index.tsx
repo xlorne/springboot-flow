@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {Flowchart} from '@ant-design/flowchart';
 import "@ant-design/flowchart/dist/index.css";
 import "antd/dist/reset.css";
@@ -64,7 +64,7 @@ export const Flow = () => {
                     const nodes = await flowApp.getAllNodes();
                     hasOverNode = false;
                     hasStartNode = false;
-                    for(const node of nodes){
+                    for (const node of nodes) {
                         const currentNodeName = node['store']['data']['data']['name'];
                         if (currentNodeName === 'flow-start') {
                             hasStartNode = true;

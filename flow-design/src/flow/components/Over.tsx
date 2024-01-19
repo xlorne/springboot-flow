@@ -10,7 +10,7 @@ export const OverDefaultConfig = {
     stroke: '#ccc',
     fill: '#fff',
     fontFill: '#000000',
-    fontSize: 16,
+    fontSize: 14,
     code: 'over',
 }
 

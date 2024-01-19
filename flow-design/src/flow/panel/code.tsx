@@ -6,6 +6,8 @@ interface CodeEditorProps {
 }
 
 export const CodeEditor = forwardRef((props:CodeEditorProps, ref: any) => {
+    const code = props.value?props.value:'// 请输入代码';
+    console.log(code);
 
     const editorRef = useRef(null);
 
@@ -26,7 +28,7 @@ export const CodeEditor = forwardRef((props:CodeEditorProps, ref: any) => {
             height="30vh"
             theme="vs-dark"
             defaultLanguage="javascript"
-            defaultValue={props.value?props.value:'// 请输入代码'}
+            defaultValue={code}
             onMount={handleEditorDidMount}
         />
     )

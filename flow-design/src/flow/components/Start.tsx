@@ -11,7 +11,7 @@ export const StartDefaultConfig = {
     stroke: '#ccc',
     fill: '#fff',
     fontFill: '#000000',
-    fontSize: 16,
+    fontSize: 14,
     code: 'start',
     userValue: null,
     userType: 'AnyUsers',
