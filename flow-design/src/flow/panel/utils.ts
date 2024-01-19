@@ -28,6 +28,7 @@ export const convertNumber = (value: any) => {
         if (isNaN(number)) {
             return defaultValue;
         }
+        return number;
     } catch (e) {
         return defaultValue;
     }

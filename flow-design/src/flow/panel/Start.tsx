@@ -4,6 +4,7 @@ import TextArea from "antd/es/input/TextArea";
 import {PanelStyle} from "./PanelStyle";
 import {convertUsers} from "./utils";
 import {CodeEditor} from "./CodeEditor";
+import {CodeSandboxOutlined} from "@ant-design/icons";
 
 
 const PREFIX = 'flowchart-editor';
@@ -38,7 +39,6 @@ export const Start: React.FC = (props: any) => {
     }, [config]);
     return (
         <div className={`${PREFIX}-panel-body`}>
-            <h4 style={{textAlign: 'center'}}>开始节点</h4>
             <div className={`${PREFIX}-panel-group`}>
                 <Form
                     layout={"vertical"}>
@@ -51,7 +51,7 @@ export const Start: React.FC = (props: any) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="代码"
+                        label="编码"
                     >
                         <Input
                             value={nodeConfig.code ? nodeConfig.code : config.originData.code}
@@ -80,11 +80,11 @@ export const Start: React.FC = (props: any) => {
                         </Select>
 
                         {nodeConfig.userType === 'Custom' && (
-                            <Button onClick={() => {
+                            <Button icon={<CodeSandboxOutlined/>} onClick={() => {
                                 setCodeKey('userValue')
                                 setCode(nodeConfig.userValue ? nodeConfig.userValue : config.originData.userValue)
                                 setShowCode(true);
-                            }}>自定义代码</Button>
+                            }}>Code</Button>
                         )}
                         {nodeConfig.userType === 'Users' && (
                             <TextArea
@@ -117,11 +117,11 @@ export const Start: React.FC = (props: any) => {
                         </Select>
 
                         {nodeConfig.conditionType === 'Custom' && (
-                            <Button onClick={() => {
+                            <Button  icon={<CodeSandboxOutlined />} onClick={() => {
                                 setCodeKey('conditionValue')
                                 setCode(nodeConfig.conditionValue ? nodeConfig.conditionValue : config.originData.conditionValue)
                                 setShowCode(true);
-                            }}>自定义代码</Button>
+                            }}>Code</Button>
                         )}
 
                     </Form.Item>

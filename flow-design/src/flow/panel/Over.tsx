@@ -32,7 +32,6 @@ export const Over: React.FC = (props: any) => {
     }, [config]);
     return (
         <div className={`${PREFIX}-panel-body`}>
-            <h4 style={{textAlign: 'center'}}>结束节点</h4>
             <div className={`${PREFIX}-panel-group`}>
                 <Form
                     layout={"vertical"}>
@@ -45,7 +44,7 @@ export const Over: React.FC = (props: any) => {
                     </Form.Item>
 
                     <Form.Item
-                        label="代码"
+                        label="编码"
                     >
                         <Input
                             value={nodeConfig.code ? nodeConfig.code : config.originData.code}

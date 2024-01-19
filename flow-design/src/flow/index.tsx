@@ -35,6 +35,27 @@ export const Flow = () => {
 
     return (
         <div style={{height: '100vh'}}>
+            <div
+                style={{
+                    position: 'absolute',
+                    zIndex: 100,
+                    height: 40,
+                    left: '35%',
+                    width: '300px',
+                    minWidth: '100px',
+                    textAlign: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <div style={{
+                    lineHeight: '40px',
+                    textAlign: 'center',
+                    fontSize: 16,
+                    fontWeight: 400,
+                }}>
+                    请假流程设计
+                </div>
+            </div>
             <Flowchart
                 onSave={async (d) => {
                     console.log(JSON.stringify(d));
@@ -83,6 +104,11 @@ export const Flow = () => {
                         left: 0,
                         right: 0,
                     },
+                    style: {
+                        height: 40,
+                    },
+
+
                 }}
                 scaleToolbarPanelProps={{
                     layout: 'horizontal',
@@ -109,7 +135,7 @@ export const Flow = () => {
                             line: {
                                 stroke: 'green',
                                 strokeDasharray: '0',
-                                strokeWidth: 1,
+                                strokeWidth: 3,
                             },
                         },
                     }
@@ -127,7 +153,7 @@ export const Flow = () => {
                     },
                 }}
                 detailPanelProps={{
-                    position: {width: 360, top: 40, bottom: 0, right: 0},
+                    position: {width: 260, top: 40, bottom: 0, right: 0},
                     controlMapService,
                     formSchemaService
                 }}
