@@ -1,22 +1,22 @@
 import React from "react";
 import { Property } from "csstype";
-import { SettingOutlined, TeamOutlined, ApiOutlined } from "@ant-design/icons"
+import { PoweroffOutlined, TeamOutlined, ApiOutlined } from "@ant-design/icons"
 
-export const NodeDefaultConfig = {
-    name: 'flow-node',
+export const OverDefaultConfig = {
+    name: 'flow-over',
     width: 160,
     height: 60,
-    label: '流程节点',
+    label: '结束',
     stroke: '#ccc',
     fill: '#fff',
     fontFill: '#000000',
     fontSize: 16,
-    code: 'test',
+    code: 'over',
     users: null,
     conditions: null,
 }
 
-interface NodeProps {
+interface OverProps {
     data: {
         label: string,
         stroke: Property.BorderColor,
@@ -33,24 +33,24 @@ interface NodeProps {
     }
 }
 
-export const Node: React.FC<NodeProps> = (props) => {
+export const Over: React.FC<OverProps> = (props) => {
     const {
         size = {
-            width: NodeDefaultConfig.width,
-            height: NodeDefaultConfig.height
+            width: OverDefaultConfig.width,
+            height: OverDefaultConfig.height
         },
         data
     } = props;
     const { width, height } = size;
     const {
-        label = NodeDefaultConfig.label,
-        stroke = NodeDefaultConfig.stroke,
-        fill = NodeDefaultConfig.fill,
-        fontFill = NodeDefaultConfig.fontFill,
-        fontSize = NodeDefaultConfig.fontSize,
-        code = NodeDefaultConfig.code,
-        users = NodeDefaultConfig.users,
-        conditions = NodeDefaultConfig.conditions,
+        label = OverDefaultConfig.label,
+        stroke = OverDefaultConfig.stroke,
+        fill = OverDefaultConfig.fill,
+        fontFill = OverDefaultConfig.fontFill,
+        fontSize = OverDefaultConfig.fontSize,
+        code = OverDefaultConfig.code,
+        users = OverDefaultConfig.users,
+        conditions = OverDefaultConfig.conditions,
     } = data;
     return (
         <div
@@ -79,7 +79,7 @@ export const Node: React.FC<NodeProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <SettingOutlined style={{ fontSize: '24px', color: '#08c' }} />
+            <PoweroffOutlined style={{ fontSize: '24px', color: '#08c' }}/>
             <div style={{
                 display: 'flex',
                 flex: 1,

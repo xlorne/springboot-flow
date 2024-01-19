@@ -1,22 +1,22 @@
 import React from "react";
 import { Property } from "csstype";
-import { SettingOutlined, TeamOutlined, ApiOutlined } from "@ant-design/icons"
+import { SendOutlined, TeamOutlined, ApiOutlined } from "@ant-design/icons"
 
-export const NodeDefaultConfig = {
-    name: 'flow-node',
+export const StartDefaultConfig = {
+    name: 'flow-start',
     width: 160,
     height: 60,
-    label: '流程节点',
+    label: '开始',
     stroke: '#ccc',
     fill: '#fff',
     fontFill: '#000000',
     fontSize: 16,
-    code: 'test',
+    code: 'start',
     users: null,
     conditions: null,
 }
 
-interface NodeProps {
+interface StartProps {
     data: {
         label: string,
         stroke: Property.BorderColor,
@@ -33,24 +33,24 @@ interface NodeProps {
     }
 }
 
-export const Node: React.FC<NodeProps> = (props) => {
+export const Start: React.FC<StartProps> = (props) => {
     const {
         size = {
-            width: NodeDefaultConfig.width,
-            height: NodeDefaultConfig.height
+            width: StartDefaultConfig.width,
+            height: StartDefaultConfig.height
         },
         data
     } = props;
     const { width, height } = size;
     const {
-        label = NodeDefaultConfig.label,
-        stroke = NodeDefaultConfig.stroke,
-        fill = NodeDefaultConfig.fill,
-        fontFill = NodeDefaultConfig.fontFill,
-        fontSize = NodeDefaultConfig.fontSize,
-        code = NodeDefaultConfig.code,
-        users = NodeDefaultConfig.users,
-        conditions = NodeDefaultConfig.conditions,
+        label = StartDefaultConfig.label,
+        stroke = StartDefaultConfig.stroke,
+        fill = StartDefaultConfig.fill,
+        fontFill = StartDefaultConfig.fontFill,
+        fontSize = StartDefaultConfig.fontSize,
+        code = StartDefaultConfig.code,
+        users = StartDefaultConfig.users,
+        conditions = StartDefaultConfig.conditions,
     } = data;
     return (
         <div
@@ -79,7 +79,7 @@ export const Node: React.FC<NodeProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <SettingOutlined style={{ fontSize: '24px', color: '#08c' }} />
+            <SendOutlined style={{ fontSize: '24px', color: '#08c' }} />
             <div style={{
                 display: 'flex',
                 flex: 1,

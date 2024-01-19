@@ -51,10 +51,10 @@ const NodePanel = (props: any) => {
                 <InputFiled
                     //@ts-ignore
                     label={'代码'}
-                    value={nodeConfig.script ? nodeConfig.script : config.originData.script}
+                    value={nodeConfig.code ? nodeConfig.code : config.originData.code}
                     //@ts-ignore
                     onChange={(value) => {
-                        onNodeConfigChange('script', value);
+                        onNodeConfigChange('code', value);
                     }}
                 />
                 <InputFiled

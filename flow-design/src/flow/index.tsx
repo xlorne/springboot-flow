@@ -8,6 +8,8 @@ import * as data from "./data/data.json";
 import {components} from "./components";
 
 export const Flow = () => {
+
+
     return (
         <div style={{height: '100vh'}}>
             <Flowchart
@@ -15,9 +17,12 @@ export const Flow = () => {
                     console.log(d);
                     console.log(JSON.stringify(d));
                 }}
-                data={
-                    data
-                }
+                onAddNode={(d) => {
+                    console.log(d);
+                }}
+                // data={
+                //     data
+                // }
                 toolbarPanelProps={{
                     position: {
                         top: 0,
