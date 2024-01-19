@@ -84,10 +84,10 @@ export const Single: React.FC<SingleProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <UserOutlined style={{fontSize: '24px', color: '#405bec'}}/>
+            <UserOutlined style={{fontSize: '18px', color: '#405bec'}}/>
             <div style={{
                 display: 'flex',
-                flex: 1,
+                flex: 3,
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -117,14 +117,12 @@ export const Single: React.FC<SingleProps> = (props) => {
             </div>
             <div style={
                 {
-                    width: '20px',
                     height: '100%',
                     display: 'flex',
                     flex: 1,
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginRight: 3
                 }
             }>
                 {userType && (

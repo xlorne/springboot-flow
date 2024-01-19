@@ -84,15 +84,15 @@ export const Start: React.FC<StartProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <SendOutlined style={{fontSize: '24px', color: '#47e533'}}/>
+            <SendOutlined style={{fontSize: '18px', color: '#47e533'}}/>
             <div style={{
                 display: 'flex',
-                flex: 1,
+                flex: 3,
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 6,
-                width: '60px',
+                width: '60%',
                 marginTop: 6
             }}>
                 <div style={{
@@ -117,14 +117,12 @@ export const Start: React.FC<StartProps> = (props) => {
 
             <div style={
                 {
-                    width: '20px',
                     height: '100%',
                     display: 'flex',
                     flex: 1,
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginRight: 3
                 }
             }>
                 {userType && (

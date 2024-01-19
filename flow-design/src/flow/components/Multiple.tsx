@@ -87,10 +87,10 @@ export const Multiple: React.FC<MultipleProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <TeamOutlined style={{fontSize: '24px', color: '#0623b9'}}/>
+            <TeamOutlined style={{fontSize: '18px', color: '#0623b9'}}/>
             <div style={{
                 display: 'flex',
-                flex: 1,
+                flex: 3,
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -120,14 +120,12 @@ export const Multiple: React.FC<MultipleProps> = (props) => {
             </div>
             <div style={
                 {
-                    width: '20px',
                     height: '100%',
                     display: 'flex',
                     flex: 1,
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginRight: 3
                 }
             }>
                 {userType && (

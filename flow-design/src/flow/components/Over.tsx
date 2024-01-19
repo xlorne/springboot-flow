@@ -72,10 +72,10 @@ export const Over: React.FC<OverProps> = (props) => {
                     marginRight: 15
                 }
             }></div>
-            <PoweroffOutlined style={{fontSize: '24px', color: '#b71818'}}/>
+            <PoweroffOutlined style={{fontSize: '18px', color: '#b71818'}}/>
             <div style={{
                 display: 'flex',
-                flex: 1,
+                flex: 3,
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -105,14 +105,12 @@ export const Over: React.FC<OverProps> = (props) => {
             </div>
             <div style={
                 {
-                    width: '20px',
                     height: '100%',
                     display: 'flex',
                     flex: 1,
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    marginRight: 3
                 }
             }>
 
