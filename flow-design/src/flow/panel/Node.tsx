@@ -1,8 +1,9 @@
 import React, {useEffect, useRef, useState} from "react";
-import {Button, Divider, Form, Input, InputNumber, Modal, Select} from "antd";
+import {Button, Divider, Form, Input, InputNumber, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import {CodeEditor} from "./code";
 import {PanelStyle} from "./PanelStyle";
+import {convertNumber, convertUsers} from "./utils";
+import {CodeEditor} from "./CodeEditor";
 
 
 const PREFIX = 'flowchart-editor';
@@ -38,20 +39,6 @@ export const Node: React.FC = (props: any) => {
     }, [config]);
 
 
-    const convertNumber = (value: any) => {
-        const defaultValue = 0;
-        if (value === 'null') {
-            return defaultValue;
-        }
-        try {
-            const number =  Number(value);
-            if (isNaN(number)) {
-                return defaultValue;
-            }
-        }catch (e) {
-            return defaultValue;
-        }
-    }
     return (
         <div className={`${PREFIX}-panel-body`}>
             <h4 style={{textAlign: 'center'}}>流程节点</h4>
@@ -79,7 +66,6 @@ export const Node: React.FC = (props: any) => {
 
                     <Form.Item
                         label="用户"
-
                     >
                         <Select
                             style={{
@@ -106,7 +92,7 @@ export const Node: React.FC = (props: any) => {
                             <TextArea
                                 rows={5}
                                 placeholder="请输入用户ID，多个用户ID用英文逗号分隔"
-                                value={nodeConfig.userValue ? nodeConfig.userValue : config.originData.userValue}
+                                value={convertUsers(nodeConfig.userValue ? nodeConfig.userValue : config.originData.userValue)}
                                 onChange={(value) => {
                                     onNodeConfigChange('userValue', value.target.value);
                                 }}
@@ -157,26 +143,13 @@ export const Node: React.FC = (props: any) => {
                 {...props}
             />
 
-            <Modal
-                open={showCode}
-                width={800}
-                onCancel={() => {
-                    setShowCode(false)
-                }}
-                destroyOnClose={true}
-                okText="确认"
-                cancelText="取消"
-
-                title="自定义代码"
-                onOk={() => {
-                    // @ts-ignore
-                    const code = codeEditorRef.current?.getValue();
-                    onNodeConfigChange(codeKey, code);
+            <CodeEditor
+                show={showCode}
+                value={code}
+                onChange={(value) => {
+                    onNodeConfigChange(codeKey, value);
                     setShowCode(false);
-                }}
-            >
-                <CodeEditor value={code} ref={codeEditorRef}/>
-            </Modal>
+                }}/>
         </div>
     );
 };

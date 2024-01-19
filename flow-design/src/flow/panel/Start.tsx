@@ -1,8 +1,9 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Button, Divider, Form, Input, InputNumber, Modal, Select} from "antd";
+import React, {useEffect, useState} from "react";
+import {Button, Divider, Form, Input, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import {CodeEditor} from "./code";
 import {PanelStyle} from "./PanelStyle";
+import {convertUsers} from "./utils";
+import {CodeEditor} from "./CodeEditor";
 
 
 const PREFIX = 'flowchart-editor';
@@ -18,7 +19,6 @@ export const Start: React.FC = (props: any) => {
     const [showCode, setShowCode] = useState(false);
     const [code, setCode] = useState('');
     const [codeKey, setCodeKey] = useState('');
-    const codeEditorRef = useRef(null);
 
     //@ts-ignore
     const onNodeConfigChange = (key, value) => {
@@ -90,7 +90,7 @@ export const Start: React.FC = (props: any) => {
                             <TextArea
                                 rows={5}
                                 placeholder="请输入用户ID，多个用户ID用英文逗号分隔"
-                                value={nodeConfig.userValue ? nodeConfig.userValue : config.originData.userValue}
+                                value={convertUsers(nodeConfig.userValue ? nodeConfig.userValue : config.originData.userValue)}
                                 onChange={(value) => {
                                     onNodeConfigChange('userValue', value.target.value);
                                 }}
@@ -133,26 +133,13 @@ export const Start: React.FC = (props: any) => {
                 {...props}
             />
 
-            <Modal
-                open={showCode}
-                width={800}
-                onCancel={() => {
-                    setShowCode(false)
-                }}
-                destroyOnClose={true}
-                okText="确认"
-                cancelText="取消"
-
-                title="自定义代码"
-                onOk={() => {
-                    // @ts-ignore
-                    const code = codeEditorRef.current?.getValue();
-                    onNodeConfigChange(codeKey, code);
+            <CodeEditor
+                show={showCode}
+                value={code}
+                onChange={(value) => {
+                    onNodeConfigChange(codeKey, value);
                     setShowCode(false);
-                }}
-            >
-                <CodeEditor value={code} ref={codeEditorRef}/>
-            </Modal>
+                }}/>
         </div>
     );
 };
