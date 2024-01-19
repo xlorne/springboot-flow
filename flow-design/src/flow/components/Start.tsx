@@ -4,8 +4,8 @@ import {ApiOutlined, SendOutlined, UserSwitchOutlined} from "@ant-design/icons"
 
 export const StartDefaultConfig = {
     name: 'flow-start',
-    width: 200,
-    height: 60,
+    width: 180,
+    height: 50,
     label: '开始',
     stroke: '#ccc',
     fill: '#fff',
@@ -92,14 +92,13 @@ export const Start: React.FC<StartProps> = (props) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 marginBottom: 6,
+                width: '60px',
                 marginTop: 6
-
             }}>
                 <div style={{
                     color: fontFill,
                     fontWeight: 'bold',
                     marginBottom: 6,
-                    width: '100px',
                     textAlign: 'center'
                 }}>{label}</div>
                 {code && (

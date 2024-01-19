@@ -4,8 +4,8 @@ import {ApiOutlined, UserOutlined, UserSwitchOutlined} from "@ant-design/icons"
 
 export const SingleDefaultConfig = {
     name: 'flow-single',
-    width: 200,
-    height: 60,
+    width: 180,
+    height: 50,
     label: '或签节点',
     stroke: '#ccc',
     fill: '#fff',
@@ -99,7 +99,7 @@ export const Single: React.FC<SingleProps> = (props) => {
                     color: fontFill,
                     fontWeight: 'bold',
                     marginBottom: 6,
-                    width: '100px',
+                    width: '60px',
                     textAlign: 'center'
                 }}>{label}</div>
                 {code && (

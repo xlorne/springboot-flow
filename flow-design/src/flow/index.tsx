@@ -3,7 +3,6 @@ import {Flowchart} from '@ant-design/flowchart';
 import "@ant-design/flowchart/dist/index.css";
 import "antd/dist/reset.css";
 
-
 import {controlMapService, formSchemaService} from "./panel"
 import {components} from "./components";
 import {message} from "antd";
@@ -16,7 +15,7 @@ interface FlowProps {
     onSave?: (data: any) => void;
 }
 
-export const Flow:React.FC<FlowProps> = (props) => {
+export const Flow: React.FC<FlowProps> = (props) => {
 
     let flowApp: any = null;
     let flowGraph: any = null;
@@ -24,9 +23,8 @@ export const Flow:React.FC<FlowProps> = (props) => {
     let hasStartNode = false;
     let hasOverNode = false;
 
-
     const initFlowNodeState = (data: any) => {
-        if(data==null){
+        if (data == null) {
             return {};
         }
         const nodes = data.nodes;
@@ -132,7 +130,7 @@ export const Flow:React.FC<FlowProps> = (props) => {
                     },
                     style: {
                         width: 150,
-                        height: 39,
+                        height: 40,
                         left: 'auto',
                         background: 'transparent',
                     },

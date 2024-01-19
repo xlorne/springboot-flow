@@ -1,5 +1,5 @@
 import React from 'react';
-import {CanvasService, EdgeService, FormWrapper, GroupService} from '@ant-design/flowchart';
+import {CanvasService, EdgeService, FormWrapper, GroupService, NodeService} from '@ant-design/flowchart';
 import {Start} from "./Start";
 import {Over} from "./Over";
 import {Single} from "./Single";
@@ -27,15 +27,15 @@ const components = [
 ]
 
 
-const NodeService = (props: any) => {
+const FlowNodeService = (props: any) => {
     return (
         <FormWrapper {...props}>
             {(config, plugin) => {
                 // @ts-ignore
                 const tag = components.find(item => item.name === config.name);
                 const Component = tag?.component;
-                if (Component==null) {
-                    return null;
+                if (Component == null) {
+                    return <NodeService {...props} plugin={plugin} config={config}/>;
                 }
                 return (
                     <Component {...props} plugin={plugin} config={config}/>
@@ -47,7 +47,7 @@ const NodeService = (props: any) => {
 };
 
 export const controlMapService = (controlMap: any) => {
-    controlMap.set('custom-node-service', NodeService);
+    controlMap.set('custom-node-service', FlowNodeService);
     controlMap.set('custom-edge-service', EdgeService);
     controlMap.set('custom-group-service', GroupService);
     controlMap.set('custom-canvas-service', CanvasService);

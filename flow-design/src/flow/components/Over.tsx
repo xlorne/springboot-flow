@@ -1,11 +1,11 @@
 import React from "react";
 import {Property} from "csstype";
-import {PoweroffOutlined} from "@ant-design/icons"
+import {ApiOutlined, PoweroffOutlined, UserSwitchOutlined} from "@ant-design/icons"
 
 export const OverDefaultConfig = {
     name: 'flow-over',
-    width: 200,
-    height: 60,
+    width: 180,
+    height: 50,
     label: '结束',
     stroke: '#ccc',
     fill: '#fff',
@@ -87,7 +87,7 @@ export const Over: React.FC<OverProps> = (props) => {
                     color: fontFill,
                     fontWeight: 'bold',
                     marginBottom: 6,
-                    width: '100px',
+                    width: '60px',
                     textAlign: 'center'
                 }}>{label}</div>
                 {code && (
@@ -102,6 +102,20 @@ export const Over: React.FC<OverProps> = (props) => {
                         {code}
                     </div>
                 )}
+            </div>
+            <div style={
+                {
+                    width: '20px',
+                    height: '100%',
+                    display: 'flex',
+                    flex: 1,
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: 3
+                }
+            }>
+
             </div>
         </div>
     );

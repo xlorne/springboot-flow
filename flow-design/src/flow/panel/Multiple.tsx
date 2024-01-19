@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Divider, Form, Input, InputNumber, Select} from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {PanelStyle} from "./PanelStyle";
@@ -19,7 +19,6 @@ export const Multiple: React.FC = (props: any) => {
     const [showCode, setShowCode] = useState(false);
     const [code, setCode] = useState('');
     const [codeKey, setCodeKey] = useState('');
-    const codeEditorRef = useRef(null);
 
     //@ts-ignore
     const onNodeConfigChange = (key, value) => {
