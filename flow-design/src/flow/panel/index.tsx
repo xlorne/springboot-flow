@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {CanvasService, EdgeService, EditorPanels, FormWrapper, GroupService} from '@ant-design/flowchart';
+import React, { useEffect, useState } from 'react';
+import { CanvasService, EdgeService, EditorPanels, FormWrapper, GroupService } from '@ant-design/flowchart';
 
 const {
     InputFiled,
@@ -14,8 +14,8 @@ const PREFIX = 'flowchart-editor';
 
 const NodePanel = (props: any) => {
     console.log(props);
-    const {config, plugin = {}} = props;
-    const {updateNode} = plugin;
+    const { config, plugin = {} } = props;
+    const { updateNode } = plugin;
     const [nodeConfig, setNodeConfig] = useState({
         ...config,
     });
@@ -36,8 +36,9 @@ const NodePanel = (props: any) => {
     }, [config]);
     return (
         <div className={`${PREFIX}-panel-body`}>
+            <h4 style={{ textAlign: 'center' }}>流程节点</h4>
             <div className={`${PREFIX}-panel-group`}>
-                <h5>内容</h5>               
+                <h5>内容</h5>
                 <InputFiled
                     //@ts-ignore
                     label={'标题'}
@@ -50,19 +51,37 @@ const NodePanel = (props: any) => {
                 <InputFiled
                     //@ts-ignore
                     label={'代码'}
-                    value={nodeConfig.script?nodeConfig.script:config.originData.script}
+                    value={nodeConfig.script ? nodeConfig.script : config.originData.script}
                     //@ts-ignore
                     onChange={(value) => {
                         onNodeConfigChange('script', value);
                     }}
                 />
-                 <InputFiled
+                <InputFiled
+                    //@ts-ignore
+                    label={'用户'}
+                    value={nodeConfig.users ? nodeConfig.users : config.originData.users}
+                    //@ts-ignore
+                    onChange={(value) => {
+                        onNodeConfigChange('users', value);
+                    }}
+                />
+                <InputFiled
+                    //@ts-ignore
+                    label={'条件'}
+                    value={nodeConfig.conditions ? nodeConfig.conditions : config.originData.conditions}
+                    //@ts-ignore
+                    onChange={(value) => {
+                        onNodeConfigChange('conditions', value);
+                    }}
+                />
+                <InputFiled
                     //@ts-ignore
                     label={'组件'}
                     value={nodeConfig.name}
                 />
             </div>
-            <div className={`${PREFIX}-panel-group`} style={{borderBottom: 'none'}}>
+            <div className={`${PREFIX}-panel-group`} style={{ borderBottom: 'none' }}>
                 <h5>样式</h5>
                 <Position
                     //@ts-ignore
@@ -85,7 +104,7 @@ const NodePanel = (props: any) => {
                 <ColorPicker
                     //@ts-ignore
                     label="填充"
-                    value={nodeConfig.fill?nodeConfig.fill:config.originData.fill }
+                    value={nodeConfig.fill ? nodeConfig.fill : config.originData.fill}
                     //@ts-ignore
                     onChange={(value) => {
                         onNodeConfigChange('fill', value);
@@ -94,7 +113,7 @@ const NodePanel = (props: any) => {
                 <ColorPicker
                     //@ts-ignore
                     label="边框"
-                    value={nodeConfig.stroke?nodeConfig.stroke:config.originData.stroke}
+                    value={nodeConfig.stroke ? nodeConfig.stroke : config.originData.stroke}
                     //@ts-ignore
                     onChange={(value) => {
                         onNodeConfigChange('stroke', value);
@@ -104,7 +123,7 @@ const NodePanel = (props: any) => {
                     <InputNumberFiled
                         //@ts-ignore
                         label="字号"
-                        value={nodeConfig.fontSize?nodeConfig.fontSize:config.originData.fontSize}
+                        value={nodeConfig.fontSize ? nodeConfig.fontSize : config.originData.fontSize}
                         width={68}
                         //@ts-ignore
                         onChange={(value) => {
@@ -113,7 +132,7 @@ const NodePanel = (props: any) => {
                     />
                     <ColorPicker
                         //@ts-ignore
-                        value={nodeConfig.fontFill?nodeConfig.fontFill:config.originData.fontFill}
+                        value={nodeConfig.fontFill ? nodeConfig.fontFill : config.originData.fontFill}
                         //@ts-ignore
                         onChange={(value) => {
                             onNodeConfigChange('fontFill', value);
@@ -125,10 +144,10 @@ const NodePanel = (props: any) => {
     );
 };
 
-const NodeService = (props:any) => {
+const NodeService = (props: any) => {
     return (
         <FormWrapper {...props}>
-            {(config, plugin) => <NodePanel {...props} plugin={plugin} config={config}/>}
+            {(config, plugin) => <NodePanel {...props} plugin={plugin} config={config} />}
         </FormWrapper>
     );
 };
@@ -143,7 +162,7 @@ export const controlMapService = (controlMap: any) => {
 
 
 export const formSchemaService = async (args: any) => {
-    const {targetType} = args;
+    const { targetType } = args;
     const isGroup = args.targetData?.isGroup;
     const groupSchema = {
         tabs: [

@@ -48,7 +48,7 @@ export const Flow = () => {
                     edgeConfig:{
                         attrs: {
                             line: {
-                                stroke: 'red',
+                                stroke: 'green',
                                 strokeDasharray: '0',
                                 strokeWidth: 1,
                             },
