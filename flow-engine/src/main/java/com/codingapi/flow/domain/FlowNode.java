@@ -152,12 +152,20 @@ public class FlowNode {
         return nodes;
     }
 
-    public static FlowNode start(String name,  IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
-        return create(CODE_START, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
+    public static FlowNode start(String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
+        return start(CODE_START, name, userMatcher, flowTrigger);
     }
 
-    public static FlowNode start(long id, String name,  IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
-        return create(id, CODE_START, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
+    public static FlowNode start(String code, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
+        return create(code, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
+    }
+
+    public static FlowNode start(long id, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
+        return start(id, CODE_START, name, userMatcher, flowTrigger);
+    }
+
+    public static FlowNode start(long id, String code, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
+        return create(id, code, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
     }
 
     public static FlowNode create(long id, String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger, int count) {
@@ -186,11 +194,19 @@ public class FlowNode {
     }
 
     public static FlowNode over(String name) {
-        return create(CODE_OVER, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
+        return over(CODE_OVER, name);
+    }
+
+    public static FlowNode over(String code, String name) {
+        return create(code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
     }
 
     public static FlowNode over(long id, String name) {
-        return create(id, CODE_OVER, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
+        return over(id, CODE_OVER, name);
+    }
+
+    public static FlowNode over(long id, String code, String name) {
+        return create(id, code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
     }
 
 }

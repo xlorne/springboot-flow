@@ -51,17 +51,17 @@ class FlowBuildTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.start("发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start("start", "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager1", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager2", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("结束")
+                                FlowNode.over("over", "结束")
                         )
                         .relations()
 
-                        .start().addNext("manager1").over()
-                        .start().addNext("manager2").over()
-                        .start().addNext("manager1").addNext("manager2").over()
-                        .start().over()
+                        .start("start").addNext("manager1").over("over")
+                        .start("start").addNext("manager2").over("over")
+                        .start("start").addNext("manager1").addNext("manager2").over("over")
+                        .start("start").over("over")
 
                         .build();
 
