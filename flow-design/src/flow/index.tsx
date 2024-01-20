@@ -40,6 +40,28 @@ export const Flow: React.FC<FlowProps> = (props) => {
 
     const data = initFlowNodeState(props.data?.data);
 
+
+    const getFlows = async () => {
+        const flows: any[] = [];
+        const nodes = await flowApp.getAllNodes();
+        for (const node of nodes) {
+            const flow = node['store']['data']['data']['originData'];
+            flow['nodeId'] = node.id;
+            flows.push(flow);
+        }
+        return flows;
+    }
+
+    const getFlowByNodeId = async (nodeId: string) => {
+        const flows = await getFlows();
+        for (const node of flows) {
+            if (node.nodeId === nodeId) {
+                return node;
+            }
+        }
+        return null;
+    }
+
     return (
         <div style={{height: '100vh'}}>
             <div
@@ -90,6 +112,23 @@ export const Flow: React.FC<FlowProps> = (props) => {
                             message.error('结束节点只能有一个');
                         }
                         hasOverNode = true;
+                    }
+                }}
+                onAddEdge={async (d) => {
+                    const source = d.source.cell;
+                    //@ts-ignore
+                    const sourceNode = await getFlowByNodeId(source);
+                    if (sourceNode.name === 'flow-over') {
+                        flowGraph.removeEdge(d.id);
+                        message.error('结束节点不能作为前置节点');
+                    }
+
+                    const target = d.target.cell;
+                    //@ts-ignore
+                    const targetNode = await getFlowByNodeId(target);
+                    if (targetNode.name === 'flow-start') {
+                        flowGraph.removeEdge(d.id);
+                        message.error('开始节点不能作为后置节点');
                     }
                 }}
                 onDelNode={async (d) => {
