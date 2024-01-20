@@ -122,14 +122,6 @@ export const Flow: React.FC<FlowProps> = (props) => {
                         flowGraph.removeEdge(d.id);
                         message.error('结束节点不能作为前置节点');
                     }
-
-                    const target = d.target.cell;
-                    //@ts-ignore
-                    const targetNode = await getFlowByNodeId(target);
-                    if (targetNode.name === 'flow-start') {
-                        flowGraph.removeEdge(d.id);
-                        message.error('开始节点不能作为后置节点');
-                    }
                 }}
                 onDelNode={async (d) => {
                     const nodes = await flowApp.getAllNodes();

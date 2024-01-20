@@ -1,18 +1,17 @@
 package com.codingapi.flow.test;
 
 import com.codingapi.flow.FlowConfiguration;
+import com.codingapi.flow.builder.FlowNodeBuilder;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.User;
-import com.codingapi.flow.builder.FlowNodeBuilder;
 import com.codingapi.flow.em.FlowType;
+import com.codingapi.flow.exception.FlowBuilderException;
 import com.codingapi.flow.trigger.FlowTriggerFactory;
 import com.codingapi.flow.user.FlowUserMatcherFactory;
-import com.codingapi.flow.exception.FlowBuilderException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FlowBuildTest {
 
@@ -32,9 +31,9 @@ class FlowBuildTest {
             FlowNode flow =
                     FlowNodeBuilder.builder()
                             .addNodes(
-                                    FlowNode.start( "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                    FlowNode.create( "manager", "经理审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                    FlowNode.over( "结束")
+                                    FlowNode.start("发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                    FlowNode.create("manager", "经理审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                    FlowNode.over("结束")
                             )
                             .relations()
                             .build();
@@ -52,10 +51,10 @@ class FlowBuildTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                FlowNode.create( "manager1", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.create( "manager2", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over(  "结束")
+                                FlowNode.start("发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager1", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager2", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.over("结束")
                         )
                         .relations()
 
@@ -82,14 +81,45 @@ class FlowBuildTest {
             FlowNode flow =
                     FlowNodeBuilder.builder()
                             .addNodes(
-                                    FlowNode.start(  "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
-                                    FlowNode.create( "manager", "经理审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                    FlowNode.over( "结束")
+                                    FlowNode.start("发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                    FlowNode.create("manager", "经理审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                    FlowNode.over("结束")
                             )
                             .relations()
                             .start().addNext("manager").addNext("end").addNext("manager")
                             .build();
         });
+    }
+
+
+    /**
+     * 最好一个节点是结束节点
+     */
+    @Test
+    void test23() {
+        User manager = new User(1, "经理");
+
+        FlowNode flow =
+                FlowNodeBuilder.builder()
+                        .addNodes(
+                                FlowNode.create("start", "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager1", "经理1审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager2", "经理2审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.create("manager3", "经理3审批", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
+                                FlowNode.create("over", "结束", FlowType.SERIAL, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over())
+                        )
+                        .edges()
+                        .from("start").to("manager1")
+                        .from("manager1").to("manager2")
+                        .from("manager2").to("manager3")
+                        .from("manager3").to("manager1")
+                        .from("manager2").to("over")
+                        .build("start");
+
+        System.out.println(flow);
+
+        assertEquals(flow.getNext().get(0).getNext().get(0).getNext().size(), 2);
+        assertEquals(flow.getNext().get(0).getNext().get(0).getNextByCode("over").size(), 1);
     }
 
 }

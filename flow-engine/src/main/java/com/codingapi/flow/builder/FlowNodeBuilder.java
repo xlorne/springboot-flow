@@ -35,6 +35,61 @@ public class FlowNodeBuilder {
         return new NodeRelation(nodes);
     }
 
+    public Edges edges() {
+        return new Edges(nodes);
+    }
+
+    public static class Edges {
+        private final List<FlowNode> nodes;
+
+        public Edges(List<FlowNode> nodes) {
+            this.nodes = nodes;
+        }
+
+        public FlowNode build(String start) {
+            return getNode(start);
+        }
+
+        private FlowNode getNode(String code) {
+            for (FlowNode n : nodes) {
+                if (n.getCode().equals(code)) {
+                    return n;
+                }
+            }
+            return null;
+        }
+
+        public ToEdge from(String code) {
+            FlowNode startNode = getNode(code);
+            if (startNode == null) {
+                throw new FlowBuilderException("flow.build.error", "开始节点不存在");
+            }
+            return new ToEdge(startNode);
+        }
+
+        public class ToEdge {
+            private final FlowNode current;
+
+            public ToEdge(FlowNode current) {
+                this.current = current;
+            }
+
+            public Edges to(String... codes) {
+                for (String code : codes) {
+                    FlowNode nextNode = getNode(code);
+                    if (nextNode == null) {
+                        throw new FlowBuilderException("flow.build.error", "下一节点不存在");
+                    }
+                    if (nextNode.isOver()) {
+                        throw new FlowBuilderException("flow.build.error", "结束节点不能再添加下一节点");
+                    }
+                    this.current.addNext(nextNode);
+                }
+                return Edges.this;
+            }
+        }
+    }
+
     public static class NodeRelation {
         private final List<FlowNode> nodes;
         private FlowNode root;
@@ -44,14 +99,18 @@ public class FlowNodeBuilder {
             this.nodes = nodes;
         }
 
-        public NodeRelation start() {
-            FlowNode start = getNode(FlowNode.CODE_START,false);
+        public NodeRelation start(String code) {
+            FlowNode start = getNode(FlowNode.CODE_START, false);
             if (start == null) {
                 throw new FlowBuilderException("flow.build.error", "开始节点不存在");
             }
             this.root = start;
             this.current = start;
             return this;
+        }
+
+        public NodeRelation start() {
+            return start(FlowNode.CODE_START);
         }
 
         private FlowNode getNode(String code) {
@@ -84,14 +143,18 @@ public class FlowNodeBuilder {
             return this;
         }
 
-        public NodeRelation over() {
-            FlowNode over = getNode(FlowNode.CODE_OVER);
+        public NodeRelation over(String code) {
+            FlowNode over = getNode(code);
             if (over == null) {
                 throw new FlowBuilderException("flow.build.error", "结束节点不存在");
             }
             this.current.addNext(over);
             this.current = over;
             return this;
+        }
+
+        public NodeRelation over() {
+            return over(FlowNode.CODE_OVER);
         }
 
         public FlowNode build() {
