@@ -43,6 +43,19 @@ export const Multiple: React.FC = (props: any) => {
             <div className={`${PREFIX}-panel-group`}>
                 <Form
                     layout={"vertical"}>
+                    {config.originData.id && (
+                        <Form.Item
+                            label="编号"
+                        >
+                            <Input
+                                disabled={true}
+                                value={config.originData.id}
+                                onChange={(value) => {
+                                    onNodeConfigChange('id', value.target.value);
+                                }}/>
+                        </Form.Item>
+                    )}
+
                     <Form.Item
                         label="标题"
                     >

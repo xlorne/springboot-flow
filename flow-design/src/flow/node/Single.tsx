@@ -16,6 +16,7 @@ export const SingleDefaultConfig = {
     userType: 'AnyUsers',
     conditionType: 'RejectBack',
     conditionValue: null,
+    id: null,
 }
 
 interface SingleProps {
@@ -30,6 +31,7 @@ interface SingleProps {
         userValue:string,
         conditionType: string,
         conditionValue: string,
+        id: number,
     }
     size: {
         width: number,
@@ -57,6 +59,7 @@ export const Single: React.FC<SingleProps> = (props) => {
         userValue = SingleDefaultConfig.userValue,
         conditionType = SingleDefaultConfig.conditionType,
         conditionValue = SingleDefaultConfig.conditionValue,
+        id = SingleDefaultConfig.id,
     } = data;
     return (
         <div

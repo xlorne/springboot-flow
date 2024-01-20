@@ -12,6 +12,7 @@ export const OverDefaultConfig = {
     fontFill: '#000000',
     fontSize: 14,
     code: 'over',
+    id: null,
 }
 
 interface OverProps {
@@ -22,6 +23,7 @@ interface OverProps {
         fontFill: Property.BorderColor,
         fontSize: Property.FontSize,
         code: string,
+        id: number,
     }
     size: {
         width: number,
@@ -45,6 +47,7 @@ export const Over: React.FC<OverProps> = (props) => {
         fontFill = OverDefaultConfig.fontFill,
         fontSize = OverDefaultConfig.fontSize,
         code = OverDefaultConfig.code,
+        id = OverDefaultConfig.id,
     } = data;
     return (
         <div

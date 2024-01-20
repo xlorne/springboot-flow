@@ -17,6 +17,7 @@ export const MultipleDefaultConfig = {
     conditionType: 'RejectBack',
     conditionValue: null,
     count: 1,
+    id: null,
 }
 
 interface MultipleProps {
@@ -32,6 +33,7 @@ interface MultipleProps {
         conditionType: string,
         conditionValue: string,
         count: number,
+        id: number,
     }
     size: {
         width: number,
@@ -60,6 +62,7 @@ export const Multiple: React.FC<MultipleProps> = (props) => {
         conditionType = MultipleDefaultConfig.conditionType,
         conditionValue = MultipleDefaultConfig.conditionValue,
         count = MultipleDefaultConfig.count,
+        id = MultipleDefaultConfig.id,
     } = data;
     return (
         <div

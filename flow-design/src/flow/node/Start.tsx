@@ -16,6 +16,7 @@ export const StartDefaultConfig = {
     userType: 'AnyUsers',
     conditionType: 'RejectBack',
     conditionValue: null,
+    id: null,
 }
 
 interface StartProps {
@@ -30,6 +31,7 @@ interface StartProps {
         userValue: string,
         conditionType: string,
         conditionValue: string,
+        id: number,
     }
     size: {
         width: number,
@@ -57,6 +59,7 @@ export const Start: React.FC<StartProps> = (props) => {
         userValue = StartDefaultConfig.userValue,
         conditionType = StartDefaultConfig.conditionType,
         conditionValue = StartDefaultConfig.conditionValue,
+        id = StartDefaultConfig.id,
     } = data;
     return (
         <div

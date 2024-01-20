@@ -7,8 +7,14 @@ export const App = () => {
         <Flow
             data={data}
             onSave={(data) => {
-                console.log(data);
-                console.log(JSON.stringify(data));
+                // console.log(data);
+                // console.log(JSON.stringify(data));
+
+                const nodes = data.data.nodes;
+                for (const node of nodes) {
+                    const flow = node.originData;
+                    console.log(flow);
+                }
             }}
         />
     )
