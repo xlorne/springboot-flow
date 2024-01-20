@@ -20,6 +20,9 @@ import java.util.List;
 @Getter
 public class FlowNode {
 
+    public static final String CODE_OVER = "over";
+    public static final String CODE_START = "start";
+
     /**
      * 节点id
      */
@@ -149,6 +152,14 @@ public class FlowNode {
         return nodes;
     }
 
+    public static FlowNode start(String name,  IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
+        return create(CODE_START, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
+    }
+
+    public static FlowNode start(long id, String name,  IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
+        return create(id, CODE_START, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
+    }
+
     public static FlowNode create(long id, String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger, int count) {
         FlowNode flowNode = new FlowNode();
         flowNode.setId(id);
@@ -174,12 +185,12 @@ public class FlowNode {
         return create(code, name, flowType, userMatcher, flowTrigger, 1);
     }
 
-    public static FlowNode over(String code, String name) {
-        return create(code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
+    public static FlowNode over(String name) {
+        return create(CODE_OVER, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
     }
 
-    public static FlowNode over(long id, String code, String name) {
-        return create(id, code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
+    public static FlowNode over(long id, String name) {
+        return create(id, CODE_OVER, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
     }
 
 }

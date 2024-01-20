@@ -44,14 +44,14 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create(1,"start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.script("""
+                                FlowNode.start(1,"发起请假", FlowUserMatcherFactory.script("""
                                         return true
-                                        """), FlowTriggerFactory.basic(),1),
+                                        """), FlowTriggerFactory.basic()),
                                 FlowNode.create(2,"manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic(),1),
-                                FlowNode.over(3,"end", "结束")
+                                FlowNode.over(3,"结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
         FlowWork work = new FlowWork(1,"请假流程","这是说明", admin, flow);
@@ -97,12 +97,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
         FlowWork work = new FlowWork("请假流程", admin, flow);
@@ -147,12 +147,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start("发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
         FlowWork work = new FlowWork("请假流程", admin, flow);
@@ -192,12 +192,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假",FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -243,12 +243,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start("发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -293,12 +293,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -341,12 +341,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.users(user), FlowTriggerFactory.basic()),
+                                FlowNode.start("发起请假",  FlowUserMatcherFactory.users(user), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -374,12 +374,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.users(user), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.users(user), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -413,12 +413,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -465,12 +465,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -510,12 +510,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -566,12 +566,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowUserMatcherFactory.users(manager1, manager2), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -618,12 +618,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -662,12 +662,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -706,13 +706,13 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic()),
                                 FlowNode.create("boss", "boss", FlowType.SERIAL, FlowUserMatcherFactory.users(admin), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").addNext("boss").over("end")
+                        .start().addNext("manager").addNext("boss").over()
                         .build();
 
 
@@ -757,12 +757,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start("发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.PARALLEL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.rate(0.6f), 5),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -812,12 +812,12 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
+                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager", "manager", FlowType.PARALLEL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.rate(0.6f), 5),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager").over("end")
+                        .start().addNext("manager").over()
                         .build();
 
 
@@ -870,7 +870,7 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), new IFlowTrigger() {
+                                FlowNode.start( "发起请假",  FlowUserMatcherFactory.anyUsers(), new IFlowTrigger() {
                                     @Override
                                     public List<FlowNode> next(FlowNode node, FlowRecord... records) {
                                         FlowRecord current = records[0];
@@ -884,11 +884,11 @@ class FlowTest {
                                 }),
                                 FlowNode.create("manager1", "manager1", FlowType.SERIAL, FlowUserMatcherFactory.users(manager1), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager2", "manager2", FlowType.SERIAL, FlowUserMatcherFactory.users(manager2), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager1").over("end")
-                        .start("start").addNext("manager2").over("end")
+                        .start().addNext("manager1").over()
+                        .start().addNext("manager2").over()
                         .build();
 
 
@@ -939,7 +939,7 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.create("start", "发起请假", FlowType.SERIAL, FlowUserMatcherFactory.anyUsers(), new IFlowTrigger() {
+                                FlowNode.start( "发起请假", FlowUserMatcherFactory.anyUsers(), new IFlowTrigger() {
                                     @Override
                                     public List<FlowNode> next(FlowNode node, FlowRecord... records) {
                                         FlowRecord current = records[0];
@@ -953,11 +953,11 @@ class FlowTest {
                                 }),
                                 FlowNode.create("manager1", "manager1", FlowType.SERIAL, FlowUserMatcherFactory.users(manager1), FlowTriggerFactory.basic()),
                                 FlowNode.create("manager2", "manager2", FlowType.SERIAL, FlowUserMatcherFactory.users(manager2), FlowTriggerFactory.basic()),
-                                FlowNode.over("end", "结束")
+                                FlowNode.over( "结束")
                         )
                         .relations()
-                        .start("start").addNext("manager1").over("end")
-                        .start("start").addNext("manager2").over("end")
+                        .start().addNext("manager1").over()
+                        .start().addNext("manager2").over()
                         .build();
 
 

@@ -44,8 +44,8 @@ public class FlowNodeBuilder {
             this.nodes = nodes;
         }
 
-        public NodeRelation start(String code) {
-            FlowNode start = getNode(code,false);
+        public NodeRelation start() {
+            FlowNode start = getNode(FlowNode.CODE_START,false);
             if (start == null) {
                 throw new FlowBuilderException("flow.build.error", "开始节点不存在");
             }
@@ -84,8 +84,8 @@ public class FlowNodeBuilder {
             return this;
         }
 
-        public NodeRelation over(String code) {
-            FlowNode over = getNode(code);
+        public NodeRelation over() {
+            FlowNode over = getNode(FlowNode.CODE_OVER);
             if (over == null) {
                 throw new FlowBuilderException("flow.build.error", "结束节点不存在");
             }
