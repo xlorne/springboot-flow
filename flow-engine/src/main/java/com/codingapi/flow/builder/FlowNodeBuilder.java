@@ -46,9 +46,25 @@ public class FlowNodeBuilder {
             this.nodes = nodes;
         }
 
-        public FlowNode build(String start) {
-            return getNode(start);
+        public BuildEdge start(String start) {
+            return new BuildEdge(start);
         }
+
+        public class BuildEdge {
+            private final String start;
+
+            public BuildEdge(String start) {
+                this.start = start;
+            }
+
+            public FlowNode build() {
+                if (this.start == null) {
+                    throw new FlowBuilderException("flow.build.error", "开始节点尚未设置");
+                }
+                return getNode(start);
+            }
+        }
+
 
         private FlowNode getNode(String code) {
             for (FlowNode n : nodes) {
@@ -75,13 +91,14 @@ public class FlowNodeBuilder {
             }
 
             public Edges to(String... codes) {
+                if (current.isOver()) {
+                    throw new FlowBuilderException("flow.build.error", "结束节点不能再添加下一节点");
+                }
+
                 for (String code : codes) {
                     FlowNode nextNode = getNode(code);
                     if (nextNode == null) {
                         throw new FlowBuilderException("flow.build.error", "下一节点不存在");
-                    }
-                    if (nextNode.isOver()) {
-                        throw new FlowBuilderException("flow.build.error", "结束节点不能再添加下一节点");
                     }
                     this.current.addNext(nextNode);
                 }

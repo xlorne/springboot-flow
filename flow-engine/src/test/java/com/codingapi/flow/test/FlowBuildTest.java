@@ -114,7 +114,8 @@ class FlowBuildTest {
                         .from("manager2").to("manager3")
                         .from("manager3").to("manager1")
                         .from("manager2").to("over")
-                        .build("start");
+                        .start("start")
+                        .build();
 
         System.out.println(flow);
 

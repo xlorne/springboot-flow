@@ -50,8 +50,10 @@ class FlowTest {
                                 FlowNode.create(2,"manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic(),1),
                                 FlowNode.over(3,"结束")
                         )
-                        .relations()
-                        .start().addNext("manager").over()
+                        .edges()
+                        .from("start").to("manager")
+                        .from("manager").to("over")
+                        .start("start")
                         .build();
 
         FlowWork work = new FlowWork(1,"请假流程","这是说明", admin, flow);
