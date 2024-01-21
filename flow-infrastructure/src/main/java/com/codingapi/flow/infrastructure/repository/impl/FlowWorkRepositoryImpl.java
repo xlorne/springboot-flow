@@ -28,4 +28,9 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository {
     public FlowWork get(long workId) {
         return FlowWorkConvertor.convert(flowWorkEntityRepository.getFlowWorkEntityById(workId));
     }
+
+    @Override
+    public void delete(long workId) {
+        flowWorkEntityRepository.deleteById(workId);
+    }
 }

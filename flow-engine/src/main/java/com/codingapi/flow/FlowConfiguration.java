@@ -1,10 +1,9 @@
 package com.codingapi.flow;
 
+import com.codingapi.flow.bind.IBind;
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
-import com.codingapi.flow.bind.IBind;
 import com.codingapi.flow.em.FlowState;
-import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.gateway.FlowGateway;
 import com.codingapi.flow.gateway.FlowGatewayContextRegister;
 import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;
@@ -12,9 +11,12 @@ import com.codingapi.flow.gennerate.IdGenerator;
 import com.codingapi.flow.gennerate.SnowflakeIDGenerator;
 import com.codingapi.flow.repository.FlowRecordQuery;
 import com.codingapi.flow.repository.FlowRecordRepository;
+import com.codingapi.flow.repository.FlowWorkQuery;
 import com.codingapi.flow.repository.FlowWorkRepository;
 import com.codingapi.flow.service.FlowQuery;
 import com.codingapi.flow.service.FlowService;
+import com.codingapi.flow.user.IFlowUser;
+import com.codingapi.springboot.framework.dto.request.SearchRequest;
 import lombok.Getter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -42,6 +44,11 @@ public class FlowConfiguration {
             @Override
             public FlowWork get(long workId) {
                 return cache.get(workId);
+            }
+
+            @Override
+            public void delete(long workId) {
+                cache.remove(workId);
             }
         };
     }
@@ -73,7 +80,7 @@ public class FlowConfiguration {
             public List<FlowRecord> findToDoList(long processId, IFlowUser flowUser) {
                 return FlowRecordCache.getInstance().get(processId, List.of()).stream().filter(record -> {
                     if (record.getState() == FlowState.WAIT) {
-                        if(record.getUsers()!=null && !record.getUsers().isEmpty()){
+                        if (record.getUsers() != null && !record.getUsers().isEmpty()) {
                             return record.containsUser(flowUser);
                         }
                         return record.getNode().matchUser(flowUser);
@@ -107,6 +114,18 @@ public class FlowConfiguration {
 
             @Override
             public List<FlowRecord> findByProcessId(long processId) {
+                // 单元测试 不允许访问该功能
+                throw new RuntimeException("not support");
+            }
+        };
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public FlowWorkQuery flowWorkQuery() {
+        return new FlowWorkQuery() {
+            @Override
+            public Page<FlowWork> list(SearchRequest request) {
                 // 单元测试 不允许访问该功能
                 throw new RuntimeException("not support");
             }

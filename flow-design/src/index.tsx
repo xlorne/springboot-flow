@@ -1,15 +1,28 @@
 import React from 'react';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import {App} from "./App";
 import {ConfigProvider} from 'antd';
+
+import {Page} from "./page";
+import {New} from "./page/new";
+import {Design} from "./Design";
+import {App} from "./App";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
+
 root.render(
     <ConfigProvider>
-        <App/>
+        <BrowserRouter>
+            <Routes>
+                <Route path="index" element={<Page/>}/>
+                <Route path="new" element={<New/>}/>
+                <Route path="design" element={<Design/>}/>
+                <Route path="/" element={<App/>}/>
+            </Routes>
+        </BrowserRouter>
     </ConfigProvider>
 );
 

@@ -2,6 +2,7 @@ package com.codingapi.flow.domain;
 
 import com.codingapi.flow.gennerate.IdGeneratorContext;
 import com.codingapi.flow.user.IFlowUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,6 +23,7 @@ public class FlowWork {
     private IFlowUser creator;
     private long createTime;
 
+    @JsonIgnore
     private FlowNode flow;
 
 

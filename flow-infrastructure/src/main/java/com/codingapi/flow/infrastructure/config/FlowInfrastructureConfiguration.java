@@ -10,9 +10,11 @@ import com.codingapi.flow.infrastructure.jpa.FlowRecordEntityRepository;
 import com.codingapi.flow.infrastructure.jpa.FlowWorkEntityRepository;
 import com.codingapi.flow.infrastructure.repository.impl.FlowRecordQueryImpl;
 import com.codingapi.flow.infrastructure.repository.impl.FlowRecordRepositoryImpl;
+import com.codingapi.flow.infrastructure.repository.impl.FlowWorkQueryImpl;
 import com.codingapi.flow.infrastructure.repository.impl.FlowWorkRepositoryImpl;
 import com.codingapi.flow.repository.FlowRecordQuery;
 import com.codingapi.flow.repository.FlowRecordRepository;
+import com.codingapi.flow.repository.FlowWorkQuery;
 import com.codingapi.flow.repository.FlowWorkRepository;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +41,10 @@ public class FlowInfrastructureConfiguration {
         return new FlowRecordQueryImpl(flowRecordEntityRepository, flowWorkEntityRepository);
     }
 
+    @Bean
+    public FlowWorkQuery flowWorkQuery(FlowWorkEntityRepository flowWorkEntityRepository) {
+        return new FlowWorkQueryImpl(flowWorkEntityRepository);
+    }
 
     @Bean
     public FlowNodeContextRegister flowNodeContextRegister(FlowNodeEntityRepository flowNodeEntityRepository) {

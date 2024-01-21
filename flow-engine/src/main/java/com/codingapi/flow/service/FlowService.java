@@ -32,12 +32,23 @@ public class FlowService {
 
     private final FlowRecordRepository flowRecordRepository;
 
+    /**
+     * 创建流程
+     * @param flowWork 流程
+     * @return 流程workId
+     */
     public long save(FlowWork flowWork) {
         flowWorkRepository.save(flowWork);
         log.info("save flowWork:{}", flowWork);
         return flowWork.getId();
     }
 
+    /**
+     * 删除流程
+     */
+    public void delete(long workId){
+        flowWorkRepository.delete(workId);
+    }
 
     /**
      * 创建流程

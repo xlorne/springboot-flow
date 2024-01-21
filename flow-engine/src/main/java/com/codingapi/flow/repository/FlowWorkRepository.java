@@ -11,4 +11,8 @@ public interface FlowWorkRepository {
 
     FlowWork get(long workId);
 
+    void delete(long workId);
+
+
+
 }
