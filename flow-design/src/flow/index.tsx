@@ -4,7 +4,8 @@ import "@ant-design/flowchart/dist/index.css";
 import "antd/dist/reset.css";
 import {controlMapService, formSchemaService} from "./panel"
 import {components} from "./node";
-import {message} from "antd";
+import {Button, Input, message, Modal} from "antd";
+import {EditOutlined} from "@ant-design/icons";
 
 interface FlowProps {
     data?: {
@@ -21,6 +22,9 @@ export const Flow: React.FC<FlowProps> = (props) => {
 
     let hasStartNode = false;
     let hasOverNode = false;
+
+    const [title, setTitle] = React.useState<string>(props.data?.title || '新建流程');
+    const [modelVisible, setModelVisible] = React.useState<boolean>(false);
 
     const initFlowNodeState = (data: any) => {
         if (data == null) {
@@ -82,13 +86,16 @@ export const Flow: React.FC<FlowProps> = (props) => {
                     fontSize: 16,
                     fontWeight: 400,
                 }}>
-                    {props.data?.title}
+                    {title}
+                    <EditOutlined onClick={() => {
+                        setModelVisible(true);
+                    }} style={{fontSize: '12px'}}/>
                 </div>
             </div>
             <Flowchart
                 onSave={async (d) => {
                     const data = {
-                        title: props.data?.title,
+                        title: title,
                         data: d
                     }
                     props.onSave && props.onSave(data);
@@ -198,6 +205,34 @@ export const Flow: React.FC<FlowProps> = (props) => {
                     formSchemaService
                 }}
             />
+
+            <Modal
+                title="流程标题"
+                open={modelVisible}
+                onOk={() => {
+                    setModelVisible(false);
+                }}
+                onCancel={() => {
+                    setModelVisible(false);
+                }}
+                destroyOnClose={true}
+                okText={'确定'}
+                footer={[
+                    <Button key="submit" type="primary" onClick={() => {
+                        setModelVisible(false);
+                    }}>
+                        确定
+                    </Button>
+                ]}
+            >
+
+                <Input
+                    value={title}
+                    onChange={(e) => {
+                        setTitle(e.target.value);
+                    }}
+                />
+            </Modal>
         </div>
     );
 };
