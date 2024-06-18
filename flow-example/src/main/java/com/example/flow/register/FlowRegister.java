@@ -74,10 +74,10 @@ public class FlowRegister implements ApplicationRunner {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.start(1, "start", "发起请假", FlowUserMatcherFactory.anyUsers(), new LeaveFlowTrigger()),
-                                FlowNode.create(2, "manager", "经理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic(), 1),
-                                FlowNode.create(3, "boss", "总理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(boss), FlowTriggerFactory.basic(), 1),
-                                FlowNode.over(4, "over", "结束")
+                                FlowNode.start( "start", "发起请假", FlowUserMatcherFactory.anyUsers(), new LeaveFlowTrigger()),
+                                FlowNode.create( "manager", "经理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic(), 1),
+                                FlowNode.create( "boss", "总理审核", FlowType.SERIAL, FlowUserMatcherFactory.users(boss), FlowTriggerFactory.basic(), 1),
+                                FlowNode.over("over", "结束")
                         )
                         .edges()
                         .from("start").to("manager")
@@ -86,7 +86,7 @@ public class FlowRegister implements ApplicationRunner {
                         .start("start")
                         .build();
 
-        FlowWork work = new FlowWork(1, "请假流程", "这是流程说明", admin, flow);
+        FlowWork work = new FlowWork("请假流程", "这是流程说明", admin, flow);
         long workId = flowService.save(work);
         log.info("workId:{}", workId);
     }

@@ -150,4 +150,12 @@ public class FlowRecord {
     public boolean isApproval() {
         return this.state != FlowState.WAIT;
     }
+
+
+    /**
+     * 是否待审批
+     */
+    public boolean isWait() {
+        return this.state == FlowState.WAIT;
+    }
 }

@@ -13,7 +13,7 @@ import com.codingapi.flow.event.FlowFinishEvent;
 import com.codingapi.flow.event.FlowRecallEvent;
 import com.codingapi.flow.event.FlowStartEvent;
 import com.codingapi.flow.exception.FlowServiceException;
-import com.codingapi.flow.gennerate.IdGeneratorContext;
+import com.codingapi.flow.gateway.FlowProcessIdGeneratorGateway;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import com.codingapi.flow.repository.FlowWorkRepository;
 import com.codingapi.flow.user.IFlowUser;
@@ -31,6 +31,8 @@ public class FlowService {
     private final FlowWorkRepository flowWorkRepository;
 
     private final FlowRecordRepository flowRecordRepository;
+
+    private final FlowProcessIdGeneratorGateway flowProcessIdGeneratorGateway;
 
     /**
      * 创建流程
@@ -64,8 +66,8 @@ public class FlowService {
         if (flowNode.matchUser(user)) {
             FlowState state = FlowState.PASS;
             //创建流程记录
-            long processId = IdGeneratorContext.getInstance().nextProcessId();
-            FlowRecord flowRecord = FlowRecordConvertor.convert(processId, workId, flowNode, bind);
+            long processId = flowProcessIdGeneratorGateway.createProcessId();
+            FlowRecord flowRecord = FlowRecordConvertor.convert( processId,workId, flowNode, bind);
             flowRecord.approval(user, state, null);
             flowRecordRepository.save(flowRecord);
             //触发流程
@@ -73,7 +75,7 @@ public class FlowService {
 
             FlowStartEvent flowEvent = new FlowStartEvent(flowNode, flowRecord, user);
             EventPusher.push(flowEvent);
-            return processId;
+            return flowRecord.getProcessId();
         } else {
             throw new FlowServiceException("user.create.error", "当前用户无权限创建该流程");
         }
@@ -124,7 +126,7 @@ public class FlowService {
         if (next != null) {
             next.forEach(node -> {
                 if (node.getFlowType() == FlowType.OVER) {
-                    FlowRecord nextRecord = FlowRecordConvertor.convert(flowRecord.getProcessId(), flowRecord.getWorkId(), node, flowRecord.getBind());
+                    FlowRecord nextRecord = FlowRecordConvertor.convert( flowRecord.getProcessId(),flowRecord.getWorkId(), node, flowRecord.getBind());
                     nextRecord.finish();
                     flowRecordRepository.save(nextRecord);
 

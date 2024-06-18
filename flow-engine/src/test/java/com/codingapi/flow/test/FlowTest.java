@@ -1,16 +1,18 @@
 package com.codingapi.flow.test;
 
-import com.codingapi.flow.FlowConfiguration;
-import com.codingapi.flow.domain.*;
 import com.codingapi.flow.builder.FlowNodeBuilder;
+import com.codingapi.flow.domain.*;
 import com.codingapi.flow.em.FlowType;
+import com.codingapi.flow.exception.FlowServiceException;
+import com.codingapi.flow.gateway.FlowProcessIdGeneratorGateway;
+import com.codingapi.flow.gateway.FlowProcessIdGeneratorGatewayImpl;
+import com.codingapi.flow.repository.FlowRecordRepositoryImpl;
+import com.codingapi.flow.repository.FlowWorkRepositoryImpl;
+import com.codingapi.flow.service.FlowQuery;
+import com.codingapi.flow.service.FlowService;
 import com.codingapi.flow.trigger.FlowTriggerFactory;
 import com.codingapi.flow.trigger.IFlowTrigger;
 import com.codingapi.flow.user.FlowUserMatcherFactory;
-import com.codingapi.flow.exception.FlowServiceException;
-import com.codingapi.flow.service.FlowQuery;
-import com.codingapi.flow.service.FlowService;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -20,21 +22,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class FlowTest {
 
+    private final FlowWorkRepositoryImpl flowWorkRepository = new FlowWorkRepositoryImpl();
+    private final FlowRecordRepositoryImpl flowRecordRepository = new FlowRecordRepositoryImpl();
+    private final FlowProcessIdGeneratorGateway flowProcessIdGeneratorGateway = new FlowProcessIdGeneratorGatewayImpl();
+    private final FlowService flowService = new FlowService(flowWorkRepository, flowRecordRepository, flowProcessIdGeneratorGateway);
+    private final FlowQuery flowQuery = new FlowQuery(flowRecordRepository);
 
-    @BeforeAll
-    static void registerIdGenerator() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        flowConfiguration.flowIdGeneratorRegister();
-    }
 
     /**
      * 请假流程(通过)
      */
     @Test
     void test1() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -44,11 +43,11 @@ class FlowTest {
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
-                                FlowNode.start(1,"发起请假", FlowUserMatcherFactory.script("""
+                                FlowNode.start("发起请假", FlowUserMatcherFactory.script("""
                                         return true
                                         """), FlowTriggerFactory.basic()),
-                                FlowNode.create(2,"manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic(),1),
-                                FlowNode.over(3,"结束")
+                                FlowNode.create("manager", "manager", FlowType.SERIAL, FlowUserMatcherFactory.users(manager), FlowTriggerFactory.basic(),1),
+                                FlowNode.over("结束")
                         )
                         .edges()
                         .from("start").to("manager")
@@ -56,7 +55,7 @@ class FlowTest {
                         .start("start")
                         .build();
 
-        FlowWork work = new FlowWork(1,"请假流程","这是说明", admin, flow);
+        FlowWork work = new FlowWork("请假流程","这是说明", admin, flow);
         long workId = flowService.save(work);
 
 
@@ -87,9 +86,6 @@ class FlowTest {
      */
     @Test
     void test11() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -137,9 +133,6 @@ class FlowTest {
      */
     @Test
     void test12() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -182,9 +175,6 @@ class FlowTest {
      */
     @Test
     void test2() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -233,9 +223,6 @@ class FlowTest {
      */
     @Test
     void test21() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -283,9 +270,6 @@ class FlowTest {
      */
     @Test
     void test22() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -332,8 +316,6 @@ class FlowTest {
      */
     @Test
     void test223() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -365,9 +347,6 @@ class FlowTest {
      */
     @Test
     void test224() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
         User manager = new User(2, "经理");
@@ -403,9 +382,6 @@ class FlowTest {
      */
     @Test
     void test221() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -455,9 +431,6 @@ class FlowTest {
      */
     @Test
     void test23() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -500,9 +473,6 @@ class FlowTest {
      */
     @Test
     void test231() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -554,9 +524,6 @@ class FlowTest {
      */
     @Test
     void test3() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
 
@@ -608,9 +575,6 @@ class FlowTest {
      */
     @Test
     void test222() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -652,9 +616,6 @@ class FlowTest {
      */
     @Test
     void test225() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -696,9 +657,6 @@ class FlowTest {
      */
     @Test
     void test226() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
         User user = new User(1, "小明");
@@ -746,9 +704,6 @@ class FlowTest {
      */
     @Test
     void test4() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
 
@@ -801,9 +756,6 @@ class FlowTest {
      */
     @Test
     void test41() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
 
@@ -858,9 +810,6 @@ class FlowTest {
      */
     @Test
     void test5() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
 
@@ -927,9 +876,6 @@ class FlowTest {
      */
     @Test
     void test51() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        FlowService flowService = new FlowService(flowConfiguration.flowWorkRepository(), flowConfiguration.flowRecordRepository());
-        FlowQuery flowQuery = new FlowQuery(flowConfiguration.flowRecordQuery());
 
         User admin = new User(100, "admin");
 

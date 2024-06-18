@@ -1,6 +1,5 @@
 package com.codingapi.flow.domain;
 
-import com.codingapi.flow.gennerate.IdGeneratorContext;
 import com.codingapi.flow.user.IFlowUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -26,13 +25,7 @@ public class FlowWork {
     @JsonIgnore
     private FlowNode flow;
 
-
-    public FlowWork(String title, String description, IFlowUser creator, FlowNode flow) {
-        this(IdGeneratorContext.getInstance().nextWorkId(), title, description, creator, flow);
-    }
-
-    public FlowWork(long id, String title, String description, IFlowUser creator, FlowNode flow) {
-        this.id = id;
+    public FlowWork( String title, String description, IFlowUser creator, FlowNode flow) {
         this.title = title;
         this.description = description;
         this.creator = creator;
