@@ -17,11 +17,8 @@ public class User implements IFlowUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String name;
+    private long id;
+    private String username;
+    private String password;
     private String role;
-
-    public long getId() {
-        return id;
-    }
 }

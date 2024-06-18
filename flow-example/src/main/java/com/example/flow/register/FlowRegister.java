@@ -34,41 +34,41 @@ public class FlowRegister implements ApplicationRunner {
     private void initUser() {
         User user = new User();
         user.setId(1L);
-        user.setName("小明");
-        user.setRole("user");
+        user.setUsername("xiaoming");
+        user.setPassword("123456");
         userRepository.save(user);
 
         User manager1 = new User();
         manager1.setId(2L);
-        manager1.setName("经理1");
-        manager1.setRole("manager");
+        manager1.setUsername("jingli1");
+        manager1.setPassword("123456");
         userRepository.save(manager1);
 
 
         User manager2 = new User();
         manager2.setId(3L);
-        manager2.setName("经理2");
-        manager2.setRole("manager");
+        manager2.setUsername("jingli2");
+        manager2.setPassword("123456");
         userRepository.save(manager2);
 
 
         User boss = new User();
         boss.setId(4L);
-        boss.setName("总理");
-        boss.setRole("boss");
+        boss.setUsername("boss");
+        boss.setPassword("123456");
         userRepository.save(boss);
 
 
         User admin = new User();
         admin.setId(5L);
-        admin.setName("admin");
-        admin.setRole("admin");
+        admin.setUsername("admin");
+        admin.setPassword("123456");
         userRepository.save(admin);
     }
 
 
     public void initFlow() {
-        User admin = userRepository.findByName("admin");
+        User admin = userRepository.getByUsername("admin");
         List<User> manager = userRepository.findByRole("manager");
         List<User> boss = userRepository.findByRole("boss");
         FlowNode flow =

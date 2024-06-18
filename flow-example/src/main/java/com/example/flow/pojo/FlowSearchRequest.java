@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 @Getter
 public class FlowSearchRequest {
 
-    private String name;
+    private String username;
     private int current;
     private int pageSize;
 
