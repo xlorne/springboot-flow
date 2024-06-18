@@ -1,11 +1,10 @@
 package com.codingapi.flow.infrastructure.convert;
 
-import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
-import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.gateway.FlowGatewayContext;
 import com.codingapi.flow.infrastructure.context.FlowNodeContext;
 import com.codingapi.flow.infrastructure.entity.FlowRecordEntity;
+import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.springboot.fast.manager.EntityManagerContent;
 
 import java.util.ArrayList;
