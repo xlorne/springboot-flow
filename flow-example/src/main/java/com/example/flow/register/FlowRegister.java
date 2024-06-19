@@ -71,11 +71,11 @@ public class FlowRegister implements ApplicationRunner {
         userRepository.save(admin);
     }
 
-
     public void initFlow() {
         User admin = userRepository.getByUsername("admin");
         List<User> manager = userRepository.findByRole("manager");
         List<User> boss = userRepository.findByRole("boss");
+
         FlowNode flow =
                 FlowNodeBuilder.builder()
                         .addNodes(
@@ -98,11 +98,10 @@ public class FlowRegister implements ApplicationRunner {
 
     public void initLeave() {
         Leave leave = new Leave();
-        leave.setId(1L);
         leave.setUserId(1L);
         leave.setDays(3.0f);
         leave.setReason("生病了");
-        leaveRepository.save(leave);
+        leave = leaveRepository.save(leave);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.example.flow;
 
-import com.codingapi.flow.domain.FlowWork;
 import com.codingapi.flow.gateway.FlowProcessIdGeneratorGateway;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import com.codingapi.flow.repository.FlowWorkRepository;
