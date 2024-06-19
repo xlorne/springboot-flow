@@ -16,6 +16,7 @@ import java.util.List;
 public class FlowNodeEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**

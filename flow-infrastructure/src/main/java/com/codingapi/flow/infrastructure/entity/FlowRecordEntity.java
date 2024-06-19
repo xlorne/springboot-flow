@@ -4,9 +4,7 @@ import com.codingapi.flow.bind.IBind;
 import com.codingapi.flow.em.FlowState;
 import com.codingapi.flow.infrastructure.entity.converter.ListLongConverter;
 import com.codingapi.flow.user.IFlowUser;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +16,7 @@ import java.util.List;
 public class FlowRecordEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
 

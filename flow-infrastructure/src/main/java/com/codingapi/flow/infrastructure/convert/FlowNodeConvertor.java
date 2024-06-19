@@ -53,21 +53,4 @@ public class FlowNodeConvertor {
         return entity;
     }
 
-    public static List<FlowNodeEntity> convert(FlowWork flowWork) {
-        FlowNode root = flowWork.getFlow();
-        long workId = flowWork.getId();
-        List<FlowNodeEntity> entities = new ArrayList<>();
-
-        Consumer<FlowNode> consumer = new Consumer<>() {
-            @Override
-            public void accept(FlowNode flowNode) {
-                flowNode.getNext().forEach(this);
-                entities.add(convert(flowNode, workId));
-            }
-        };
-
-        root.getNext().forEach(consumer);
-        entities.add(convert(root, workId));
-        return entities.stream().sorted((o1, o2) -> (int) (o1.getId() - o2.getId())).collect(Collectors.toList());
-    }
 }
