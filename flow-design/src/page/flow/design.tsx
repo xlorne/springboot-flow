@@ -1,6 +1,6 @@
 import React from 'react';
-import {Flow} from "./flow";
-import * as data from "./data/data.json";
+import {Flow} from "@/flow";
+import * as data from "@/data/data.json";
 
 export const Design = () => {
     return (

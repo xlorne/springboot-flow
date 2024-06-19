@@ -1,11 +1,11 @@
 import React from "react";
 import axios from "axios";
-import {ProTable} from "@ant-design/pro-components";
+import {PageContainer, ProTable} from "@ant-design/pro-components";
 import moment from "moment";
 import {Button} from "antd";
 import {useNavigate} from "react-router-dom";
 
-export const Page = () => {
+const FLowPage = () => {
     const navigate = useNavigate();
 
     const columns: any[] = [
@@ -57,14 +57,13 @@ export const Page = () => {
 
 
     return (
-        <div>
-            <h1>Page</h1>
+        <PageContainer>
             <ProTable
                 columns={columns}
                 toolBarRender={() => {
                     return [
                         <Button onClick={()=>{
-                            navigate('/new');
+
                         }}>新建流程</Button>
                     ]
                 }}
@@ -80,6 +79,8 @@ export const Page = () => {
                 }
                 }
             />
-        </div>
+        </PageContainer>
     )
 }
+
+export default FLowPage;

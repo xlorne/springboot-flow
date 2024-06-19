@@ -1,10 +1,14 @@
 import {LockOutlined, UserOutlined,} from '@ant-design/icons';
 import {LoginForm, ProConfigProvider, ProFormCheckbox, ProFormText,} from '@ant-design/pro-components';
 import {theme} from 'antd';
+import {login} from "@/api/login";
+import {useNavigate} from "react-router-dom";
 
 
 const LoginPage =  () => {
     const { token } = theme.useToken();
+
+    const navigate = useNavigate();
 
     return (
         <ProConfigProvider hashed={false}>
@@ -13,6 +17,15 @@ const LoginPage =  () => {
                     logo="https://github.githubassets.com/favicons/favicon.png"
                     title="Flow Design"
                     subTitle="开源的流程引擎"
+                    onFinish={async (values) => {
+                        login(values).then((res) => {
+                            if (res.success) {
+                                localStorage.setItem('username', res.data.username);
+                                localStorage.setItem('token', res.data.token);
+                                navigate('/welcome');
+                            }
+                        });
+                    }}
                 >
 
                     <ProFormText
