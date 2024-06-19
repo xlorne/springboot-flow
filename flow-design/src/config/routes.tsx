@@ -5,7 +5,8 @@ import Login from "@/page/login";
 import Home from "@/layout";
 import Welcome from "@/page/welcome";
 import NotFound from "@/layout/NotFound";
-import User from "@/page/user";
+import UserPage from "@/page/user";
+import WorkPage from "@/page/work";
 
 
 export const layoutRoutes = [
@@ -19,7 +20,11 @@ export const layoutRoutes = [
     },
     {
         path: "/user",
-        element: <User/>
+        element: <UserPage/>
+    },
+    {
+        path: "/work",
+        element: <WorkPage/>
     },
     {
         path: "*",

@@ -1,9 +1,9 @@
 import React from "react";
-import axios from "axios";
 import {PageContainer, ProTable} from "@ant-design/pro-components";
 import moment from "moment";
 import {Button} from "antd";
 import {useNavigate} from "react-router-dom";
+import {list} from "@/api/flow";
 
 const FLowPage = () => {
     const navigate = useNavigate();
@@ -29,7 +29,7 @@ const FLowPage = () => {
             search: false,
             render: (text: any, record: any, index: any) => {
                 return (
-                    <span>{record['creator'].name}</span>
+                    <span>{record.creator.username}</span>
                 )
             }
         },
@@ -59,25 +59,17 @@ const FLowPage = () => {
     return (
         <PageContainer>
             <ProTable
+                rowKey={"id"}
                 columns={columns}
                 toolBarRender={() => {
                     return [
                         <Button onClick={()=>{
-
                         }}>新建流程</Button>
                     ]
                 }}
-                request={async (params) => {
-                    const res = await axios.get('http://localhost:8090/design/list', {
-                        params: params
-                    });
-                    return {
-                        data: res.data.data.list,
-                        success: true,
-                        total: res.data.data.total,
-                    }
-                }
-                }
+                request={async (params,sort,filter) => {
+                    return list(params,sort,filter,[]);
+                }}
             />
         </PageContainer>
     )

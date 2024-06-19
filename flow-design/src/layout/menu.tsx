@@ -36,6 +36,10 @@ const LayoutMenu = () => {
                         key: 'user',
                         label: '用户管理',
                     },
+                    {
+                        key: 'work',
+                        label: '工作台',
+                    },
 
                 ]}
             />
