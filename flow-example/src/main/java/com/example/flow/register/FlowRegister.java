@@ -36,12 +36,14 @@ public class FlowRegister implements ApplicationRunner {
         user.setId(1L);
         user.setUsername("xiaoming");
         user.setPassword("123456");
+        user.setRole("user");
         userRepository.save(user);
 
         User manager1 = new User();
         manager1.setId(2L);
         manager1.setUsername("jingli1");
         manager1.setPassword("123456");
+        manager1.setRole("manager");
         userRepository.save(manager1);
 
 
@@ -49,6 +51,7 @@ public class FlowRegister implements ApplicationRunner {
         manager2.setId(3L);
         manager2.setUsername("jingli2");
         manager2.setPassword("123456");
+        manager2.setRole("manager");
         userRepository.save(manager2);
 
 
@@ -56,6 +59,7 @@ public class FlowRegister implements ApplicationRunner {
         boss.setId(4L);
         boss.setUsername("boss");
         boss.setPassword("123456");
+        boss.setRole("boss");
         userRepository.save(boss);
 
 
@@ -63,6 +67,7 @@ public class FlowRegister implements ApplicationRunner {
         admin.setId(5L);
         admin.setUsername("admin");
         admin.setPassword("123456");
+        admin.setRole("admin");
         userRepository.save(admin);
     }
 
