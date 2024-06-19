@@ -54,7 +54,7 @@ public class FlowNode {
 
     public void setNext(List<FlowNode> next) {
         this.next = next;
-        if (next != null) {
+        if (next != null && !next.isEmpty()) {
             for (FlowNode node : next) {
                 node.setPrev(this);
             }

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import "./menu.scss";
 import {Menu, MenuProps} from "antd";
 import {useNavigate} from "react-router";

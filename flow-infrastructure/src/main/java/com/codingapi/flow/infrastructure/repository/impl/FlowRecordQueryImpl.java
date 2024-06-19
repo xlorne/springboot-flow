@@ -35,7 +35,8 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
 
     @Override
     public List<FlowRecord> findProcessList(long processId, IFlowUser flowUser) {
-        return flowRecordEntityRepository.findProcessList(processId, flowUser.getId()).stream().map(FlowRecordConvertor::convert)
+        return flowRecordEntityRepository.findProcessList(processId, flowUser.getId())
+                .stream().map(FlowRecordConvertor::convert)
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +59,9 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
 
     @Override
     public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
-        List<FlowWork> flowWorks = flowWorkEntityRepository.findAll().stream().map(FlowWorkConvertor::convert).toList();
+        List<FlowWork> flowWorks = flowWorkEntityRepository.findAll()
+                .stream().map(FlowWorkConvertor::convert).toList();
+
         List<Long> nodeIds = new ArrayList<>();
         List<Long> wordIds = new ArrayList<>();
         for (FlowWork flowWork : flowWorks) {

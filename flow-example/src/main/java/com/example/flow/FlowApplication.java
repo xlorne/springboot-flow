@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EntityScan(basePackages = {"com.example.flow.domain"})
 @EnableJpaRepositories(basePackages = {"com.example.flow.repository"})
@@ -23,5 +24,20 @@ public class FlowApplication {
     @Bean
     public FlowService flowService(FlowWorkRepository flowWorkRepository, FlowRecordRepository flowRecordRepository, FlowProcessIdGeneratorGateway flowProcessIdGeneratorGateway) {
         return new FlowService(flowWorkRepository, flowRecordRepository, flowProcessIdGeneratorGateway);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence charSequence) {
+                return charSequence.toString();
+            }
+
+            @Override
+            public boolean matches(CharSequence charSequence, String s) {
+                return charSequence.toString().equals(s);
+            }
+        };
     }
 }

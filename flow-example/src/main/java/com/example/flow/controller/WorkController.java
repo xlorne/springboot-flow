@@ -6,6 +6,7 @@ import com.codingapi.flow.service.FlowService;
 import com.codingapi.springboot.framework.dto.response.MultiResponse;
 import com.codingapi.springboot.framework.dto.response.Response;
 import com.codingapi.springboot.framework.dto.response.SingleResponse;
+import com.codingapi.springboot.security.gateway.TokenContext;
 import com.example.flow.domain.Leave;
 import com.example.flow.domain.User;
 import com.example.flow.pojo.FlowSearchRequest;
@@ -34,13 +35,15 @@ public class WorkController {
 
     @GetMapping("/todo")
     public MultiResponse<FlowRecord> todo(FlowSearchRequest request) {
-        User user = userRepository.getByUsername(request.getUsername());
+        String username = TokenContext.current().getUsername();
+        User user = userRepository.getByUsername(username);
         return MultiResponse.of(flowQuery.todos(request.toPage(), user));
     }
 
     @GetMapping("/process")
     public MultiResponse<FlowRecord> process(FlowSearchRequest request) {
-        User user = userRepository.getByUsername(request.getUsername());
+        String username = TokenContext.current().getUsername();
+        User user = userRepository.getByUsername(username);
         return MultiResponse.of(flowQuery.process(request.toPage(), user));
     }
 
@@ -52,7 +55,7 @@ public class WorkController {
 
     @GetMapping("/start")
     public SingleResponse<Long> start(HttpServletRequest request) {
-        String username = request.getParameter("username");
+        String username = TokenContext.current().getUsername();
         long workId = Long.parseLong(request.getParameter("workId"));
         long leaveId = Long.parseLong(request.getParameter("leaveId"));
         User user = userRepository.getByUsername(username);
@@ -62,7 +65,7 @@ public class WorkController {
 
     @GetMapping("/pass")
     public Response pass(HttpServletRequest request) {
-        String username = request.getParameter("username");
+        String username = TokenContext.current().getUsername();
         String option = request.getParameter("option");
         long recordId = Long.parseLong(request.getParameter("recordId"));
         User user = userRepository.getByUsername(username);
@@ -72,7 +75,7 @@ public class WorkController {
 
     @GetMapping("/reject")
     public Response reject(HttpServletRequest request) {
-        String username = request.getParameter("username");
+        String username = TokenContext.current().getUsername();
         String option = request.getParameter("option");
         long recordId = Long.parseLong(request.getParameter("recordId"));
         User user = userRepository.getByUsername(username);
@@ -82,7 +85,7 @@ public class WorkController {
 
     @GetMapping("/recall")
     public Response recall(HttpServletRequest request) {
-        String username = request.getParameter("username");
+        String username = TokenContext.current().getUsername();
         long recordId = Long.parseLong(request.getParameter("recordId"));
         User user = userRepository.getByUsername(username);
         flowService.recall(recordId, user);
@@ -91,7 +94,7 @@ public class WorkController {
 
     @GetMapping("/back")
     public Response back(HttpServletRequest request) {
-        String username = request.getParameter("username");
+        String username = TokenContext.current().getUsername();
         String option = request.getParameter("option");
         long recordId = Long.parseLong(request.getParameter("recordId"));
         User user = userRepository.getByUsername(username);

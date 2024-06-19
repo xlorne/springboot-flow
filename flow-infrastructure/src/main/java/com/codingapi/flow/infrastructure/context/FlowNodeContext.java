@@ -42,7 +42,10 @@ public class FlowNodeContext {
             if (entity.getNext() != null) {
                 List<FlowNode> next = new ArrayList<>();
                 for (long nextId : entity.getNext()) {
-                    next.add(loadFlowNode(nextId));
+                    FlowNode flowNode =  loadFlowNode(nextId);
+                    if(flowNode!=null) {
+                        next.add(flowNode);
+                    }
                 }
                 node.setNext(next);
             }

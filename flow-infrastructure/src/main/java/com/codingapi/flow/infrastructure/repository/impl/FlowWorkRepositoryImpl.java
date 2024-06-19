@@ -24,15 +24,18 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository {
         entity = flowWorkEntityRepository.save(entity);
         flowWork.setId(entity.getId());
         this.saveNode(flowWork.getFlow(), flowWork.getId());
+
+        entity.setFlowId(flowWork.getFlow().getId());
+        flowWorkEntityRepository.save(entity);
     }
 
 
-    private void saveNode( FlowNode node,long workId) {
-        FlowNodeEntity entity =  FlowNodeConvertor.convert(node, workId);
+    private void saveNode(FlowNode node, long workId) {
+        FlowNodeEntity entity = FlowNodeConvertor.convert(node, workId);
         entity = flowNodeEntityRepository.save(entity);
         node.setId(entity.getId());
 
-        if(node.getNext()!=null) {
+        if (node.getNext() != null) {
             node.getNext().forEach(next -> {
                 saveNode(next, workId);
             });
