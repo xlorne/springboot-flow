@@ -11,7 +11,7 @@ const WorkPage = () => {
             search: false,
         },
         {
-            dataIndex: 'username',
+            dataIndex: 'name',
             title: '账户',
         },
         {
@@ -19,10 +19,29 @@ const WorkPage = () => {
             title: '密码',
         },
         {
-            dataIndex: 'role',
-            title: '权限',
+            dataIndex: 'createTime',
+            title: '创建时间',
+            valueType: 'dateTime',
             search: false,
         },
+        {
+            dataIndex: 'updateTime',
+            title: '更新时间',
+            valueType: 'dateTime',
+            search: false,
+        },
+        {
+            dataIndex: 'opinion',
+            title: '审批意见',
+            valueType: 'dateTime',
+            search: false,
+        },
+        {
+            dataIndex: 'state',
+            title: '审批状态',
+            search: false,
+        },
+
     ]
 
 
