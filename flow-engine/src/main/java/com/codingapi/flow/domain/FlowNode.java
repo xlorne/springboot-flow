@@ -6,6 +6,7 @@ import com.codingapi.flow.trigger.IFlowTrigger;
 import com.codingapi.flow.user.FlowUserMatcherFactory;
 import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.user.IFlowUserMatcher;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -64,17 +65,20 @@ public class FlowNode {
     /**
      * 上一个节点
      */
+    @JsonIgnore
     private FlowNode prev;
 
     /**
      * 流程触发条件
      */
+    @JsonIgnore
     private IFlowTrigger flowTrigger;
 
 
     /**
      * 可见节点用户列表
      */
+    @JsonIgnore
     private IFlowUserMatcher userMatcher;
 
 

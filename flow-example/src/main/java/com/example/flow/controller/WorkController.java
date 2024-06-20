@@ -1,7 +1,7 @@
 package com.example.flow.controller;
 
 import com.codingapi.flow.domain.FlowRecord;
-import com.codingapi.flow.service.FlowQuery;
+import com.codingapi.flow.query.FlowProcessQuery;
 import com.codingapi.flow.service.FlowService;
 import com.codingapi.springboot.framework.dto.response.MultiResponse;
 import com.codingapi.springboot.framework.dto.response.Response;
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WorkController {
 
     private final FlowService flowService;
-    private final FlowQuery flowQuery;
+    private final FlowProcessQuery flowProcessQuery;
     private final UserRepository userRepository;
     private final LeaveRepository leaveRepository;
 
@@ -37,20 +37,20 @@ public class WorkController {
     public MultiResponse<FlowRecord> todo(FlowSearchRequest request) {
         String username = TokenContext.current().getUsername();
         User user = userRepository.getByUsername(username);
-        return MultiResponse.of(flowQuery.todos(request.toPage(), user));
+        return MultiResponse.of(flowProcessQuery.todos(request.toPage(), user));
     }
 
     @GetMapping("/process")
     public MultiResponse<FlowRecord> process(FlowSearchRequest request) {
         String username = TokenContext.current().getUsername();
         User user = userRepository.getByUsername(username);
-        return MultiResponse.of(flowQuery.process(request.toPage(), user));
+        return MultiResponse.of(flowProcessQuery.process(request.toPage(), user));
     }
 
     @GetMapping("/detail")
     public MultiResponse<FlowRecord> detail(HttpServletRequest request) {
         long processId = Long.parseLong(request.getParameter("processId"));
-        return MultiResponse.of(flowQuery.detail(processId));
+        return MultiResponse.of(flowProcessQuery.detail(processId));
     }
 
     @GetMapping("/start")

@@ -54,6 +54,15 @@ public class FlowService {
     }
 
     /**
+     * 获取流程
+     * @param workId 流程id
+     * @return 流程
+     */
+    public FlowWork get(long workId) {
+        return flowWorkRepository.get(workId);
+    }
+
+    /**
      * 创建流程
      *
      * @param workId 流程id

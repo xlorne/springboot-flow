@@ -11,6 +11,7 @@ import {todo} from "@/api/work";
 import {Button} from "antd";
 import {create} from "@/api/leave";
 import FlowSelector from "@/page/flow/selector";
+import FlowBind from "@/page/work/bind";
 
 const WorkPage = () => {
 
@@ -42,10 +43,20 @@ const WorkPage = () => {
             title: '下一节点',
             search: false,
             render: (text: any, recode: any) => {
-                if (recode.node) {
-                    return recode.node.name;
+                if (recode.node.next) {
+                    return recode.node.next.map((item:any)=>{
+                        return item.name;
+                    }).join(",");
                 }
                 return '-';
+            }
+        },
+        {
+            dataIndex: 'bind',
+            title: '审批内容',
+            search: false,
+            render:(text:any,recode:any)=>{
+                return <FlowBind text={recode.bind.reason} body={recode.bind}/>;
             }
         },
         {
@@ -70,6 +81,24 @@ const WorkPage = () => {
             dataIndex: 'state',
             title: '审批状态',
             search: false,
+            valueEnum: {
+                'WAIT': {
+                    text: '待审批',
+                    status: 'Processing'
+                },
+                'PASS': {
+                    text: '已通过',
+                    status: 'Success'
+                },
+                'REJECT': {
+                    text: '已拒绝',
+                    status: 'Error'
+                },
+                'BACK': {
+                    text: '已退回',
+                    status: 'Warning'
+                },
+            },
         },
         {
             dataIndex: 'option',

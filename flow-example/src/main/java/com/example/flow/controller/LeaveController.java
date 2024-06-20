@@ -23,7 +23,7 @@ public class LeaveController {
     public Response create(@RequestBody LeaveCmd.CreateRequest request){
         request.setUsername(TokenContext.current().getUsername());
         log.info("request:{}",request);
-        leaveService.save(request.getUsername(),request.getReason(), request.getWorkId(), request.getDays());
+        leaveService.create(request.getUsername(),request.getReason(), request.getWorkId(), request.getDays());
         return Response.buildSuccess();
     }
 

@@ -40,7 +40,6 @@ public class FlowRecord {
     /**
      * 当前节点
      */
-    @JsonIgnore
     private FlowNode node;
 
     /**

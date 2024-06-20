@@ -1,4 +1,4 @@
-package com.codingapi.flow.service;
+package com.codingapi.flow.query;
 
 
 import com.codingapi.flow.domain.FlowRecord;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
-public class FlowQuery {
+public class FlowProcessQuery {
 
     private final FlowRecordQuery flowRecordQuery;
 

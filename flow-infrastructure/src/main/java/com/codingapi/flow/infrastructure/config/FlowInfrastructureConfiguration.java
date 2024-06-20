@@ -15,7 +15,7 @@ import com.codingapi.flow.repository.FlowRecordQuery;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import com.codingapi.flow.repository.FlowWorkQuery;
 import com.codingapi.flow.repository.FlowWorkRepository;
-import com.codingapi.flow.service.FlowQuery;
+import com.codingapi.flow.query.FlowProcessQuery;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -62,8 +62,8 @@ public class FlowInfrastructureConfiguration {
     }
 
     @Bean
-    public FlowQuery flowQuery(FlowRecordQuery flowRecordQuery) {
-        return new FlowQuery(flowRecordQuery);
+    public FlowProcessQuery flowQuery(FlowRecordQuery flowRecordQuery) {
+        return new FlowProcessQuery(flowRecordQuery);
     }
 
 }

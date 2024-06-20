@@ -18,7 +18,7 @@ public class LeaveService {
     private final LeaveRepository leaveRepository;
     private final FlowService flowService;
 
-    public void save(String username,String reason, long workId,int days){
+    public void create(String username, String reason, long workId, int days){
 
         User user = userRepository.getByUsername(username);
 

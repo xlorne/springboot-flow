@@ -27,6 +27,7 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository {
 
         entity.setFlowId(flowWork.getFlow().getId());
         flowWorkEntityRepository.save(entity);
+        this.saveNode(flowWork.getFlow(), flowWork.getId());
     }
 
 
