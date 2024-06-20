@@ -1,9 +1,30 @@
 import React from "react";
-import {PageContainer, ProTable} from "@ant-design/pro-components";
+import {
+    ActionType,
+    ModalForm,
+    PageContainer,
+    ProFormDigit,
+    ProFormTextArea,
+    ProTable
+} from "@ant-design/pro-components";
 import {todo} from "@/api/work";
 import {Button} from "antd";
+import {create} from "@/api/leave";
 
 const WorkPage = () => {
+
+    const [visible, setVisible] = React.useState(false);
+
+    const actionRef = React.useRef<ActionType>();
+
+    const handleCreate = (values: any) => {
+        console.log(values);
+        create(values).then(res=>{
+            console.log(res);
+            actionRef.current?.reload();
+            setVisible(false);
+        });
+    }
 
     const columns: any[] = [
         {
@@ -19,8 +40,8 @@ const WorkPage = () => {
             dataIndex: 'node',
             title: '下一节点',
             search: false,
-            render: (text: any,recode:any) => {
-                if(recode.node){
+            render: (text: any, recode: any) => {
+                if (recode.node) {
                     return recode.node.name;
                 }
                 return '-';
@@ -53,7 +74,7 @@ const WorkPage = () => {
             dataIndex: 'option',
             title: '操作',
             valueType: 'option',
-            render: (text: any,recode:any) => {
+            render: (text: any, recode: any) => {
                 return [
                     <a key="pass">通过</a>,
                     <a key="reject">拒绝</a>,
@@ -70,17 +91,51 @@ const WorkPage = () => {
         <PageContainer>
             <ProTable
                 rowKey={"id"}
+                actionRef={actionRef}
                 columns={columns}
                 toolBarRender={() => {
                     return [
-                        <Button type={'primary'} onClick={()=>{
-                        }}>发起请假</Button>
+                        <Button type={'primary'}
+                                onClick={() => {
+                                    setVisible(true);
+                                }}
+                        >发起请假</Button>
                     ]
                 }}
-                request={async (params,sort,filter) => {
-                    return todo(params,sort,filter,[]);
+                request={async (params, sort, filter) => {
+                    return todo(params, sort, filter, []);
                 }}
             />
+
+            <ModalForm
+                title="发起请假"
+                open={visible}
+                modalProps={{
+                    onCancel: () => {
+                        setVisible(false);
+                    },
+                    destroyOnClose: true,
+                }}
+                onFinish={async (values) => {
+                    handleCreate(values)
+                    return true;
+                }}
+            >
+                <ProFormTextArea
+                    name="reason"
+                    label="请假原因"
+                    placeholder="请输入请假原因"
+                />
+
+                <ProFormDigit
+                    min={0}
+                    name="days"
+                    label="请假天数"
+                    placeholder="请输入请假天数"
+                />
+
+            </ModalForm>
+
         </PageContainer>
     )
 }
