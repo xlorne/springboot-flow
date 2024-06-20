@@ -8,10 +8,12 @@ import {
     ProTable
 } from "@ant-design/pro-components";
 import {todo} from "@/api/work";
-import {Button} from "antd";
-import {create} from "@/api/leave";
+import {Button, Popconfirm} from "antd";
+import {back, create, pass, recall, reject} from "@/api/leave";
 import FlowSelector from "@/page/flow/selector";
 import FlowBind from "@/page/work/bind";
+import TextArea from "antd/es/input/TextArea";
+import FlowConfirm from "@/page/work/confirm";
 
 const WorkPage = () => {
 
@@ -20,12 +22,50 @@ const WorkPage = () => {
     const actionRef = React.useRef<ActionType>();
 
     const handleCreate = (values: any) => {
-        console.log(values);
         create(values).then(res=>{
             console.log(res);
             actionRef.current?.reload();
             setVisible(false);
         });
+    }
+
+    const handlePass = (recordId:number,opinion:string)=>{
+        pass({
+            recordId,
+            opinion
+        }).then(res=>{
+            actionRef.current?.reload();
+        })
+    }
+
+
+    const handleReject = (recordId:number,opinion:string)=>{
+        reject({
+            recordId,
+            opinion
+        }).then(res=>{
+            actionRef.current?.reload();
+        })
+    }
+
+
+    const handleRecall = (recordId:number,opinion:string)=>{
+        recall({
+            recordId,
+            opinion
+        }).then(res=>{
+            actionRef.current?.reload();
+        })
+    }
+
+
+    const handleBack = (recordId:number,opinion:string)=>{
+        back({
+            recordId,
+            opinion
+        }).then(res=>{
+            actionRef.current?.reload();
+        })
     }
 
     const columns: any[] = [
@@ -106,10 +146,19 @@ const WorkPage = () => {
             valueType: 'option',
             render: (text: any, recode: any) => {
                 return [
-                    <a key="pass">通过</a>,
-                    <a key="reject">拒绝</a>,
-                    <a key="recall">召回</a>,
-                    <a key="back">退回</a>,
+                    <FlowConfirm onConfirm={(content)=>{
+                        handlePass(recode.id,content);
+                    }} title="通过"/>,
+                    <FlowConfirm onConfirm={(content)=>{
+                        handleReject(recode.id,content);
+                    }} title="拒绝"/>,
+                    <FlowConfirm onConfirm={(content)=>{
+                        handleRecall(recode.id,content);
+                    }} title="撤回"/>,
+                    <FlowConfirm onConfirm={(content)=>{
+                        handleBack(recode.id,content);
+                    }} title="退回"/>,
+
                 ]
             }
         },

@@ -31,4 +31,24 @@ public class LeaveService {
 
         flowService.createFlow(workId, user, leave);
     }
+
+    public void pass(String username, String opinion, long recordId) {
+        User user = userRepository.getByUsername(username);
+        flowService.pass(recordId, opinion,user);
+    }
+
+    public void reject(String username, String opinion, long recordId) {
+        User user = userRepository.getByUsername(username);
+        flowService.reject(recordId, opinion,user);
+    }
+
+    public void recall(String username, long recordId) {
+        User user = userRepository.getByUsername(username);
+        flowService.recall(recordId, user);
+    }
+
+    public void back(String username,String opinion,  long recordId) {
+        User user = userRepository.getByUsername(username);
+        flowService.back(recordId,opinion, user);
+    }
 }
