@@ -99,7 +99,7 @@ public class FlowRegister implements ApplicationRunner {
     public void initLeave() {
         Leave leave = new Leave();
         leave.setUserId(1L);
-        leave.setDays(3.0f);
+        leave.setDays(3);
         leave.setReason("生病了");
         leave = leaveRepository.save(leave);
     }

@@ -36,6 +36,7 @@ public class FlowService {
 
     /**
      * 创建流程
+     *
      * @param flowWork 流程
      * @return 流程workId
      */
@@ -48,7 +49,7 @@ public class FlowService {
     /**
      * 删除流程
      */
-    public void delete(long workId){
+    public void delete(long workId) {
         flowWorkRepository.delete(workId);
     }
 
@@ -67,7 +68,7 @@ public class FlowService {
             FlowState state = FlowState.PASS;
             //创建流程记录
             long processId = flowProcessIdGeneratorGateway.createProcessId();
-            FlowRecord flowRecord = FlowRecordConvertor.convert( processId,workId, flowNode, bind);
+            FlowRecord flowRecord = FlowRecordConvertor.convert(processId, workId, flowNode, bind);
             flowRecord.approval(user, state, null);
             flowRecordRepository.save(flowRecord);
             //触发流程
@@ -126,7 +127,7 @@ public class FlowService {
         if (next != null) {
             next.forEach(node -> {
                 if (node.getFlowType() == FlowType.OVER) {
-                    FlowRecord nextRecord = FlowRecordConvertor.convert( flowRecord.getProcessId(),flowRecord.getWorkId(), node, flowRecord.getBind());
+                    FlowRecord nextRecord = FlowRecordConvertor.convert(flowRecord.getProcessId(), flowRecord.getWorkId(), node, flowRecord.getBind());
                     nextRecord.finish();
                     flowRecordRepository.save(nextRecord);
 

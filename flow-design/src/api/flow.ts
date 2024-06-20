@@ -1,4 +1,4 @@
-import {page} from "@/api/index";
+import {get, page} from "@/api/index";
 
 export async function list(
     params: {
@@ -12,4 +12,9 @@ export async function list(
     }[],
 ) {
     return await page('/api/flow/list', params, sort, filter, match);
+}
+
+
+export async function all() {
+    return await get('/api/flow/all');
 }

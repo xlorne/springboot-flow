@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,5 +45,10 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository,FlowWorkQuery{
     @Override
     public Page<FlowWork> list(SearchRequest request) {
         return new PageImpl<>(cache.values().stream().toList());
+    }
+
+    @Override
+    public List<FlowWork> findAll() {
+        return cache.values().stream().toList();
     }
 }

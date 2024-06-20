@@ -20,4 +20,10 @@ public class FlowController {
     public MultiResponse<FlowWork> list(SearchRequest request) {
         return MultiResponse.of(flowWorkQuery.list(request));
     }
+
+    @GetMapping("/all")
+    public MultiResponse<FlowWork> all() {
+        return MultiResponse.of(flowWorkQuery.findAll());
+    }
+
 }

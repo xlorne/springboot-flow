@@ -10,6 +10,7 @@ import {
 import {todo} from "@/api/work";
 import {Button} from "antd";
 import {create} from "@/api/leave";
+import FlowSelector from "@/page/flow/selector";
 
 const WorkPage = () => {
 
@@ -121,6 +122,11 @@ const WorkPage = () => {
                     return true;
                 }}
             >
+                <FlowSelector
+                    name="workId"
+                    label="流程"
+                    placeholder="请选择流程"
+                />
                 <ProFormTextArea
                     name="reason"
                     label="请假原因"
