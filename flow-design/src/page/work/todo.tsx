@@ -8,14 +8,13 @@ import {
     ProTable
 } from "@ant-design/pro-components";
 import {todo} from "@/api/work";
-import {Button, Popconfirm} from "antd";
-import {back, create, pass, recall, reject} from "@/api/leave";
+import {Button} from "antd";
+import {create, pass, recall, reject} from "@/api/leave";
 import FlowSelector from "@/page/flow/selector";
 import FlowBind from "@/page/work/bind";
-import TextArea from "antd/es/input/TextArea";
 import FlowConfirm from "@/page/work/confirm";
 
-const WorkPage = () => {
+const TodoPage = () => {
 
     const [visible, setVisible] = React.useState(false);
 
@@ -51,16 +50,6 @@ const WorkPage = () => {
 
     const handleRecall = (recordId:number,opinion:string)=>{
         recall({
-            recordId,
-            opinion
-        }).then(res=>{
-            actionRef.current?.reload();
-        })
-    }
-
-
-    const handleBack = (recordId:number,opinion:string)=>{
-        back({
             recordId,
             opinion
         }).then(res=>{
@@ -155,9 +144,6 @@ const WorkPage = () => {
                     <FlowConfirm onConfirm={(content)=>{
                         handleRecall(recode.id,content);
                     }} title="撤回"/>,
-                    <FlowConfirm onConfirm={(content)=>{
-                        handleBack(recode.id,content);
-                    }} title="退回"/>,
 
                 ]
             }
@@ -167,7 +153,9 @@ const WorkPage = () => {
 
 
     return (
-        <PageContainer>
+        <PageContainer
+            title="待办事项"
+        >
             <ProTable
                 rowKey={"id"}
                 actionRef={actionRef}
@@ -224,4 +212,4 @@ const WorkPage = () => {
     )
 }
 
-export default WorkPage;
+export default TodoPage;

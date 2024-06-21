@@ -6,7 +6,10 @@ import Home from "@/layout";
 import Welcome from "@/page/welcome";
 import NotFound from "@/layout/NotFound";
 import UserPage from "@/page/user";
-import WorkPage from "@/page/work";
+import WorkPage from "@/page/work/todo";
+import Routes from "@/compoments/Routes";
+import TodoPage from "@/page/work/todo";
+import ProcessPage from "@/page/work/process";
 
 
 export const layoutRoutes = [
@@ -24,7 +27,17 @@ export const layoutRoutes = [
     },
     {
         path: "/work",
-        element: <WorkPage/>
+        element:  <Routes rootPath="/work"/>,
+        children: [
+            {
+                path: "/work/todo",
+                element: <TodoPage/>
+            },
+            {
+                path: "/work/process",
+                element: <ProcessPage/>
+            }
+        ]
     },
     {
         path: "*",

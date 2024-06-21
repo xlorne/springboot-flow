@@ -1,8 +1,7 @@
 import React from "react";
-import {Layout, Space} from "antd";
+import {Layout} from "antd";
 import Routes from "@/compoments/Routes";
 import "./index.scss";
-import {UserOutlined} from "@ant-design/icons";
 import LayoutHeader from "@/layout/header";
 import LayoutMenu from "@/layout/menu";
 
