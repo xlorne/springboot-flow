@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ant-design/flowchart": "^1.2.2",
+    "@ant-design/flowchart": "^1.2.3",
     "@ant-design/icons": "^5.2.6",
     "@ant-design/pro-components": "^2.6.48",
     "@monaco-editor/react": "^4.6.0",

@@ -1,4 +1,4 @@
-import {page} from "@/api/index";
+import {get, page} from "@/api/index";
 
 export async function todo(
     params: {
@@ -27,4 +27,11 @@ export async function process(
     }[],
 ) {
     return await page('/api/work/process', params, sort, filter, match);
+}
+
+
+export async function detail(processId:string) {
+    return await get('/api/work/detail', {
+        processId
+    });
 }

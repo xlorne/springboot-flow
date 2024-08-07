@@ -1,10 +1,13 @@
 import React from "react";
 import {PageContainer, ProTable} from "@ant-design/pro-components";
-import {Button} from "antd";
+import {Button, Drawer} from "antd";
 import {list} from "@/api/flow";
 import {flowColumns} from "@/page/flow/type";
+import {Design} from "@/page/flow/design";
 
 const FLowPage = () => {
+
+    const [designVisible, setDesignVisible] = React.useState<boolean>(false);
 
     const columns: any[] = [
         ...flowColumns,
@@ -28,6 +31,7 @@ const FLowPage = () => {
                 toolBarRender={() => {
                     return [
                         <Button onClick={() => {
+                            setDesignVisible(true)
                         }}>新建流程</Button>
                     ]
                 }}
@@ -35,6 +39,18 @@ const FLowPage = () => {
                     return list(params, sort, filter, []);
                 }}
             />
+
+            <Drawer
+                title={"新建流程"}
+                width={"90%"}
+                open={designVisible}
+                onClose={()=>{
+                    setDesignVisible(false);
+                }}
+                destroyOnClose={true}
+            >
+                <Design/>
+            </Drawer>
         </PageContainer>
     )
 }

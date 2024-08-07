@@ -24,6 +24,12 @@ public class Leave implements IBind {
      * 请假人
      */
     private Long userId;
+
+    /**
+     * 请假人姓名
+     */
+    private String username;
+
     /**
      * 请假天数
      */

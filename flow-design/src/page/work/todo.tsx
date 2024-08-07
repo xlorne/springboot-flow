@@ -1,32 +1,13 @@
 import React from "react";
-import {
-    ActionType,
-    ModalForm,
-    PageContainer,
-    ProFormDigit,
-    ProFormTextArea,
-    ProTable
-} from "@ant-design/pro-components";
+import {ActionType, PageContainer, ProTable} from "@ant-design/pro-components";
 import {todo} from "@/api/work";
-import {Button} from "antd";
-import {create, pass, recall, reject} from "@/api/leave";
-import FlowSelector from "@/page/flow/selector";
+import {pass, recall, reject} from "@/api/leave";
 import FlowBind from "@/page/work/bind";
 import FlowConfirm from "@/page/work/confirm";
 
 const TodoPage = () => {
 
-    const [visible, setVisible] = React.useState(false);
-
     const actionRef = React.useRef<ActionType>();
-
-    const handleCreate = (values: any) => {
-        create(values).then(res=>{
-            console.log(res);
-            actionRef.current?.reload();
-            setVisible(false);
-        });
-    }
 
     const handlePass = (recordId:number,opinion:string)=>{
         pass({
@@ -85,7 +66,7 @@ const TodoPage = () => {
             title: '审批内容',
             search: false,
             render:(text:any,recode:any)=>{
-                return <FlowBind text={recode.bind.reason} body={recode.bind}/>;
+                return <FlowBind text={recode.bind.reason} processId={recode.processId}/>;
             }
         },
         {
@@ -160,54 +141,10 @@ const TodoPage = () => {
                 rowKey={"id"}
                 actionRef={actionRef}
                 columns={columns}
-                toolBarRender={() => {
-                    return [
-                        <Button type={'primary'}
-                                onClick={() => {
-                                    setVisible(true);
-                                }}
-                        >发起请假</Button>
-                    ]
-                }}
                 request={async (params, sort, filter) => {
                     return todo(params, sort, filter, []);
                 }}
             />
-
-            <ModalForm
-                title="发起请假"
-                open={visible}
-                modalProps={{
-                    onCancel: () => {
-                        setVisible(false);
-                    },
-                    destroyOnClose: true,
-                }}
-                onFinish={async (values) => {
-                    handleCreate(values)
-                    return true;
-                }}
-            >
-                <FlowSelector
-                    name="workId"
-                    label="流程"
-                    placeholder="请选择流程"
-                />
-                <ProFormTextArea
-                    name="reason"
-                    label="请假原因"
-                    placeholder="请输入请假原因"
-                />
-
-                <ProFormDigit
-                    min={0}
-                    name="days"
-                    label="请假天数"
-                    placeholder="请输入请假天数"
-                />
-
-            </ModalForm>
-
         </PageContainer>
     )
 }

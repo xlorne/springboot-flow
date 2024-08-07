@@ -25,6 +25,7 @@ public class LeaveService {
         Leave leave = new Leave();
         leave.setDays(days);
         leave.setReason(reason);
+        leave.setUsername(user.getUsername());
         leave.setCreateTime(System.currentTimeMillis());
         leave.setUserId(user.getId());
         leaveRepository.save(leave);

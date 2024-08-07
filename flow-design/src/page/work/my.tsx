@@ -1,18 +1,36 @@
 import React from "react";
 import {ActionType, PageContainer, ProTable} from "@ant-design/pro-components";
-import {process} from "@/api/work";
-import {back} from "@/api/leave";
+import {todo} from "@/api/work";
+import {pass, recall, reject} from "@/api/leave";
 import FlowBind from "@/page/work/bind";
 import FlowConfirm from "@/page/work/confirm";
 
-const ProcessPage = () => {
-
-    const [visible, setVisible] = React.useState(false);
+const MyProcessPage = () => {
 
     const actionRef = React.useRef<ActionType>();
 
-    const handleBack = (recordId:number,opinion:string)=>{
-        back({
+    const handlePass = (recordId:number,opinion:string)=>{
+        pass({
+            recordId,
+            opinion
+        }).then(res=>{
+            actionRef.current?.reload();
+        })
+    }
+
+
+    const handleReject = (recordId:number,opinion:string)=>{
+        reject({
+            recordId,
+            opinion
+        }).then(res=>{
+            actionRef.current?.reload();
+        })
+    }
+
+
+    const handleRecall = (recordId:number,opinion:string)=>{
+        recall({
             recordId,
             opinion
         }).then(res=>{
@@ -66,6 +84,7 @@ const ProcessPage = () => {
         {
             dataIndex: 'opinion',
             title: '审批意见',
+            valueType: 'dateTime',
             search: false,
         },
         {
@@ -98,8 +117,14 @@ const ProcessPage = () => {
             render: (text: any, recode: any) => {
                 return [
                     <FlowConfirm onConfirm={(content)=>{
-                        handleBack(recode.id,content);
-                    }} title="退回"/>,
+                        handlePass(recode.id,content);
+                    }} title="通过"/>,
+                    <FlowConfirm onConfirm={(content)=>{
+                        handleReject(recode.id,content);
+                    }} title="拒绝"/>,
+                    <FlowConfirm onConfirm={(content)=>{
+                        handleRecall(recode.id,content);
+                    }} title="撤回"/>,
 
                 ]
             }
@@ -110,19 +135,18 @@ const ProcessPage = () => {
 
     return (
         <PageContainer
-            title="已办事项"
+            title="我的发起"
         >
             <ProTable
                 rowKey={"id"}
                 actionRef={actionRef}
                 columns={columns}
                 request={async (params, sort, filter) => {
-                    return process(params, sort, filter, []);
+                    return todo(params, sort, filter, []);
                 }}
             />
-
         </PageContainer>
     )
 }
 
-export default ProcessPage;
+export default MyProcessPage;

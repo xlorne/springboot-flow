@@ -41,17 +41,17 @@ const LayoutMenu = () => {
                         label: '工作台',
                         children: [
                             {
+                                key: 'work/my',
+                                label: '我的发起',
+                            },
+                            {
                                 key: 'work/todo',
                                 label: '待办事项',
                             },
                             {
                                 key: 'work/process',
                                 label: '已办事项',
-                            },
-                            {
-                                key: 'work/bind',
-                                label: '绑定事项',
-                            },
+                            }
                         ]
                     },
 
