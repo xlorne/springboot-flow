@@ -17,14 +17,12 @@
 	<description>flow-parent</description>
 	<modules>
 		<module>flow-engine</module>
-		<module>flow-infrastructure</module>
-		<module>flow-example</module>
 	</modules>
 
 	<properties>
 		<java.version>17</java.version>
 		<snakeyaml.version>2.2</snakeyaml.version>
-		<codingapi.framework.version>3.2.3</codingapi.framework.version>
+		<codingapi.framework.version>3.2.6</codingapi.framework.version>
 	</properties>
 
 	<dependencies>
