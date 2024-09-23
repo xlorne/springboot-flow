@@ -93,6 +93,17 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository, FlowRecor
     }
 
     @Override
+    public Page<FlowRecord> myInitiatives(PageRequest request, IFlowUser currentUser) {
+        List<FlowRecord> records = new ArrayList<>();
+        for (FlowRecord record : cache.values()) {
+            if (record.getNode().isStart()&&record.containsUser(currentUser)) {
+                records.add(record);
+            }
+        }
+        return new PageImpl<>(records, request, records.size());
+    }
+
+    @Override
     public Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser) {
         List<FlowRecord> records = new ArrayList<>();
         for (FlowRecord record : cache.values()) {

@@ -31,6 +31,9 @@ class FlowBuildTest {
                             .relations()
                             .build();
         });
+
+        assertTrue(FlowNode.start("发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()).isStart());
+        assertTrue( FlowNode.over("结束").isOver());
     }
 
 

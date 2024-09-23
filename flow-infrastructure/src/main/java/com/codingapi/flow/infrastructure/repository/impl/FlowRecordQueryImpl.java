@@ -40,6 +40,11 @@ public class FlowRecordQueryImpl implements FlowRecordQuery {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Page<FlowRecord> myInitiatives(PageRequest request, IFlowUser currentUser) {
+        return null;
+    }
+
     private List<Long> matchUserNodes(FlowNode flow, IFlowUser currentUser) {
         List<Long> nodeIds = new ArrayList<>();
         Consumer<FlowNode> consumer = new Consumer<>() {

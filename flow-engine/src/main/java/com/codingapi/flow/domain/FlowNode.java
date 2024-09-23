@@ -53,14 +53,6 @@ public class FlowNode {
      */
     private List<FlowNode> next;
 
-    public void setNext(List<FlowNode> next) {
-        this.next = next;
-        if (next != null && !next.isEmpty()) {
-            for (FlowNode node : next) {
-                node.setPrev(this);
-            }
-        }
-    }
 
     /**
      * 上一个节点
@@ -84,6 +76,20 @@ public class FlowNode {
 
     public FlowNode() {
         this.next = new ArrayList<>();
+    }
+
+    /**
+     * 设置下一个节点
+     *
+     * @param next 下一个节点
+     */
+    public void setNext(List<FlowNode> next) {
+        this.next = next;
+        if (next != null && !next.isEmpty()) {
+            for (FlowNode node : next) {
+                node.setPrev(this);
+            }
+        }
     }
 
     /**
@@ -132,6 +138,13 @@ public class FlowNode {
         return this.flowType == FlowType.OVER;
     }
 
+    /**
+     * 是否是发起节点
+     */
+    public boolean isStart() {
+        return this.flowType == FlowType.START;
+    }
+
 
     public FlowNode copyNew() {
         FlowNode flowNode = new FlowNode();
@@ -160,7 +173,7 @@ public class FlowNode {
     }
 
     public static FlowNode start(String code, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
-        return create(code, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
+        return create(code, name, FlowType.START, userMatcher, flowTrigger, 1);
     }
 
 
@@ -174,7 +187,6 @@ public class FlowNode {
         flowNode.setFlowTrigger(flowTrigger);
         return flowNode;
     }
-
 
 
     public static FlowNode create(String code, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
@@ -192,7 +204,6 @@ public class FlowNode {
     public static FlowNode over(String code, String name) {
         return create(code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
     }
-
 
 
 }

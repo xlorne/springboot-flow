@@ -3,7 +3,6 @@ package com.codingapi.flow.domain;
 import com.codingapi.flow.bind.IBind;
 import com.codingapi.flow.em.FlowState;
 import com.codingapi.flow.user.IFlowUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 

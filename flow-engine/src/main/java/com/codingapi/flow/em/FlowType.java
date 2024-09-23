@@ -10,13 +10,20 @@ import lombok.Getter;
 public enum FlowType implements IEnum {
 
     /**
+     * 开始
+     */
+    START(0),
+
+    /**
      * 串行
      */
     SERIAL(1),
+
     /**
      * 并行
      */
     PARALLEL(2),
+
     /**
      * 结束
      */

@@ -19,6 +19,17 @@ public class FlowProcessQuery {
 
 
     /**
+     * 获取我的发起列表
+     *
+     * @param request   分页展示
+     * @param currentUser 当前用户
+     * @return 发起列表
+     */
+    public Page<FlowRecord> myInitiatives(PageRequest request, IFlowUser currentUser) {
+        return flowRecordQuery.myInitiatives(request,currentUser);
+    }
+
+    /**
      * 获取待办列表
      *
      * @param processId   流程id
