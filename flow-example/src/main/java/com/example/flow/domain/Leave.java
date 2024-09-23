@@ -16,9 +16,27 @@ public class Leave implements IBind {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    /**
+     * 请假原因
+     */
     private String reason;
+    /**
+     * 请假人
+     */
     private Long userId;
-    private Float days;
+
+    /**
+     * 请假人姓名
+     */
+    private String username;
+
+    /**
+     * 请假天数
+     */
+    private Integer days;
+    /**
+     * 请假开始时间
+     */
     private Long createTime;
 
 

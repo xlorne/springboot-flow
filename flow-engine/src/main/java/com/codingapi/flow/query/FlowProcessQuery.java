@@ -1,4 +1,4 @@
-package com.codingapi.flow.service;
+package com.codingapi.flow.query;
 
 
 import com.codingapi.flow.domain.FlowRecord;
@@ -13,10 +13,21 @@ import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
-public class FlowQuery {
+public class FlowProcessQuery {
 
     private final FlowRecordQuery flowRecordQuery;
 
+
+    /**
+     * 获取我的发起列表
+     *
+     * @param request   分页展示
+     * @param currentUser 当前用户
+     * @return 发起列表
+     */
+    public Page<FlowRecord> myInitiatives(PageRequest request, IFlowUser currentUser) {
+        return flowRecordQuery.myInitiatives(request,currentUser);
+    }
 
     /**
      * 获取待办列表

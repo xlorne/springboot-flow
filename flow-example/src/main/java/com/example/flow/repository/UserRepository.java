@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserRepository extends FastRepository<User,Long> {
 
-    User findByName(String name);
+    User getByUsername(String username);
 
     List<User> findByRole(String role);
 

@@ -25,6 +25,9 @@ public class FlowNodeContext {
 
     public FlowNode getFlowNode(Long nodeId) {
         FlowNode node = loadFlowNode(nodeId);
+        if(node==null){
+            return null;
+        }
         FlowNodeEntity entity = flowNodeEntityRepository.getFlowNodeEntityById(nodeId);
         if (entity.getPrev() != null) {
             node.setPrev(FlowNodeConvertor.convert(flowNodeEntityRepository.getFlowNodeEntityById(entity.getPrev())));
@@ -34,15 +37,21 @@ public class FlowNodeContext {
 
     private FlowNode loadFlowNode(long nodeId) {
         FlowNodeEntity entity = flowNodeEntityRepository.getFlowNodeEntityById(nodeId);
-        FlowNode node = FlowNodeConvertor.convert(entity);
-        if (entity.getNext() != null) {
-            List<FlowNode> next = new ArrayList<>();
-            for (long nextId : entity.getNext()) {
-                next.add(loadFlowNode(nextId));
+        if(entity!=null) {
+            FlowNode node = FlowNodeConvertor.convert(entity);
+            if (entity.getNext() != null) {
+                List<FlowNode> next = new ArrayList<>();
+                for (long nextId : entity.getNext()) {
+                    FlowNode flowNode =  loadFlowNode(nextId);
+                    if(flowNode!=null) {
+                        next.add(flowNode);
+                    }
+                }
+                node.setNext(next);
             }
-            node.setNext(next);
+            return node;
         }
-        return node;
+        return null;
     }
 
 }

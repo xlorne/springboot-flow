@@ -13,7 +13,7 @@ import com.codingapi.flow.event.FlowFinishEvent;
 import com.codingapi.flow.event.FlowRecallEvent;
 import com.codingapi.flow.event.FlowStartEvent;
 import com.codingapi.flow.exception.FlowServiceException;
-import com.codingapi.flow.gennerate.IdGeneratorContext;
+import com.codingapi.flow.gateway.FlowProcessIdGeneratorGateway;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import com.codingapi.flow.repository.FlowWorkRepository;
 import com.codingapi.flow.user.IFlowUser;
@@ -32,8 +32,11 @@ public class FlowService {
 
     private final FlowRecordRepository flowRecordRepository;
 
+    private final FlowProcessIdGeneratorGateway flowProcessIdGeneratorGateway;
+
     /**
      * 创建流程
+     *
      * @param flowWork 流程
      * @return 流程workId
      */
@@ -46,8 +49,17 @@ public class FlowService {
     /**
      * 删除流程
      */
-    public void delete(long workId){
+    public void delete(long workId) {
         flowWorkRepository.delete(workId);
+    }
+
+    /**
+     * 获取流程
+     * @param workId 流程id
+     * @return 流程
+     */
+    public FlowWork get(long workId) {
+        return flowWorkRepository.get(workId);
     }
 
     /**
@@ -64,7 +76,7 @@ public class FlowService {
         if (flowNode.matchUser(user)) {
             FlowState state = FlowState.PASS;
             //创建流程记录
-            long processId = IdGeneratorContext.getInstance().nextProcessId();
+            long processId = flowProcessIdGeneratorGateway.createProcessId();
             FlowRecord flowRecord = FlowRecordConvertor.convert(processId, workId, flowNode, bind);
             flowRecord.approval(user, state, null);
             flowRecordRepository.save(flowRecord);
@@ -73,7 +85,7 @@ public class FlowService {
 
             FlowStartEvent flowEvent = new FlowStartEvent(flowNode, flowRecord, user);
             EventPusher.push(flowEvent);
-            return processId;
+            return flowRecord.getProcessId();
         } else {
             throw new FlowServiceException("user.create.error", "当前用户无权限创建该流程");
         }

@@ -3,7 +3,6 @@ package com.codingapi.flow.domain;
 import com.codingapi.flow.bind.IBind;
 import com.codingapi.flow.em.FlowState;
 import com.codingapi.flow.user.IFlowUser;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,7 +39,6 @@ public class FlowRecord {
     /**
      * 当前节点
      */
-    @JsonIgnore
     private FlowNode node;
 
     /**
@@ -149,5 +147,13 @@ public class FlowRecord {
      */
     public boolean isApproval() {
         return this.state != FlowState.WAIT;
+    }
+
+
+    /**
+     * 是否待审批
+     */
+    public boolean isWait() {
+        return this.state == FlowState.WAIT;
     }
 }

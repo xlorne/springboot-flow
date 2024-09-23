@@ -8,12 +8,12 @@ import org.springframework.data.domain.PageRequest;
 @Getter
 public class FlowSearchRequest {
 
-    private String name;
+    private String username;
     private int current;
     private int pageSize;
 
 
     public PageRequest toPage(){
-        return PageRequest.of(current,pageSize==0?10:pageSize);
+        return PageRequest.of(current-1,pageSize==0?10:pageSize);
     }
 }

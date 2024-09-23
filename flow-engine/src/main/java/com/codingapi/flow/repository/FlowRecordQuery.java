@@ -34,6 +34,15 @@ public interface FlowRecordQuery {
      */
     Page<FlowRecord> findToDoPage(PageRequest request, IFlowUser currentUser);
 
+
+    /**
+     * 我的发起记录（分页查询）
+     * @param request 分页条件
+     * @param currentUser 流程用户
+     * @return 我的发起记录
+     */
+    Page<FlowRecord> myInitiatives(PageRequest request, IFlowUser currentUser);
+
     /**
      *  已办流程记录 （分页查询）
      * @param request 分页条件

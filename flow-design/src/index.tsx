@@ -1,13 +1,9 @@
 import React from 'react';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {RouterProvider} from 'react-router-dom';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import {ConfigProvider} from 'antd';
-
-import {Page} from "./page";
-import {New} from "./page/new";
-import {Design} from "./Design";
-import {App} from "./App";
+import {hashRoutes} from "./config/routes";
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
@@ -15,14 +11,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <ConfigProvider>
-        <BrowserRouter>
-            <Routes>
-                <Route path="index" element={<Page/>}/>
-                <Route path="new" element={<New/>}/>
-                <Route path="design" element={<Design/>}/>
-                <Route path="/" element={<App/>}/>
-            </Routes>
-        </BrowserRouter>
+        <RouterProvider router={hashRoutes}/>
     </ConfigProvider>
 );
 

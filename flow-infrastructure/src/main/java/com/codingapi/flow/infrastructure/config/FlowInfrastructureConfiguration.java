@@ -1,8 +1,7 @@
 package com.codingapi.flow.infrastructure.config;
 
-import com.codingapi.flow.gennerate.FlowIdGeneratorRegister;
-import com.codingapi.flow.gennerate.IdGenerator;
 import com.codingapi.flow.infrastructure.context.FlowNodeContextRegister;
+import com.codingapi.flow.infrastructure.gateway.impl.FlowProcessIdGeneratorGatewayImpl;
 import com.codingapi.flow.infrastructure.generator.FlowNodeSeqGenerator;
 import com.codingapi.flow.infrastructure.jpa.FlowNodeEntityRepository;
 import com.codingapi.flow.infrastructure.jpa.FlowNodeSeqRepository;
@@ -16,6 +15,7 @@ import com.codingapi.flow.repository.FlowRecordQuery;
 import com.codingapi.flow.repository.FlowRecordRepository;
 import com.codingapi.flow.repository.FlowWorkQuery;
 import com.codingapi.flow.repository.FlowWorkRepository;
+import com.codingapi.flow.query.FlowProcessQuery;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,27 +57,13 @@ public class FlowInfrastructureConfiguration {
     }
 
     @Bean
-    public FlowIdGeneratorRegister flowIdGeneratorRegister(FlowNodeSeqGenerator flowNodeSeqGenerator) {
-        return new FlowIdGeneratorRegister(new IdGenerator() {
-            @Override
-            public long nextRecordId() {
-                return flowNodeSeqGenerator.getNextRecordId();
-            }
-
-            @Override
-            public long nextProcessId() {
-                return flowNodeSeqGenerator.getNextProcessId();
-            }
-
-            @Override
-            public long nextNodeId() {
-                return flowNodeSeqGenerator.getNextNodeId();
-            }
-
-            @Override
-            public long nextWorkId() {
-                return flowNodeSeqGenerator.getNextWorkId();
-            }
-        });
+    public FlowProcessIdGeneratorGatewayImpl flowProcessIdGeneratorGatewayImpl(FlowNodeSeqGenerator flowNodeSeqGenerator) {
+        return new FlowProcessIdGeneratorGatewayImpl(flowNodeSeqGenerator);
     }
+
+    @Bean
+    public FlowProcessQuery flowQuery(FlowRecordQuery flowRecordQuery) {
+        return new FlowProcessQuery(flowRecordQuery);
+    }
+
 }

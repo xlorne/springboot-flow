@@ -1,12 +1,12 @@
 package com.codingapi.flow.domain;
 
 import com.codingapi.flow.em.FlowType;
-import com.codingapi.flow.gennerate.IdGeneratorContext;
 import com.codingapi.flow.trigger.FlowTriggerFactory;
 import com.codingapi.flow.trigger.IFlowTrigger;
 import com.codingapi.flow.user.FlowUserMatcherFactory;
 import com.codingapi.flow.user.IFlowUser;
 import com.codingapi.flow.user.IFlowUserMatcher;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,34 +53,43 @@ public class FlowNode {
      */
     private List<FlowNode> next;
 
-    public void setNext(List<FlowNode> next) {
-        this.next = next;
-        if (next != null) {
-            for (FlowNode node : next) {
-                node.setPrev(this);
-            }
-        }
-    }
 
     /**
      * 上一个节点
      */
+    @JsonIgnore
     private FlowNode prev;
 
     /**
      * 流程触发条件
      */
+    @JsonIgnore
     private IFlowTrigger flowTrigger;
 
 
     /**
      * 可见节点用户列表
      */
+    @JsonIgnore
     private IFlowUserMatcher userMatcher;
 
 
     public FlowNode() {
         this.next = new ArrayList<>();
+    }
+
+    /**
+     * 设置下一个节点
+     *
+     * @param next 下一个节点
+     */
+    public void setNext(List<FlowNode> next) {
+        this.next = next;
+        if (next != null && !next.isEmpty()) {
+            for (FlowNode node : next) {
+                node.setPrev(this);
+            }
+        }
     }
 
     /**
@@ -129,6 +138,13 @@ public class FlowNode {
         return this.flowType == FlowType.OVER;
     }
 
+    /**
+     * 是否是发起节点
+     */
+    public boolean isStart() {
+        return this.flowType == FlowType.START;
+    }
+
 
     public FlowNode copyNew() {
         FlowNode flowNode = new FlowNode();
@@ -157,20 +173,12 @@ public class FlowNode {
     }
 
     public static FlowNode start(String code, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
-        return create(code, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
+        return create(code, name, FlowType.START, userMatcher, flowTrigger, 1);
     }
 
-    public static FlowNode start(long id, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
-        return start(id, CODE_START, name, userMatcher, flowTrigger);
-    }
 
-    public static FlowNode start(long id, String code, String name, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger) {
-        return create(id, code, name, FlowType.SERIAL, userMatcher, flowTrigger, 1);
-    }
-
-    public static FlowNode create(long id, String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger, int count) {
+    public static FlowNode create(String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger, int count) {
         FlowNode flowNode = new FlowNode();
-        flowNode.setId(id);
         flowNode.setCode(code);
         flowNode.setName(name);
         flowNode.setFlowType(flowType);
@@ -178,10 +186,6 @@ public class FlowNode {
         flowNode.setUserMatcher(userMatcher);
         flowNode.setFlowTrigger(flowTrigger);
         return flowNode;
-    }
-
-    public static FlowNode create(String code, String name, FlowType flowType, IFlowUserMatcher userMatcher, IFlowTrigger flowTrigger, int count) {
-        return create(IdGeneratorContext.getInstance().nextNodeId(), code, name, flowType, userMatcher, flowTrigger, count);
     }
 
 
@@ -201,12 +205,5 @@ public class FlowNode {
         return create(code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
     }
 
-    public static FlowNode over(long id, String name) {
-        return over(id, CODE_OVER, name);
-    }
-
-    public static FlowNode over(long id, String code, String name) {
-        return create(id, code, name, FlowType.OVER, FlowUserMatcherFactory.noUsers(), FlowTriggerFactory.over(), 1);
-    }
 
 }

@@ -1,8 +1,10 @@
 package com.codingapi.flow.infrastructure.repository.impl;
 
+import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowWork;
 import com.codingapi.flow.infrastructure.convert.FlowNodeConvertor;
 import com.codingapi.flow.infrastructure.convert.FlowWorkConvertor;
+import com.codingapi.flow.infrastructure.entity.FlowNodeEntity;
 import com.codingapi.flow.infrastructure.entity.FlowWorkEntity;
 import com.codingapi.flow.infrastructure.jpa.FlowNodeEntityRepository;
 import com.codingapi.flow.infrastructure.jpa.FlowWorkEntityRepository;
@@ -21,7 +23,24 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository {
         FlowWorkEntity entity = FlowWorkConvertor.convert(flowWork);
         entity = flowWorkEntityRepository.save(entity);
         flowWork.setId(entity.getId());
-        flowNodeEntityRepository.saveAll(FlowNodeConvertor.convert(flowWork));
+        this.saveNode(flowWork.getFlow(), flowWork.getId());
+
+        entity.setFlowId(flowWork.getFlow().getId());
+        flowWorkEntityRepository.save(entity);
+        this.saveNode(flowWork.getFlow(), flowWork.getId());
+    }
+
+
+    private void saveNode(FlowNode node, long workId) {
+        FlowNodeEntity entity = FlowNodeConvertor.convert(node, workId);
+        entity = flowNodeEntityRepository.save(entity);
+        node.setId(entity.getId());
+
+        if (node.getNext() != null) {
+            node.getNext().forEach(next -> {
+                saveNode(next, workId);
+            });
+        }
     }
 
     @Override

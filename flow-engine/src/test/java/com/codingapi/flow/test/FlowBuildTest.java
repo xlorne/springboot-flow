@@ -1,6 +1,5 @@
 package com.codingapi.flow.test;
 
-import com.codingapi.flow.FlowConfiguration;
 import com.codingapi.flow.builder.FlowNodeBuilder;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.User;
@@ -8,18 +7,12 @@ import com.codingapi.flow.em.FlowType;
 import com.codingapi.flow.exception.FlowBuilderException;
 import com.codingapi.flow.trigger.FlowTriggerFactory;
 import com.codingapi.flow.user.FlowUserMatcherFactory;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FlowBuildTest {
 
-    @BeforeAll
-    static void registerIdGenerator() {
-        FlowConfiguration flowConfiguration = new FlowConfiguration();
-        flowConfiguration.flowIdGeneratorRegister();
-    }
 
     /**
      * 结束以后不能再增加节点
@@ -38,6 +31,9 @@ class FlowBuildTest {
                             .relations()
                             .build();
         });
+
+        assertTrue(FlowNode.start("发起请假", FlowUserMatcherFactory.anyUsers(), FlowTriggerFactory.basic()).isStart());
+        assertTrue( FlowNode.over("结束").isOver());
     }
 
 
