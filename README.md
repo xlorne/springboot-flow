@@ -12,13 +12,13 @@ FlowWork
 id: 流程的设计id
 title: 流程的标题
 description: 流程的描述
-designUserId: 流程的设计者id
+createUserId: 流程的设计者id
 createTime: 流程的创建时间
 updateTime: 流程的更新时间
 enable: 流程是否启用
 lock: 流程是否锁定,锁定流程将无法发起新的流程，当前存在的流程不受影响
 node: 发起节点 FLowNode类型
-schema: 流程设计的脚本
+schema: 界面设计脚本
 
 ----------------------------
 
@@ -32,7 +32,6 @@ FLowNode
 id: 节点的id
 workId: 节点所属的流程设计id
 name: 节点的名称
-title: 流程标题
 titleCreator: 自定义标题，根据当前节点的配置设置自定义的标题 ，默认标题为 流程名称-节点名称-审批人名称
 type: 节点的类型 | 分为发起、审批、结束
 view: 节点的视图，界面展示的视图
@@ -42,7 +41,7 @@ outTrigger: 出口配置，约定出口的条件配置
 next: 下一个节点数组，系统将根据出口配置，选择下一个节点
 createTime: 创建时间
 updateTime: 更新时间
-designUserId: 设计者id
+createUserId: 设计者id
 bindDataId: 绑定数据的id
 errTrigger: 异常触发器，当流程发生异常时异常通常是指找不到审批人，将会触发异常触发器，异常触发器可以是一个节点
 
@@ -61,10 +60,10 @@ workId: 节点所属的流程设计id
 processId: 流程id
 nodeId: 节点id
 title: 流程标题
-operatorId: 操作者id
+operatorId: 操作者id 
 nodeStatus: 节点状态 | 待办、已办、专办
 createTime: 创建时间
-userId: 用户id
+createOperatorId: 发起者id 
 opinion: 审批意见
 flowStatus: 流程状态 ｜ 进行中、已完成
 state: 记录状态 | 正常、异常，当流程发生异常时，将会记录异常状态，异常状态的流程将无法继续审批
@@ -79,6 +78,8 @@ IBindData
 关键属性：
 id: 数据id
 toJsonSnapshot(): 返回数据的json快照
+
+----------------------------
 
 BindDataSnapshot
 数据快照，记录数据的快照，用于流程的审批记录
