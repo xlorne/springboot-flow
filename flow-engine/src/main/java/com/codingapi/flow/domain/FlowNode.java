@@ -1,8 +1,10 @@
 package com.codingapi.flow.domain;
 
 import com.codingapi.flow.creator.ITitleCreator;
+import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.FlowType;
 import com.codingapi.flow.em.NodeType;
+import com.codingapi.flow.operator.IFlowOperator;
 import com.codingapi.flow.operator.IOperatorMatcher;
 import com.codingapi.flow.trigger.IErrTrigger;
 import com.codingapi.flow.trigger.IOutTrigger;
@@ -25,10 +27,7 @@ public class FlowNode {
      * 节点id
      */
     private long id;
-    /**
-     * 节点所属的流程设计id
-     */
-    private long workId;
+
     /**
      * 节点名称
      */
@@ -72,11 +71,11 @@ public class FlowNode {
     /**
      * 设计者id
      */
-    private long createUserId;
+    private IFlowOperator createUser;
     /**
      * 绑定数据的id
      */
-    private long bindDataId;
+    private IBindData bindData;
     /**
      * 异常触发器，当流程发生异常时异常通常是指找不到审批人，将会触发异常触发器，异常触发器可以是一个节点
      */

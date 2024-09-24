@@ -18,37 +18,37 @@ public class FlowWorkBuilder {
         return new FlowWorkBuilder();
     }
 
-    public FlowWorkBuilder setTitle(String title) {
+    public FlowWorkBuilder title(String title) {
         flowWork.setTitle(title);
         return this;
     }
 
-    public FlowWorkBuilder setDescription(String description) {
+    public FlowWorkBuilder description(String description) {
         flowWork.setDescription(description);
         return this;
     }
 
-    public FlowWorkBuilder setCreateUser(IFlowOperator createUser) {
+    public FlowWorkBuilder createUser(IFlowOperator createUser) {
         flowWork.setCreateUser(createUser);
         return this;
     }
 
-    public FlowWorkBuilder setNode(FlowNode node) {
+    public FlowWorkBuilder node(FlowNode node) {
         flowWork.setNode(node);
         return this;
     }
 
-    public FlowWorkBuilder setSchema(String schema) {
+    public FlowWorkBuilder schema(String schema) {
         flowWork.setSchema(schema);
         return this;
     }
 
-    public FlowWorkBuilder setEnable(boolean enable) {
+    public FlowWorkBuilder enable(boolean enable) {
         flowWork.setEnable(enable);
         return this;
     }
 
-    public FlowWorkBuilder setLock(boolean lock) {
+    public FlowWorkBuilder lock(boolean lock) {
         flowWork.setLock(lock);
         return this;
     }
