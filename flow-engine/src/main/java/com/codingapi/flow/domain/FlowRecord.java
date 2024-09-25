@@ -1,6 +1,7 @@
 package com.codingapi.flow.domain;
 
 import com.codingapi.flow.data.BindDataSnapshot;
+import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.FlowStatus;
 import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.em.RecodeState;
@@ -72,4 +73,11 @@ public class FlowRecord {
      */
     private BindDataSnapshot bindDataSnapshot;
 
+    public void bindData(IBindData bindData) {
+        if(bindData!=null) {
+            this.bindDataSnapshot = new BindDataSnapshot();
+            this.bindDataSnapshot.setCreateTime(System.currentTimeMillis());
+            this.bindDataSnapshot.setSnapshot(bindData.toJsonSnapshot());
+        }
+    }
 }

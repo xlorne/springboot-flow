@@ -7,6 +7,7 @@ import com.codingapi.flow.em.NodeType;
 import com.codingapi.flow.operator.IFlowOperator;
 import com.codingapi.flow.operator.IOperatorMatcher;
 import com.codingapi.flow.trigger.IOutTrigger;
+import com.codingapi.flow.trigger.OverOutTrigger;
 
 public class FlowNodeFactory {
 
@@ -26,19 +27,19 @@ public class FlowNodeFactory {
         return flowNode;
     }
 
-    public static FlowNode overNode(String name, IFlowOperator createUser, IOperatorMatcher operatorMatcher, IOutTrigger outTrigger) {
+    public static FlowNode overNode(String name, IFlowOperator createUser, IOperatorMatcher operatorMatcher) {
         FlowNode flowNode = new FlowNode();
         flowNode.setName(name);
         flowNode.setType(NodeType.OVER);
         flowNode.setCode(FlowNode.CODE_OVER);
         flowNode.setView(FlowNode.VIEW_DEFAULT);
+        flowNode.setOutTrigger(new OverOutTrigger());
         flowNode.setTitleCreator(new DefaultTitleCreator());
         flowNode.setFlowType(FlowType.NOT_SIGN);
         flowNode.setCreateTime(System.currentTimeMillis());
         flowNode.setUpdateTime(System.currentTimeMillis());
         flowNode.setCreateUser(createUser);
         flowNode.setOperatorMatcher(operatorMatcher);
-        flowNode.setOutTrigger(outTrigger);
         return flowNode;
     }
 

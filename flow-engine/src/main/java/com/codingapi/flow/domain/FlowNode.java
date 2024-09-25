@@ -1,8 +1,9 @@
 package com.codingapi.flow.domain;
 
 import com.codingapi.flow.creator.ITitleCreator;
-import com.codingapi.flow.em.FlowType;
-import com.codingapi.flow.em.NodeType;
+import com.codingapi.flow.data.IBindData;
+import com.codingapi.flow.em.*;
+import com.codingapi.flow.operator.FlowOperatorContext;
 import com.codingapi.flow.operator.IFlowOperator;
 import com.codingapi.flow.operator.IOperatorMatcher;
 import com.codingapi.flow.trigger.IErrTrigger;
@@ -42,6 +43,7 @@ public class FlowNode {
      * 节点名称
      */
     private String name;
+
     /**
      * 节点标题创建规则
      */
@@ -110,10 +112,70 @@ public class FlowNode {
      *
      * @param operator 操作者
      */
-    public void verifyOperator(IFlowOperator operator) {
-        if (!operatorMatcher.matcher(operator)) {
+    public void matcherOperator(FlowRecord flowRecord, IFlowOperator operator) {
+        if (!operator.matcher(flowRecord)) {
             throw new RuntimeException("operator not match");
         }
     }
 
+    public FlowRecord createRecord(String opinion,
+                                   IBindData bindData,
+                                   IFlowOperator operatorUser,
+                                   IFlowOperator createOperatorUser) {
+        FlowRecord record = new FlowRecord();
+        record.bindData(bindData);
+        record.setProcessId(System.currentTimeMillis());
+        record.setNode(this);
+        record.setOpinion(opinion);
+        record.setOperatorUser(operatorUser);
+        record.setCreateTime(System.currentTimeMillis());
+        record.setCreateOperatorUser(createOperatorUser);
+        record.setNodeStatus(NodeStatus.TODO);
+        record.setFlowStatus(FlowStatus.RUNNING);
+        record.setState(RecodeState.NORMAL);
+        record.setTitle(createTitle(record));
+
+        return record;
+    }
+
+
+    /**
+     * 创建标题
+     *
+     * @param record 流程记录
+     * @return 标题
+     */
+    public String createTitle(FlowRecord record) {
+        return this.titleCreator.createTitle(record);
+    }
+
+    public FlowNode triggerNextNode(FlowRecord record) {
+        if (outTrigger != null) {
+            return outTrigger.trigger(record);
+        }
+        return null;
+    }
+
+    public boolean isOver() {
+        return CODE_OVER.equals(this.code);
+    }
+
+    public boolean isStart() {
+        return CODE_START.equals(this.code);
+    }
+
+    public List<IFlowOperator> matchOperators(FlowRecord record) {
+        return FlowOperatorContext.getInstance().match(this.operatorMatcher,record);
+    }
+
+    public FlowNode getNextNodeByCode(String depart) {
+        if (next != null) {
+            for (FlowNode node : next) {
+                if (node.getCode().equals(depart)) {
+                    return node;
+                }
+            }
+        }
+        return null;
+    }
 }

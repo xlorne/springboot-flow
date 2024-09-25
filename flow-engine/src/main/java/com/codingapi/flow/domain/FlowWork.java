@@ -1,9 +1,13 @@
 package com.codingapi.flow.domain;
 
 import com.codingapi.flow.data.IBindData;
+import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.operator.IFlowOperator;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 流程的设计，约定流程的节点配置与配置
@@ -56,14 +60,28 @@ public class FlowWork {
 
     /**
      * 创建流程节点
-     * @param bindData 绑定数据
+     *
+     * @param bindData     绑定数据
      * @param operatorUser 操作者
      */
     public void createNode(IBindData bindData, IFlowOperator operatorUser) {
-        node.verifyOperator(operatorUser);
+        node.matcherOperator(null, operatorUser);
 
-        FlowRecord record = new FlowRecord();
-        record.setProcessId(System.currentTimeMillis());
+        List<FlowRecord> records = new ArrayList<>();
+        FlowRecord record = node.createRecord(null, bindData, operatorUser, operatorUser);
+        record.setNodeStatus(NodeStatus.DONE);
+        records.add(record);
+
+        FlowNode nextNode = node.triggerNextNode(record);
+        List<IFlowOperator> operators = nextNode.matchOperators(record);
+        for(IFlowOperator operator:operators){
+            records.add(nextNode.createRecord(null, bindData, operator, operatorUser));
+        }
+
+        records.forEach(r->{
+            //TODO save
+            System.out.println(r);
+        });
 
     }
 }
