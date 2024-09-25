@@ -1,7 +1,6 @@
 package com.codingapi.flow.domain;
 
 import com.codingapi.flow.creator.ITitleCreator;
-import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.FlowType;
 import com.codingapi.flow.em.NodeType;
 import com.codingapi.flow.operator.IFlowOperator;
@@ -11,6 +10,7 @@ import com.codingapi.flow.trigger.IOutTrigger;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,10 +23,20 @@ import java.util.List;
 @Getter
 public class FlowNode {
 
+    public static final String CODE_START = "start";
+    public static final String CODE_OVER = "over";
+
+    public static final String VIEW_DEFAULT = "default";
+
     /**
      * 节点id
      */
     private long id;
+
+    /**
+     * 节点编码
+     */
+    private String code;
 
     /**
      * 节点名称
@@ -60,6 +70,8 @@ public class FlowNode {
      * 下一个节点数组，系统将根据出口配置，选择下一个节点
      */
     private List<FlowNode> next;
+
+
     /**
      * 创建时间
      */
@@ -69,16 +81,39 @@ public class FlowNode {
      */
     private long updateTime;
     /**
-     * 设计者id
+     * 设计者
      */
     private IFlowOperator createUser;
-    /**
-     * 绑定数据的id
-     */
-    private IBindData bindData;
     /**
      * 异常触发器，当流程发生异常时异常通常是指找不到审批人，将会触发异常触发器，异常触发器可以是一个节点
      */
     private IErrTrigger errTrigger;
+
+
+    /**
+     * 添加下一个节点
+     *
+     * @param flowNode 下一个节点
+     */
+    public void addNextNode(FlowNode flowNode) {
+        if (next == null) {
+            this.next = new ArrayList<>();
+        }
+        List<String> nextCodes = this.next.stream().map(FlowNode::getCode).toList();
+        if (!nextCodes.contains(flowNode.getCode())) {
+            this.next.add(flowNode);
+        }
+    }
+
+    /**
+     * 匹配操作者
+     *
+     * @param operator 操作者
+     */
+    public void verifyOperator(IFlowOperator operator) {
+        if (!operatorMatcher.matcher(operator)) {
+            throw new RuntimeException("operator not match");
+        }
+    }
 
 }

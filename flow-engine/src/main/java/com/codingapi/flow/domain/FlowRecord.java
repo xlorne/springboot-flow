@@ -36,9 +36,9 @@ public class FlowRecord {
      */
     private String title;
     /**
-     * 操作者id
+     * 操作者
      */
-    private IFlowOperator operator;
+    private IFlowOperator operatorUser;
     /**
      * 节点状态 | 待办、已办、专办
      */
@@ -50,7 +50,7 @@ public class FlowRecord {
     /**
      * 发起者id
      */
-    private IFlowOperator createOperator;
+    private IFlowOperator createOperatorUser;
     /**
      * 审批意见
      */
@@ -68,7 +68,7 @@ public class FlowRecord {
      */
     private String errMessage;
     /**
-     * 绑定数据的快照id
+     * 绑定数据的快照
      */
     private BindDataSnapshot bindDataSnapshot;
 

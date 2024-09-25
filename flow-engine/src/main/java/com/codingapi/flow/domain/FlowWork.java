@@ -1,5 +1,6 @@
 package com.codingapi.flow.domain;
 
+import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.operator.IFlowOperator;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,4 +54,16 @@ public class FlowWork {
      */
     private String schema;
 
+    /**
+     * 创建流程节点
+     * @param bindData 绑定数据
+     * @param operatorUser 操作者
+     */
+    public void createNode(IBindData bindData, IFlowOperator operatorUser) {
+        node.verifyOperator(operatorUser);
+
+        FlowRecord record = new FlowRecord();
+        record.setProcessId(System.currentTimeMillis());
+
+    }
 }

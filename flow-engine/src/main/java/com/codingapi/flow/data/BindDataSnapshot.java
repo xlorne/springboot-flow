@@ -12,10 +12,6 @@ public class BindDataSnapshot {
      */
     private long id;
     /**
-     * 绑定数据
-     */
-    private IBindData data;
-    /**
      * 快照信息
      */
     private String snapshot;
@@ -23,5 +19,7 @@ public class BindDataSnapshot {
      * 创建时间
      */
     private long createTime;
+
+
 
 }

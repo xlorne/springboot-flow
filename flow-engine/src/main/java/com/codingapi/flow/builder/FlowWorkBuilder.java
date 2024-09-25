@@ -4,6 +4,10 @@ import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowWork;
 import com.codingapi.flow.operator.IFlowOperator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class FlowWorkBuilder {
 
     private final FlowWork flowWork = new FlowWork();
@@ -33,9 +37,8 @@ public class FlowWorkBuilder {
         return this;
     }
 
-    public FlowWorkBuilder node(FlowNode node) {
-        flowWork.setNode(node);
-        return this;
+    public FlowNodeBuilder nodeBuilder() {
+        return new FlowNodeBuilder();
     }
 
     public FlowWorkBuilder schema(String schema) {
@@ -57,5 +60,63 @@ public class FlowWorkBuilder {
         flowWork.setUpdateTime(System.currentTimeMillis());
         return flowWork;
     }
+
+
+    public class FlowNodeBuilder {
+
+        private final List<FlowNode> list = new ArrayList<>();
+
+        private FlowNodeBuilder() {
+        }
+
+        public FlowNodeBuilder addNode(FlowNode flowNode) {
+            list.add(flowNode);
+            return this;
+        }
+
+        public FlowNodeBuilder relations(String... codes) {
+            this.relationNodes(codes);
+            return this;
+        }
+
+        private void relationNodes(String[] codes) {
+            int length = codes.length;
+            if (length >= 2) {
+                String first = codes[0];
+                FlowNode firstNode = getFlowNodeByCode(first);
+                if (firstNode == null) {
+                    throw new RuntimeException(first+" not found node");
+                }
+                String next = codes[1];
+                FlowNode nexNode = getFlowNodeByCode(next);
+                if (nexNode == null) {
+                    throw new RuntimeException(next+" not found node");
+                }
+                firstNode.addNextNode(nexNode);
+                relationNodes(Arrays.copyOfRange(codes, 1, length));
+            }
+        }
+
+
+        private FlowNode getFlowNodeByCode(String code) {
+            for (FlowNode flowNode : list) {
+                if (flowNode.getCode().equals(code)) {
+                    return flowNode;
+                }
+            }
+            return null;
+        }
+
+        public FlowWork build() {
+            FlowNode flowNode = getFlowNodeByCode(FlowNode.CODE_START);
+            if(flowNode==null){
+                throw new RuntimeException("start node not found");
+            }
+            flowWork.setNode(flowNode);
+            return flowWork;
+        }
+
+    }
+
 
 }
