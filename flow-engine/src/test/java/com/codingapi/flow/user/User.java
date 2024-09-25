@@ -1,14 +1,16 @@
 package com.codingapi.flow.user;
 
-import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.operator.IFlowOperator;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class User implements IFlowOperator {
 
-    private final long id;
+    @Setter
+    private long id;
     private final String name;
 
     @Setter
@@ -18,10 +20,5 @@ public class User implements IFlowOperator {
         this.id = id;
         this.name = name;
         this.role = "user";
-    }
-
-    @Override
-    public boolean matcher(FlowRecord context) {
-        return true;
     }
 }

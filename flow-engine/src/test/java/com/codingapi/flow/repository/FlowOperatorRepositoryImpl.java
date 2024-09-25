@@ -1,9 +1,6 @@
 package com.codingapi.flow.repository;
 
-import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.operator.IFlowOperator;
-import com.codingapi.flow.operator.IOperatorMatcher;
-import com.codingapi.flow.operator.repository.FlowOperatorRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +11,14 @@ public class FlowOperatorRepositoryImpl implements FlowOperatorRepository {
 
     public void addOperator(IFlowOperator operator) {
         operators.add(operator);
+        if(operator.getId()==0){
+            operator.setId(operators.size());
+        }
     }
 
+
     @Override
-    public List<IFlowOperator> findOperator(IOperatorMatcher matcher, FlowRecord context) {
-        return operators;
+    public List<IFlowOperator> findOperatorByIds(List<Long> operatorIds) {
+        return operators.stream().filter(operator -> operatorIds.contains(operator.getId())).toList();
     }
 }

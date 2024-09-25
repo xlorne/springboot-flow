@@ -1,5 +1,6 @@
 package com.codingapi.flow.builder;
 
+import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowWork;
 import com.codingapi.flow.operator.IFlowOperator;
@@ -70,6 +71,7 @@ public class FlowWorkBuilder {
         }
 
         public FlowNodeBuilder addNode(FlowNode flowNode) {
+            flowNode.setFlowWork(flowWork);
             list.add(flowNode);
             return this;
         }
@@ -113,6 +115,8 @@ public class FlowWorkBuilder {
                 throw new RuntimeException("start node not found");
             }
             flowWork.setNode(flowNode);
+            FlowRepositoryContext.getInstance().save(flowWork);
+            list.forEach(FlowRepositoryContext.getInstance()::save);
             return flowWork;
         }
 

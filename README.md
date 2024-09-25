@@ -36,7 +36,7 @@ titleCreator: 自定义标题，根据当前节点的配置设置自定义的标
 type: 节点的类型 | 分为发起、审批、结束
 view: 节点的视图，界面展示的视图
 flowType: 流程审批类型 | 分为会签、非会签
-operatorMatcher: 操作者配置 
+operatorMatcherContext: 操作者配置 
 outTrigger: 出口配置，约定出口的条件配置
 next: 下一个节点数组，系统将根据出口配置，选择下一个节点
 createTime: 创建时间

@@ -1,10 +1,12 @@
 package com.codingapi.flow.domain;
 
+import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.operator.IFlowOperator;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
 /**
  * 流程的设计，约定流程的节点配置与配置
  */
+@Slf4j
 @Setter
 @Getter
 public class FlowWork {
@@ -65,7 +68,7 @@ public class FlowWork {
      * @param operatorUser 操作者
      */
     public void createNode(IBindData bindData, IFlowOperator operatorUser) {
-        node.matcherOperator(null, operatorUser);
+        node.verifyOperator(operatorUser);
 
         List<FlowRecord> records = new ArrayList<>();
         FlowRecord record = node.createRecord(null, bindData, operatorUser, operatorUser);
@@ -79,8 +82,8 @@ public class FlowWork {
         }
 
         records.forEach(r->{
-            //TODO save
-            System.out.println(r);
+            FlowRepositoryContext.getInstance().save(r);
+            log.info("save record:{}",r);
         });
 
     }

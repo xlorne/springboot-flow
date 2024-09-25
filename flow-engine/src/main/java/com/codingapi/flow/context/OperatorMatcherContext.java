@@ -1,0 +1,34 @@
+package com.codingapi.flow.context;
+
+import com.codingapi.flow.domain.FlowRecord;
+import com.codingapi.flow.matcher.IOperatorMatcher;
+import com.codingapi.flow.operator.IFlowOperator;
+
+import java.util.List;
+
+/**
+ * 操作者匹配器上下文
+ */
+public class OperatorMatcherContext {
+
+    /**
+     * 匹配操作者
+     *
+     * @param operator 操作者
+     * @return 是否匹配
+     */
+    public static List<IFlowOperator> matcher(IOperatorMatcher operatorMatcher, FlowRecord context, IFlowOperator operator) {
+        List<Long> operatorIds = operatorMatcher.matcherOperatorIds(context, operator);
+        return FlowRepositoryContext.getInstance().findOperatorByIds(operatorIds);
+    }
+
+
+    public static List<IFlowOperator> matcher(IOperatorMatcher operatorMatcher, IFlowOperator operator) {
+        return matcher(operatorMatcher, null, operator);
+    }
+
+    public static List<IFlowOperator> matcher(IOperatorMatcher operatorMatcher, FlowRecord context) {
+        return matcher(operatorMatcher, context, null);
+    }
+
+}

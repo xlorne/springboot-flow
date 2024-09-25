@@ -3,13 +3,15 @@ package com.codingapi.flow.domain;
 import com.codingapi.flow.creator.ITitleCreator;
 import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.*;
-import com.codingapi.flow.operator.FlowOperatorContext;
+import com.codingapi.flow.matcher.IOperatorMatcher;
+import com.codingapi.flow.context.OperatorMatcherContext;
 import com.codingapi.flow.operator.IFlowOperator;
-import com.codingapi.flow.operator.IOperatorMatcher;
 import com.codingapi.flow.trigger.IErrTrigger;
 import com.codingapi.flow.trigger.IOutTrigger;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.List;
  */
 @Setter
 @Getter
+@ToString(exclude = {"flowWork", "operatorMatcher", "outTrigger", "next", "errTrigger","titleCreator"})
 public class FlowNode {
 
     public static final String CODE_START = "start";
@@ -45,8 +48,15 @@ public class FlowNode {
     private String name;
 
     /**
+     * 流程设计
+     */
+    @JsonIgnore
+    private FlowWork flowWork;
+
+    /**
      * 节点标题创建规则
      */
+    @JsonIgnore
     private ITitleCreator titleCreator;
     /**
      * 节点类型 | 分为发起、审批、结束
@@ -63,14 +73,17 @@ public class FlowNode {
     /**
      * 操作者匹配器
      */
+    @JsonIgnore
     private IOperatorMatcher operatorMatcher;
     /**
      * 出口触发器
      */
+    @JsonIgnore
     private IOutTrigger outTrigger;
     /**
      * 下一个节点数组，系统将根据出口配置，选择下一个节点
      */
+    @JsonIgnore
     private List<FlowNode> next;
 
 
@@ -85,10 +98,12 @@ public class FlowNode {
     /**
      * 设计者
      */
+    @JsonIgnore
     private IFlowOperator createUser;
     /**
      * 异常触发器，当流程发生异常时异常通常是指找不到审批人，将会触发异常触发器，异常触发器可以是一个节点
      */
+    @JsonIgnore
     private IErrTrigger errTrigger;
 
 
@@ -112,8 +127,10 @@ public class FlowNode {
      *
      * @param operator 操作者
      */
-    public void matcherOperator(FlowRecord flowRecord, IFlowOperator operator) {
-        if (!operator.matcher(flowRecord)) {
+    public void verifyOperator(IFlowOperator operator) {
+        List<IFlowOperator> operators = OperatorMatcherContext.matcher(operatorMatcher, operator);
+        List<Long> operatorIds = operators.stream().map(IFlowOperator::getId).toList();
+        if (!operatorIds.contains(operator.getId())) {
             throw new RuntimeException("operator not match");
         }
     }
@@ -126,6 +143,7 @@ public class FlowNode {
         record.bindData(bindData);
         record.setProcessId(System.currentTimeMillis());
         record.setNode(this);
+        record.setWorkId(flowWork.getId());
         record.setOpinion(opinion);
         record.setOperatorUser(operatorUser);
         record.setCreateTime(System.currentTimeMillis());
@@ -165,7 +183,7 @@ public class FlowNode {
     }
 
     public List<IFlowOperator> matchOperators(FlowRecord record) {
-        return FlowOperatorContext.getInstance().match(this.operatorMatcher,record);
+        return OperatorMatcherContext.matcher(operatorMatcher,record);
     }
 
     public FlowNode getNextNodeByCode(String depart) {

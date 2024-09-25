@@ -1,13 +1,17 @@
 package com.codingapi.flow.domain;
 
+import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.data.BindDataSnapshot;
 import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.FlowStatus;
 import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.em.RecodeState;
 import com.codingapi.flow.operator.IFlowOperator;
+import com.codingapi.flow.repository.FlowRecordRepository;
+import com.codingapi.flow.repository.FlowWorkRepository;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * 流程记录，记录流程的执行记录。数据中有关键的三个id，分别是流程设计id、节点id、流程id、流程记录id
@@ -18,12 +22,17 @@ import lombok.Setter;
  */
 @Setter
 @Getter
+@ToString
 public class FlowRecord {
 
     /**
      * 流程记录id
      */
     private long id;
+    /**
+     * 工作id
+     */
+    private long workId;
     /**
      * 流程id
      */
@@ -78,6 +87,7 @@ public class FlowRecord {
             this.bindDataSnapshot = new BindDataSnapshot();
             this.bindDataSnapshot.setCreateTime(System.currentTimeMillis());
             this.bindDataSnapshot.setSnapshot(bindData.toJsonSnapshot());
+            FlowRepositoryContext.getInstance().save(this.bindDataSnapshot);
         }
     }
 }
