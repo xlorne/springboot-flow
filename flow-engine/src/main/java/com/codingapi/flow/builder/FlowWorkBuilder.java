@@ -75,9 +75,10 @@ public class FlowWorkBuilder {
             if(flowNode==null){
                 throw new RuntimeException("start node not found");
             }
-            flowWork.setNode(flowNode);
+            list.add(flowNode);
             FlowRepositoryContext.getInstance().save(flowWork);
             list.forEach(FlowRepositoryContext.getInstance()::save);
+            flowWork.setNodes(list);
             return flowWork;
         }
 

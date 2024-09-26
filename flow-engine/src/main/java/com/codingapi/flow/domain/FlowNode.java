@@ -1,10 +1,10 @@
 package com.codingapi.flow.domain;
 
+import com.codingapi.flow.context.OperatorMatcher;
 import com.codingapi.flow.creator.ITitleCreator;
 import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.*;
 import com.codingapi.flow.matcher.IOperatorMatcher;
-import com.codingapi.flow.context.OperatorMatcher;
 import com.codingapi.flow.operator.IFlowOperator;
 import com.codingapi.flow.trigger.IErrTrigger;
 import com.codingapi.flow.trigger.IOutTrigger;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Setter
 @Getter
-@ToString(exclude = {"flowWork", "operatorMatcher", "outTrigger", "next", "errTrigger","titleCreator"})
+@ToString(exclude = {"flowWork", "operatorMatcher", "outTrigger", "next", "errTrigger", "titleCreator"})
 public class FlowNode {
 
     public static final String CODE_START = "start";
@@ -80,11 +80,18 @@ public class FlowNode {
      */
     @JsonIgnore
     private IOutTrigger outTrigger;
+
     /**
      * 下一个节点数组，系统将根据出口配置，选择下一个节点
      */
     @JsonIgnore
-    private List<FlowNode> next;
+    private List<String> next;
+
+
+    /**
+     * 父节点编码
+     */
+    private String parentCode;
 
 
     /**
@@ -122,9 +129,8 @@ public class FlowNode {
         if (next == null) {
             this.next = new ArrayList<>();
         }
-        List<String> nextCodes = this.next.stream().map(FlowNode::getCode).toList();
-        if (!nextCodes.contains(flowNode.getCode())) {
-            this.next.add(flowNode);
+        if (!next.contains(flowNode.getCode())) {
+            this.next.add(flowNode.getCode());
         }
     }
 
@@ -154,7 +160,7 @@ public class FlowNode {
     /**
      * 创建流程记录
      */
-    public FlowRecord createRecord(String opinion,
+    public FlowRecord createRecord(Opinion opinion,
                                    long processId,
                                    IBindData bindData,
                                    IFlowOperator operatorUser,
@@ -163,7 +169,7 @@ public class FlowNode {
         record.bindData(bindData);
         record.setProcessId(processId);
         record.setNode(this);
-        record.setWorkId(flowWork.getId());
+        record.setWork(flowWork);
         record.setOpinion(opinion);
         record.setOperatorUser(operatorUser);
         record.setCreateTime(System.currentTimeMillis());
@@ -179,6 +185,7 @@ public class FlowNode {
 
     /**
      * 创建流程标题
+     *
      * @param record 流程记录
      * @return 标题
      */
@@ -210,30 +217,22 @@ public class FlowNode {
 
     /**
      * 匹配出口操作者
+     *
      * @param record 流程记录
      * @return 操作者
      */
     public List<? extends IFlowOperator> matchOutOperators(FlowRecord record) {
-        return OperatorMatcher.matcher(outOperatorMatcher,record);
+        return OperatorMatcher.matcher(outOperatorMatcher, record);
     }
 
     /**
      * 匹配出口操作者
+     *
      * @param record 流程记录
      * @return 操作者
      */
     public List<? extends IFlowOperator> matchErrorOperators(FlowRecord record) {
-        return OperatorMatcher.matcher(errOperatorMatcher,record);
+        return OperatorMatcher.matcher(errOperatorMatcher, record);
     }
 
-    public FlowNode getNextNodeByCode(String depart) {
-        if (next != null) {
-            for (FlowNode node : next) {
-                if (node.getCode().equals(depart)) {
-                    return node;
-                }
-            }
-        }
-        return null;
-    }
 }

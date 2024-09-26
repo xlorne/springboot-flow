@@ -34,7 +34,7 @@ public class FlowRecord {
     /**
      * 工作id
      */
-    private long workId;
+    private FlowWork work;
     /**
      * 流程id
      */
@@ -71,7 +71,7 @@ public class FlowRecord {
     /**
      * 审批意见
      */
-    private String opinion;
+    private Opinion opinion;
     /**
      * 流程状态 ｜ 进行中、已完成
      */
@@ -120,26 +120,30 @@ public class FlowRecord {
 
     /**
      * 通过编码获取节点
+     *
      * @param code 节点编码
      * @return 节点
      */
-    public FlowNode getNextNodeByCode(String code){
-        return node.getNextNodeByCode(code);
+    public FlowNode getNextNodeByCode(String code) {
+        return node.getFlowWork().getFlowNode(code);
     }
 
     /**
      * 提交流程
+     *
      * @param opinion 意见
      */
-    public void submit(String opinion) {
+    public void submit(Opinion opinion) {
         this.submit(opinion, getBindData());
     }
+
     /**
      * 提交流程
      *
      * @param bindData 绑定数据
      */
-    public void submit(String opinion, IBindData bindData) {
+    public void submit(Opinion opinion, IBindData bindData) {
+        this.opinion = opinion;
         FlowNode nextNode = node.triggerNextNode(this);
         // 是否为结束节点
         if (nextNode.isOver()) {
@@ -172,8 +176,11 @@ public class FlowRecord {
                 FlowRepositoryContext.getInstance().save(nextRecord);
             }
         }
-        this.opinion = opinion;
         this.nodeStatus = NodeStatus.DONE;
         FlowRepositoryContext.getInstance().save(this);
+    }
+
+    public FlowNode getPreNode() {
+        return work.getFlowNode(node.getParentCode());
     }
 }

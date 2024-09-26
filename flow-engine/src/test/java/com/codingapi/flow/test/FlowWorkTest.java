@@ -6,6 +6,7 @@ import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
+import com.codingapi.flow.domain.Opinion;
 import com.codingapi.flow.em.FlowStatus;
 import com.codingapi.flow.em.FlowType;
 import com.codingapi.flow.em.NodeStatus;
@@ -82,7 +83,12 @@ public class FlowWorkTest {
         IOutTrigger bossOutTrigger = new IOutTrigger() {
             @Override
             public FlowNode trigger(FlowRecord record) {
-                return record.getNextNodeByCode("over");
+                if(record.getOpinion().isPass()) {
+                    return record.getNextNodeByCode("over");
+                }else {
+                    // 驳回
+                    return record.getPreNode();
+                }
             }
         };
 
@@ -122,7 +128,7 @@ public class FlowWorkTest {
         assertEquals(userRecords.get(0).getNodeStatus(), NodeStatus.DONE);
 
         // 批准请假
-        bossRecord.submit("同意");
+        bossRecord.submit(Opinion.pass("同意"));
 
         bossRecords = flowRecordRepository.findFlowRecordByOperatorId(boss.getId());
         assertEquals(2, bossRecords.size());
