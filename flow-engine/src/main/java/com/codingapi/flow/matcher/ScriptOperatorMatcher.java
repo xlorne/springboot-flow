@@ -17,10 +17,10 @@ public class ScriptOperatorMatcher implements IOperatorMatcher {
     }
 
     @Override
-    public List<Long> matcherOperatorIds(FlowRecord context, IFlowOperator operator) {
+    public List<Long> matcherOperatorIds(FlowRecord record, IFlowOperator operator) {
         return ScriptRuntime.run(script,
                 binding -> {
-                    binding.setVariable("context", context);
+                    binding.setVariable("record", record);
                     binding.setVariable("operator", operator);
                     binding.setVariable("params", params);
                 },
