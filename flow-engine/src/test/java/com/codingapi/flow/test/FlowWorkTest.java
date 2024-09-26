@@ -13,9 +13,11 @@ import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.form.Leave;
 import com.codingapi.flow.matcher.AnyOperatorMatcher;
 import com.codingapi.flow.matcher.IOperatorMatcher;
+import com.codingapi.flow.matcher.ScriptOperatorMatcher;
 import com.codingapi.flow.matcher.SpecifyOperatorMatcher;
 import com.codingapi.flow.repository.*;
 import com.codingapi.flow.trigger.IOutTrigger;
+import com.codingapi.flow.trigger.ScriptOutTrigger;
 import com.codingapi.flow.user.User;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +49,7 @@ public class FlowWorkTest {
     @Test
     void flow() {
 
+
         User admin = new User("admin");
         userRepository.save(admin);
 
@@ -59,40 +62,42 @@ public class FlowWorkTest {
         User boss = new User("boss");
         userRepository.save(boss);
 
-        IOperatorMatcher anyOperatorMatcher = new AnyOperatorMatcher();
-        IOperatorMatcher departOperatorMatcher = new SpecifyOperatorMatcher(depart.getId());
-        IOperatorMatcher bossOperatorMatcher = new SpecifyOperatorMatcher(boss.getId());
+        IOperatorMatcher anyOperatorMatcher = new ScriptOperatorMatcher(
+                """
+                return [operator.getId()];
+                """);
+        IOperatorMatcher departOperatorMatcher = new ScriptOperatorMatcher("""
+                return [params[0]];
+                """, depart.getId());
 
-        IOutTrigger userOutTrigger = new IOutTrigger() {
-            @Override
-            public FlowNode trigger(FlowRecord record) {
-                Leave leave = (Leave) record.getBindData();
+        IOperatorMatcher bossOperatorMatcher = new ScriptOperatorMatcher("""
+                return [params[0]];
+                """, boss.getId());
+
+        IOutTrigger userOutTrigger = new ScriptOutTrigger(
+                """
+                var leave = record.getBindData();
                 if (leave.getLeaveDays() >= 3) {
                     return record.getNextNodeByCode("boss");
                 } else {
                     return record.getNextNodeByCode("depart");
                 }
-            }
-        };
+                """);
 
-        IOutTrigger departOutTrigger = new IOutTrigger() {
-            @Override
-            public FlowNode trigger(FlowRecord record) {
+        IOutTrigger departOutTrigger = new ScriptOutTrigger(
+                """
                 return record.getNextNodeByCode("depart");
-            }
-        };
+                """
+        );
 
-        IOutTrigger bossOutTrigger = new IOutTrigger() {
-            @Override
-            public FlowNode trigger(FlowRecord record) {
-                if (record.getOpinion().isPass()) {
+        IOutTrigger bossOutTrigger = new ScriptOutTrigger(
+                """
+                if(record.getOpinion().isPass()){
                     return record.getNextNodeByCode("over");
-                } else {
-                    // 驳回
+                }else{
                     return record.getPreNode();
                 }
-            }
-        };
+                """);
 
         FlowWork flowWork = FlowWorkBuilder
                 .Builder(admin)
@@ -108,10 +113,10 @@ public class FlowWorkTest {
                 .relation("start", "boss", "over")
                 .build();
 
+
         // 创建请假数据
         Leave leave = new Leave(1, "desc", user, 1, "2020-01-01", "2020-01-05");
         log.info("leave days:{}", leave.getLeaveDays());
-
         // 发起请假流程
         flowWork.createNode(leave, user);
 
@@ -184,6 +189,5 @@ public class FlowWorkTest {
 
         // 本流程的所有记录
         assertEquals(5, flowRecordRepository.findAllFlowRecordByProcessId(bossRecord.getProcessId()).size());
-
     }
 }

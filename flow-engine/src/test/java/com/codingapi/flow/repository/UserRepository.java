@@ -1,5 +1,6 @@
 package com.codingapi.flow.repository;
 
+import com.codingapi.flow.operator.IFlowOperator;
 import com.codingapi.flow.user.User;
 
 import java.util.ArrayList;
@@ -16,6 +17,10 @@ public class UserRepository implements FlowOperatorRepository {
         }
     }
 
+    @Override
+    public IFlowOperator getOperatorById(long id) {
+        return operators.stream().filter(operator -> operator.getId() == id).findFirst().orElse(null);
+    }
 
     @Override
     public List<User> findOperatorByIds(List<Long> operatorIds) {
