@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FlowWorkBuilderTest {
 
-    private final FlowOperatorRepositoryImpl flowOperatorRepository = new FlowOperatorRepositoryImpl();
+    private final UserRepository userRepository = new UserRepository();
     private final FlowRecordRepository flowRecordRepository = new FlowRecordRepositoryImpl();
     private final FlowWorkRepository flowWorkRepository = new FlowWorkRepositoryImpl();
     private final FlowNodeRepository flowNodeRepository = new FlowNodeRepositoryImpl();
@@ -27,7 +27,7 @@ class FlowWorkBuilderTest {
 
     @BeforeEach
     void before() {
-        FlowRepositoryContext.getInstance().bind(flowOperatorRepository);
+        FlowRepositoryContext.getInstance().bind(userRepository);
         FlowRepositoryContext.getInstance().bind(flowRecordRepository);
         FlowRepositoryContext.getInstance().bind(flowWorkRepository);
         FlowRepositoryContext.getInstance().bind(flowNodeRepository);
@@ -37,16 +37,16 @@ class FlowWorkBuilderTest {
     @Test
     void builder() {
         User admin = new User("admin");
-        flowOperatorRepository.addOperator(admin);
+        userRepository.save(admin);
 
         User user = new User("user");
-        flowOperatorRepository.addOperator(user);
+        userRepository.save(user);
 
         User depart = new User("depart");
-        flowOperatorRepository.addOperator(depart);
+        userRepository.save(depart);
 
         User boss = new User("boss");
-        flowOperatorRepository.addOperator(boss);
+        userRepository.save(boss);
 
         IOperatorMatcher anyOperatorMatcher = new AnyOperatorMatcher();
         IOperatorMatcher departOperatorMatcher = new SpecifyOperatorMatcher(depart.getId());

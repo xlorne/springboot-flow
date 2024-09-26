@@ -12,12 +12,6 @@ public interface IFlowOperator {
     long getId();
 
     /**
-     * 设置操作者的id
-     * @param id 操作者的id
-     */
-    void setId(long id);
-
-    /**
      * 获取操作者的名称
      *
      * @return 操作者的名称

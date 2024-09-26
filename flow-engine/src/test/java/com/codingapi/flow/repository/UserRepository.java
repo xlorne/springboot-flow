@@ -1,0 +1,24 @@
+package com.codingapi.flow.repository;
+
+import com.codingapi.flow.user.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserRepository implements FlowOperatorRepository {
+
+    private final List<User> operators = new ArrayList<>();
+
+    public void save(User user) {
+        if (user.getId() == 0) {
+            operators.add(user);
+            user.setId(operators.size());
+        }
+    }
+
+
+    @Override
+    public List<User> findOperatorByIds(List<Long> operatorIds) {
+        return operators.stream().filter(operator -> operatorIds.contains(operator.getId())).toList();
+    }
+}

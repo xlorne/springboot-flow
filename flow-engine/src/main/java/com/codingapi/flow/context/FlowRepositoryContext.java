@@ -43,7 +43,7 @@ public class FlowRepositoryContext {
         this.bindDataSnapshotRepository = bindDataSnapshotRepository;
     }
 
-    public List<IFlowOperator> findOperatorByIds(List<Long> operatorIds) {
+    public List<? extends IFlowOperator> findOperatorByIds(List<Long> operatorIds) {
         return flowOperatorRepository.findOperatorByIds(operatorIds);
     }
 

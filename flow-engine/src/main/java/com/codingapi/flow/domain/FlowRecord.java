@@ -158,7 +158,7 @@ public class FlowRecord {
             FlowRepositoryContext.getInstance().save(nextRecord);
         } else {
             // 获取下一个节点的操作者
-            List<IFlowOperator> operators = nextNode.matchOutOperators(this);
+            List<? extends IFlowOperator> operators = nextNode.matchOutOperators(this);
             if (operators.isEmpty()) {
                 nextNode = nextNode.triggerErrorNode(this);
                 operators = nextNode.matchErrorOperators(this);
