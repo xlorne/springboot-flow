@@ -4,13 +4,17 @@ import groovy.lang.Binding;
 import groovy.lang.GroovyShell;
 import groovy.lang.Script;
 
+import java.util.function.Consumer;
+
 public class ScriptRuntime {
 
-    public static boolean match(String script, Object bind) {
+    public static <T> T run(String script,
+                            Consumer<Binding> consumer,
+                            Class<T> clazz) {
         Binding binding = new Binding();
-        binding.setVariable("bind", bind);
+        consumer.accept(binding);
         GroovyShell groovyShell = new GroovyShell(binding);
         Script userScript = groovyShell.parse(script);
-        return (Boolean) userScript.run();
+        return (T) userScript.run();
     }
 }

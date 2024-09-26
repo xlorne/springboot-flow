@@ -12,30 +12,27 @@ import com.codingapi.flow.matcher.SpecifyOperatorMatcher;
 import com.codingapi.flow.repository.*;
 import com.codingapi.flow.trigger.IOutTrigger;
 import com.codingapi.flow.user.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FlowWorkBuilderTest {
 
-    private final UserRepository userRepository = new UserRepository();
-    private final FlowRecordRepository flowRecordRepository = new FlowRecordRepositoryImpl();
-    private final FlowWorkRepository flowWorkRepository = new FlowWorkRepositoryImpl();
-    private final FlowNodeRepository flowNodeRepository = new FlowNodeRepositoryImpl();
-    private final BindDataSnapshotRepository bindDataSnapshotRepository = new BindDataSnapshotRepositoryImpl();
+    @Test
+    void builder() {
 
-    @BeforeEach
-    void before() {
+        UserRepository userRepository = new UserRepository();
+        FlowRecordRepository flowRecordRepository = new FlowRecordRepositoryImpl();
+        FlowWorkRepository flowWorkRepository = new FlowWorkRepositoryImpl();
+        FlowNodeRepository flowNodeRepository = new FlowNodeRepositoryImpl();
+        BindDataSnapshotRepository bindDataSnapshotRepository = new BindDataSnapshotRepositoryImpl();
+
         FlowRepositoryContext.getInstance().bind(userRepository);
         FlowRepositoryContext.getInstance().bind(flowRecordRepository);
         FlowRepositoryContext.getInstance().bind(flowWorkRepository);
         FlowRepositoryContext.getInstance().bind(flowNodeRepository);
         FlowRepositoryContext.getInstance().bind(bindDataSnapshotRepository);
-    }
 
-    @Test
-    void builder() {
         User admin = new User("admin");
         userRepository.save(admin);
 

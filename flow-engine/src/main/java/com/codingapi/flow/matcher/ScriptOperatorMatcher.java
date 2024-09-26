@@ -2,9 +2,7 @@ package com.codingapi.flow.matcher;
 
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.operator.IFlowOperator;
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-import groovy.lang.Script;
+import com.codingapi.flow.script.ScriptRuntime;
 
 import java.util.List;
 
@@ -20,12 +18,12 @@ public class ScriptOperatorMatcher implements IOperatorMatcher {
 
     @Override
     public List<Long> matcherOperatorIds(FlowRecord context, IFlowOperator operator) {
-        Binding binding = new Binding();
-        binding.setVariable("context", context);
-        binding.setVariable("operator", operator);
-        binding.setVariable("params", params);
-        GroovyShell groovyShell = new GroovyShell(binding);
-        Script userScript = groovyShell.parse(script);
-        return (List<Long>) userScript.run();
+        return ScriptRuntime.run(script,
+                binding -> {
+                    binding.setVariable("context", context);
+                    binding.setVariable("operator", operator);
+                    binding.setVariable("params", params);
+                },
+                List.class);
     }
 }

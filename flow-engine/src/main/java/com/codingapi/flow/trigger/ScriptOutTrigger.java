@@ -2,9 +2,7 @@ package com.codingapi.flow.trigger;
 
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
-import groovy.lang.Binding;
-import groovy.lang.GroovyShell;
-import groovy.lang.Script;
+import com.codingapi.flow.script.ScriptRuntime;
 
 public class ScriptOutTrigger implements IOutTrigger {
 
@@ -18,11 +16,9 @@ public class ScriptOutTrigger implements IOutTrigger {
 
     @Override
     public FlowNode trigger(FlowRecord record) {
-        Binding binding = new Binding();
-        binding.setVariable("record", record);
-        binding.setVariable("params", params);
-        GroovyShell groovyShell = new GroovyShell(binding);
-        Script userScript = groovyShell.parse(script);
-        return (FlowNode) userScript.run();
+        return ScriptRuntime.run(script, binding -> {
+            binding.setVariable("record", record);
+            binding.setVariable("params", params);
+        }, FlowNode.class);
     }
 }
