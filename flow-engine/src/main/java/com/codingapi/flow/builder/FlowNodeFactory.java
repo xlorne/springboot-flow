@@ -14,15 +14,20 @@ import lombok.AllArgsConstructor;
 public class FlowNodeFactory {
 
     @AllArgsConstructor
-    public static class Builder{
+    public static class Builder {
         private IFlowOperator createUser;
 
         public FlowNode startNode(String name, IOperatorMatcher operatorMatcher, IOutTrigger outTrigger) {
+            return startNode(name, FlowNode.VIEW_DEFAULT, operatorMatcher, outTrigger);
+        }
+
+
+        public FlowNode startNode(String name, String view, IOperatorMatcher operatorMatcher, IOutTrigger outTrigger) {
             FlowNode flowNode = new FlowNode();
             flowNode.setName(name);
             flowNode.setType(NodeType.START);
             flowNode.setCode(FlowNode.CODE_START);
-            flowNode.setView(FlowNode.VIEW_DEFAULT);
+            flowNode.setView(view);
             flowNode.setTitleCreator(new DefaultTitleCreator());
             flowNode.setFlowType(FlowType.NOT_SIGN);
             flowNode.setCreateTime(System.currentTimeMillis());
@@ -49,25 +54,36 @@ public class FlowNodeFactory {
         }
 
         public FlowNode node(String name,
-                                    String code,
-                                    FlowType flowType,
-                                    IOutTrigger outTrigger,
-                                    IOperatorMatcher outOperatorMatcher) {
-            return node(name, code, flowType, outTrigger, outOperatorMatcher, null, null);
+                             String code,
+                             String view,
+                             FlowType flowType,
+                             IOutTrigger outTrigger,
+                             IOperatorMatcher outOperatorMatcher) {
+            return node(name, code, view, flowType, outTrigger, outOperatorMatcher, null, null);
+        }
+
+
+        public FlowNode node(String name,
+                             String code,
+                             FlowType flowType,
+                             IOutTrigger outTrigger,
+                             IOperatorMatcher outOperatorMatcher) {
+            return node(name, code, FlowNode.VIEW_DEFAULT, flowType, outTrigger, outOperatorMatcher, null, null);
         }
 
         public FlowNode node(String name,
-                                    String code,
-                                    FlowType flowType,
-                                    IOutTrigger outTrigger,
-                                    IOperatorMatcher outOperatorMatcher,
-                                    IErrTrigger errTrigger,
-                                    IOperatorMatcher errOperatorMatcher) {
+                             String code,
+                             String view,
+                             FlowType flowType,
+                             IOutTrigger outTrigger,
+                             IOperatorMatcher outOperatorMatcher,
+                             IErrTrigger errTrigger,
+                             IOperatorMatcher errOperatorMatcher) {
             FlowNode flowNode = new FlowNode();
             flowNode.setName(name);
             flowNode.setType(NodeType.APPROVAL);
             flowNode.setCode(code);
-            flowNode.setView(FlowNode.VIEW_DEFAULT);
+            flowNode.setView(view);
             flowNode.setTitleCreator(new DefaultTitleCreator());
             flowNode.setFlowType(flowType);
             flowNode.setCreateTime(System.currentTimeMillis());
@@ -85,7 +101,7 @@ public class FlowNodeFactory {
 
     }
 
-    public static Builder Builder(IFlowOperator createUser){
+    public static Builder Builder(IFlowOperator createUser) {
         return new Builder(createUser);
     }
 

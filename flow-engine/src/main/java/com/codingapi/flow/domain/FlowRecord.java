@@ -97,7 +97,7 @@ public class FlowRecord {
     public void bindData(IBindData bindData) {
         if (bindData != null) {
             this.bindDataSnapshot = new BindDataSnapshot();
-            this.bindDataSnapshot.setBindDataClassName(bindData.getClass().getName());
+            this.bindDataSnapshot.setClazzName(bindData.getClass().getName());
             this.bindDataSnapshot.setCreateTime(System.currentTimeMillis());
             this.bindDataSnapshot.setSnapshot(bindData.toJsonSnapshot());
             FlowRepositoryContext.getInstance().save(this.bindDataSnapshot);

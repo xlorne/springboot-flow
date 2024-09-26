@@ -4,7 +4,7 @@ import com.codingapi.flow.creator.ITitleCreator;
 import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.*;
 import com.codingapi.flow.matcher.IOperatorMatcher;
-import com.codingapi.flow.context.OperatorMatcherContext;
+import com.codingapi.flow.context.OperatorMatcher;
 import com.codingapi.flow.operator.IFlowOperator;
 import com.codingapi.flow.trigger.IErrTrigger;
 import com.codingapi.flow.trigger.IOutTrigger;
@@ -134,10 +134,10 @@ public class FlowNode {
      * @param operator 操作者
      */
     public void verifyOperator(IFlowOperator operator) {
-        List<? extends IFlowOperator> operators = OperatorMatcherContext.matcher(outOperatorMatcher, operator);
+        List<? extends IFlowOperator> operators = OperatorMatcher.matcher(outOperatorMatcher, operator);
         List<Long> operatorIds = operators.stream().map(IFlowOperator::getId).toList();
         if (!operatorIds.contains(operator.getId())) {
-            throw new RuntimeException("operator not match");
+            throw new RuntimeException("operator not match.");
         }
     }
 
@@ -178,8 +178,7 @@ public class FlowNode {
 
 
     /**
-     * 创建标题
-     *
+     * 创建流程标题
      * @param record 流程记录
      * @return 标题
      */
@@ -215,7 +214,7 @@ public class FlowNode {
      * @return 操作者
      */
     public List<? extends IFlowOperator> matchOutOperators(FlowRecord record) {
-        return OperatorMatcherContext.matcher(outOperatorMatcher,record);
+        return OperatorMatcher.matcher(outOperatorMatcher,record);
     }
 
     /**
@@ -224,7 +223,7 @@ public class FlowNode {
      * @return 操作者
      */
     public List<? extends IFlowOperator> matchErrorOperators(FlowRecord record) {
-        return OperatorMatcherContext.matcher(errOperatorMatcher,record);
+        return OperatorMatcher.matcher(errOperatorMatcher,record);
     }
 
     public FlowNode getNextNodeByCode(String depart) {

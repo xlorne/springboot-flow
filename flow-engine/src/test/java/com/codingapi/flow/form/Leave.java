@@ -1,6 +1,5 @@
 package com.codingapi.flow.form;
 
-import com.alibaba.fastjson.JSONObject;
 import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.user.User;
 import lombok.AllArgsConstructor;

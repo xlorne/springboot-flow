@@ -7,9 +7,9 @@ import com.codingapi.flow.operator.IFlowOperator;
 import java.util.List;
 
 /**
- * 操作者匹配器上下文
+ * 操作者匹配器
  */
-public class OperatorMatcherContext {
+public class OperatorMatcher {
 
     /**
      * 匹配操作者

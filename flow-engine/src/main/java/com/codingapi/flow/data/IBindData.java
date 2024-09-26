@@ -2,6 +2,10 @@ package com.codingapi.flow.data;
 
 import com.alibaba.fastjson.JSONObject;
 
+/**
+ * 流程数据的绑定对象
+ * 只要实现这个接口，就可以作为流程的数据对象
+ */
 public interface IBindData {
 
     /**

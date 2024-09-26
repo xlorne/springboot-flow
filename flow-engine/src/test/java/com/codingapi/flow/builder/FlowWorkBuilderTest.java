@@ -82,7 +82,7 @@ class FlowWorkBuilderTest {
                 .title("请假流程")
                 .description("请假流程")
                 .nodes()
-                .node(FlowNodeFactory.Builder(admin).startNode("发起请假", anyOperatorMatcher, userOutTrigger))
+                .node(FlowNodeFactory.Builder(admin).startNode("发起请假",anyOperatorMatcher, userOutTrigger))
                 .node(FlowNodeFactory.Builder(admin).node("部门经理审批", "depart", FlowType.NOT_SIGN, departOutTrigger, departOperatorMatcher))
                 .node(FlowNodeFactory.Builder(admin).node("总经理审批", "boss", FlowType.NOT_SIGN, bossOutTrigger, bossOperatorMatcher))
                 .node(FlowNodeFactory.Builder(admin).overNode("结束"))

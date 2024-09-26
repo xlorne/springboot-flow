@@ -3,7 +3,8 @@ package com.codingapi.flow.creator;
 import com.codingapi.flow.domain.FlowRecord;
 
 /**
- * 标题创建器，用于创建标题，根据当前节点的配置设置自定义的标题 ，默认标题为 流程名称-节点名称-审批人名称
+ * 标题创建器，
+ * 用于创建标题，根据当前节点的配置设置自定义的标题 ，默认标题为 流程名称-节点名称-审批人名称
  */
 public interface ITitleCreator {
 

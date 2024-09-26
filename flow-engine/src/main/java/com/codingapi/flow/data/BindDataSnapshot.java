@@ -6,6 +6,10 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.ToString;
 
+/**
+ * 数据绑定快照
+ * 用于流程记录中的数据信息
+ */
 @Setter
 @Getter
 @ToString
@@ -27,12 +31,12 @@ public class BindDataSnapshot {
     /**
      * 数据绑定类名称
      */
-    private String bindDataClassName;
+    private String clazzName;
 
 
     @SneakyThrows
     public IBindData toBindData(){
-        return JSONObject.parseObject(snapshot,(Class<? extends IBindData>) Class.forName(bindDataClassName));
+        return JSONObject.parseObject(snapshot,(Class<? extends IBindData>) Class.forName(clazzName));
     }
 
 
