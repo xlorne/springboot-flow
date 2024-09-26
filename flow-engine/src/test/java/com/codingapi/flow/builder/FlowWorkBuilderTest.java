@@ -78,15 +78,14 @@ class FlowWorkBuilderTest {
             }
         };
 
-        FlowWork flowWork = FlowWorkBuilder.Builder()
+        FlowWork flowWork = FlowWorkBuilder.Builder(admin)
                 .title("请假流程")
-                .createUser(admin)
                 .description("请假流程")
-                .nodeBuilder()
-                .addNode(FlowNodeFactory.builder(admin).startNode("发起请假", anyOperatorMatcher, userOutTrigger))
-                .addNode(FlowNodeFactory.builder(admin).node("部门经理审批", "depart", FlowType.NOT_SIGN, departOutTrigger, departOperatorMatcher))
-                .addNode(FlowNodeFactory.builder(admin).node("总经理审批", "boss", FlowType.NOT_SIGN, bossOutTrigger, bossOperatorMatcher))
-                .addNode(FlowNodeFactory.builder(admin).overNode("结束"))
+                .nodes()
+                .node(FlowNodeFactory.Builder(admin).startNode("发起请假", anyOperatorMatcher, userOutTrigger))
+                .node(FlowNodeFactory.Builder(admin).node("部门经理审批", "depart", FlowType.NOT_SIGN, departOutTrigger, departOperatorMatcher))
+                .node(FlowNodeFactory.Builder(admin).node("总经理审批", "boss", FlowType.NOT_SIGN, bossOutTrigger, bossOperatorMatcher))
+                .node(FlowNodeFactory.Builder(admin).overNode("结束"))
                 .relations()
                 .relation("start", "depart", "boss", "over")
                 .relation("start", "boss", "over")

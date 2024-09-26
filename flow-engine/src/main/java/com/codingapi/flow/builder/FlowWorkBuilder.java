@@ -13,14 +13,15 @@ public class FlowWorkBuilder {
 
     private final FlowWork flowWork = new FlowWork();
 
-    private FlowWorkBuilder() {
+    private FlowWorkBuilder(IFlowOperator createOperator) {
         flowWork.setEnable(true);
         flowWork.setLock(false);
+        flowWork.setCreateUser(createOperator);
         flowWork.setCreateTime(System.currentTimeMillis());
     }
 
-    public static FlowWorkBuilder Builder() {
-        return new FlowWorkBuilder();
+    public static FlowWorkBuilder Builder(IFlowOperator createOperator) {
+        return new FlowWorkBuilder(createOperator);
     }
 
     public FlowWorkBuilder title(String title) {
@@ -33,12 +34,7 @@ public class FlowWorkBuilder {
         return this;
     }
 
-    public FlowWorkBuilder createUser(IFlowOperator createUser) {
-        flowWork.setCreateUser(createUser);
-        return this;
-    }
-
-    public FlowNodeBuilder nodeBuilder() {
+    public FlowNodeBuilder nodes() {
         return new FlowNodeBuilder();
     }
 
@@ -121,7 +117,7 @@ public class FlowWorkBuilder {
         private FlowNodeBuilder() {
         }
 
-        public FlowNodeBuilder addNode(FlowNode flowNode) {
+        public FlowNodeBuilder node(FlowNode flowNode) {
             flowNode.setFlowWork(flowWork);
             list.add(flowNode);
             return this;

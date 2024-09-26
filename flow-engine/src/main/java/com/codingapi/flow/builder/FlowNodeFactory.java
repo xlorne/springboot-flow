@@ -85,7 +85,7 @@ public class FlowNodeFactory {
 
     }
 
-    public static Builder builder(IFlowOperator createUser){
+    public static Builder Builder(IFlowOperator createUser){
         return new Builder(createUser);
     }
 
