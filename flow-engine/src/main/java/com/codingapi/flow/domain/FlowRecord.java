@@ -59,6 +59,11 @@ public class FlowRecord {
      * 创建时间
      */
     private long createTime;
+
+    /**
+     * 更新时间
+     */
+    private long updateTime;
     /**
      * 发起者id
      */
@@ -113,6 +118,13 @@ public class FlowRecord {
     }
 
 
+    /**
+     * 提交流程
+     * @param opinion 意见
+     */
+    public void submit(String opinion) {
+        this.submit(opinion, getBindData());
+    }
     /**
      * 提交流程
      *

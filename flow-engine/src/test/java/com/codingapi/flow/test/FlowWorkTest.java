@@ -1,10 +1,14 @@
-package com.codingapi.flow.builder;
+package com.codingapi.flow.test;
 
+import com.codingapi.flow.builder.FlowNodeFactory;
+import com.codingapi.flow.builder.FlowWorkBuilder;
 import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
+import com.codingapi.flow.em.FlowStatus;
 import com.codingapi.flow.em.FlowType;
+import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.form.Leave;
 import com.codingapi.flow.matcher.AnyOperatorMatcher;
 import com.codingapi.flow.matcher.IOperatorMatcher;
@@ -15,9 +19,11 @@ import com.codingapi.flow.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
-class FlowWorkBuilderTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class FlowWorkTest {
 
     private final FlowOperatorRepositoryImpl flowOperatorRepository = new FlowOperatorRepositoryImpl();
     private final FlowRecordRepository flowRecordRepository = new FlowRecordRepositoryImpl();
@@ -34,8 +40,10 @@ class FlowWorkBuilderTest {
         FlowRepositoryContext.getInstance().bind(bindDataSnapshotRepository);
     }
 
+
     @Test
-    void builder() {
+    void flow() {
+
         User admin = new User("admin");
         flowOperatorRepository.addOperator(admin);
 
@@ -91,11 +99,39 @@ class FlowWorkBuilderTest {
                 .relation("start", "depart", "boss", "over")
                 .relation("start", "boss", "over")
                 .build();
-        assertNotNull(flowWork);
-        assertTrue(flowWork.isEnable());
-        assertFalse(flowWork.isLock());
+
+        // 创建请假数据
+        Leave leave = new Leave(1, "desc", user, 1, "2020-01-01", "2020-01-05");
+
+        // 发起请假流程
+        flowWork.createNode(leave, user);
+
+        // 老板的待办列表
+        List<FlowRecord> bossRecords = flowRecordRepository.findFlowRecordByOperatorId(boss.getId());
+        assertEquals(1, bossRecords.size());
+
+        FlowRecord bossRecord = bossRecords.get(0);
+
+        assertEquals(bossRecord.getFlowStatus(), FlowStatus.RUNNING);
+        assertEquals(bossRecord.getNodeStatus(), NodeStatus.TODO);
+
+        // 用户的已办列表
+        List<FlowRecord> userRecords = flowRecordRepository.findFlowRecordByOperatorId(user.getId());
+        assertEquals(1, userRecords.size());
+
+        assertEquals(userRecords.get(0).getNodeStatus(), NodeStatus.DONE);
+
+        // 批准请假
+        bossRecord.submit("同意");
+
+        bossRecords = flowRecordRepository.findFlowRecordByOperatorId(boss.getId());
+        assertEquals(2, bossRecords.size());
+
+        assertEquals(bossRecord.getNodeStatus(), NodeStatus.DONE);
+        assertEquals(bossRecord.getFlowStatus(), FlowStatus.FINISH);
+
+        // 本流程的所有记录
+        assertEquals(3, flowRecordRepository.findFlowRecordByProcessId(bossRecord.getProcessId()).size());
 
     }
-
-
 }

@@ -15,6 +15,8 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository {
         if (flowRecord.getId() == 0) {
             records.add(flowRecord);
             flowRecord.setId(records.size());
+        }else {
+            flowRecord.setUpdateTime(System.currentTimeMillis());
         }
     }
 

@@ -110,7 +110,7 @@ public class FlowNode {
      * 异常操作者匹配器
      */
     @JsonIgnore
-    private IOperatorMatcher errorOperatorMatcher;
+    private IOperatorMatcher errOperatorMatcher;
 
 
     /**
@@ -224,7 +224,7 @@ public class FlowNode {
      * @return 操作者
      */
     public List<IFlowOperator> matchErrorOperators(FlowRecord record) {
-        return OperatorMatcherContext.matcher(errorOperatorMatcher,record);
+        return OperatorMatcherContext.matcher(errOperatorMatcher,record);
     }
 
     public FlowNode getNextNodeByCode(String depart) {

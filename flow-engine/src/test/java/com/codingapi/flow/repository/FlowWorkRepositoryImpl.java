@@ -14,6 +14,8 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository{
         if(flowWork.getId()==0){
             works.add(flowWork);
             flowWork.setId(works.size());
+        }else {
+            flowWork.setUpdateTime(System.currentTimeMillis());
         }
 
     }

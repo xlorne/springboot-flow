@@ -62,23 +62,36 @@ public class FlowWorkBuilder {
         return flowWork;
     }
 
+    public class Relations{
+        private final List<FlowNode> list;
 
-    public class FlowNodeBuilder {
-
-        private final List<FlowNode> list = new ArrayList<>();
-
-        private FlowNodeBuilder() {
+        private Relations(List<FlowNode> list) {
+            this.list = list;
         }
 
-        public FlowNodeBuilder addNode(FlowNode flowNode) {
-            flowNode.setFlowWork(flowWork);
-            list.add(flowNode);
+        public Relations relation(String... codes) {
+            relationNodes(codes);
             return this;
         }
 
-        public FlowNodeBuilder relations(String... codes) {
-            this.relationNodes(codes);
-            return this;
+        public FlowWork build() {
+            FlowNode flowNode = getFlowNodeByCode(FlowNode.CODE_START);
+            if(flowNode==null){
+                throw new RuntimeException("start node not found");
+            }
+            flowWork.setNode(flowNode);
+            FlowRepositoryContext.getInstance().save(flowWork);
+            list.forEach(FlowRepositoryContext.getInstance()::save);
+            return flowWork;
+        }
+
+        private FlowNode getFlowNodeByCode(String code) {
+            for (FlowNode flowNode : list) {
+                if (flowNode.getCode().equals(code)) {
+                    return flowNode;
+                }
+            }
+            return null;
         }
 
         private void relationNodes(String[] codes) {
@@ -98,27 +111,26 @@ public class FlowWorkBuilder {
                 relationNodes(Arrays.copyOfRange(codes, 1, length));
             }
         }
+    }
 
 
-        private FlowNode getFlowNodeByCode(String code) {
-            for (FlowNode flowNode : list) {
-                if (flowNode.getCode().equals(code)) {
-                    return flowNode;
-                }
-            }
-            return null;
+    public class FlowNodeBuilder {
+
+        private final List<FlowNode> list = new ArrayList<>();
+
+        private FlowNodeBuilder() {
         }
 
-        public FlowWork build() {
-            FlowNode flowNode = getFlowNodeByCode(FlowNode.CODE_START);
-            if(flowNode==null){
-                throw new RuntimeException("start node not found");
-            }
-            flowWork.setNode(flowNode);
-            FlowRepositoryContext.getInstance().save(flowWork);
-            list.forEach(FlowRepositoryContext.getInstance()::save);
-            return flowWork;
+        public FlowNodeBuilder addNode(FlowNode flowNode) {
+            flowNode.setFlowWork(flowWork);
+            list.add(flowNode);
+            return this;
         }
+
+        public Relations relations() {
+            return new Relations(list);
+        }
+
 
     }
 

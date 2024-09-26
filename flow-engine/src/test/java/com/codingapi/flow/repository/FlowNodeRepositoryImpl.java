@@ -14,6 +14,8 @@ public class FlowNodeRepositoryImpl implements FlowNodeRepository{
         if(flowNode.getId()==0){
             nodes.add(flowNode);
             flowNode.setId(nodes.size());
+        }else {
+            flowNode.setUpdateTime(System.currentTimeMillis());
         }
     }
 }
