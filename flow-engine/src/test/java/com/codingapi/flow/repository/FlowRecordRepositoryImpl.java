@@ -1,7 +1,6 @@
 package com.codingapi.flow.repository;
 
 import com.codingapi.flow.domain.FlowRecord;
-import com.codingapi.flow.em.NodeStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +32,12 @@ public class FlowRecordRepositoryImpl implements FlowRecordRepository {
 
     @Override
     public List<FlowRecord> findTodoFlowRecordByOperatorId(long operatorId) {
-        return records.stream().filter(flowRecord -> flowRecord.getOperatorUser().getId() == operatorId && flowRecord.getNodeStatus() == NodeStatus.TODO).collect(Collectors.toList());
+        return records.stream().filter(flowRecord -> flowRecord.getOperatorUser().getId() == operatorId && flowRecord.isTodo() && !flowRecord.isFinish()).collect(Collectors.toList());
     }
 
     @Override
     public List<FlowRecord> findDoneFlowRecordByOperatorId(long operatorId) {
-        return records.stream().filter(flowRecord -> flowRecord.getOperatorUser().getId() == operatorId && flowRecord.getNodeStatus() == NodeStatus.DONE).collect(Collectors.toList());
+        return records.stream().filter(flowRecord -> flowRecord.getOperatorUser().getId() == operatorId && flowRecord.isDone()).collect(Collectors.toList());
     }
 
     @Override

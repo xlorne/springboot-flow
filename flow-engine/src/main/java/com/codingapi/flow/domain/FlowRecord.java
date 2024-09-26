@@ -4,9 +4,12 @@ import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.data.BindDataSnapshot;
 import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.em.FlowStatus;
+import com.codingapi.flow.em.FlowType;
 import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.em.RecodeState;
+import com.codingapi.flow.event.FlowRecordEvent;
 import com.codingapi.flow.operator.IFlowOperator;
+import com.codingapi.springboot.framework.event.EventPusher;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -150,11 +153,19 @@ public class FlowRecord {
      * @param bindData 绑定数据
      */
     public void save(Opinion opinion, IBindData bindData) {
-        if (this.nodeStatus == NodeStatus.TODO) {
-            this.opinion = opinion;
-            this.bindData(bindData);
-            FlowRepositoryContext.getInstance().save(this);
+        if (isDone()) {
+            throw new RuntimeException("node is done.");
         }
+        if (isFinish()) {
+            throw new RuntimeException("node is finish.");
+        }
+        this.opinion = opinion;
+        this.bindData(bindData);
+        FlowRepositoryContext.getInstance().save(this);
+    }
+
+    public List<FlowRecord> loadCurrentNodeRecords() {
+        return FlowRepositoryContext.getInstance().findChildrenFlowRecordByParentId(parentId);
     }
 
     /**
@@ -163,52 +174,79 @@ public class FlowRecord {
      * @param bindData 绑定数据
      */
     public void submit(Opinion opinion, IBindData bindData) {
-        if (isDone()) {
-            throw new RuntimeException("node is done.");
-        }
         // 保存意见
         this.save(opinion, bindData);
+        // 更新时间
+        this.nodeStatus = NodeStatus.DONE;
+        this.updateTime();
+        FlowRepositoryContext.getInstance().save(this);
+        EventPusher.push(new FlowRecordEvent(this));
 
-        FlowNode nextNode = node.triggerNextNode(this);
-        // 是否为结束节点
-        if (nextNode.isOver()) {
-            FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, operatorUser, createOperatorUser);
-            nextRecord.setState(RecodeState.NORMAL);
-            nextRecord.setNodeStatus(NodeStatus.DONE);
-            nextRecord.setFlowStatus(FlowStatus.FINISH);
-
-            List<FlowRecord> flowRecords = FlowRepositoryContext.getInstance().findFlowRepositoryByProcessId(processId);
-            if (!flowRecords.isEmpty()) {
-                for (FlowRecord flowRecord : flowRecords) {
-                    flowRecord.setFlowStatus(FlowStatus.FINISH);
-                    FlowRepositoryContext.getInstance().save(flowRecord);
-                }
-            }
-            FlowRepositoryContext.getInstance().save(nextRecord);
-        } else {
-            if(nextNode.isCode(node.getParentCode())){
-                IFlowOperator preOperator = FlowRepositoryContext.getInstance().getFlowRecordById(parentId).getOperatorUser();
-                FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, preOperator, createOperatorUser);
-                FlowRepositoryContext.getInstance().save(nextRecord);
-            }else {
-                // 获取下一个节点的操作者
-                List<? extends IFlowOperator> operators = nextNode.matchOutOperators(this);
-                if (operators.isEmpty()) {
-                    nextNode = nextNode.triggerErrorNode(this);
-                    operators = nextNode.matchErrorOperators(this);
-                    if (operators.isEmpty()) {
-                        throw new RuntimeException("next node operator not found.");
-                    }
-                }
-                // 创建下一个节点的记录ø
-                for (IFlowOperator operator : operators) {
-                    FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, operator, createOperatorUser);
-                    FlowRepositoryContext.getInstance().save(nextRecord);
+        // 会签的情况下要根据所有的审批情况来判断是否进入下一个节点
+        if (this.isSign()) {
+            // 当前节点的审批情况
+            List<FlowRecord> records = this.loadCurrentNodeRecords();
+            for (FlowRecord record : records) {
+                if (record.isTodo()) {
+                    return;
                 }
             }
         }
-        this.nodeStatus = NodeStatus.DONE;
-        FlowRepositoryContext.getInstance().save(this);
+
+        FlowNode nextNode = node.triggerNextNode(this);
+        if (nextNode != null) {
+            // 是否为结束节点
+            if (nextNode.isOver()) {
+                FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, operatorUser, createOperatorUser);
+                nextRecord.setNodeStatus(NodeStatus.DONE);
+                nextRecord.setFlowStatus(FlowStatus.FINISH);
+
+                List<FlowRecord> flowRecords = FlowRepositoryContext.getInstance().findFlowRepositoryByProcessId(processId);
+                if (!flowRecords.isEmpty()) {
+                    for (FlowRecord flowRecord : flowRecords) {
+                        flowRecord.setFlowStatus(FlowStatus.FINISH);
+                        FlowRepositoryContext.getInstance().save(flowRecord);
+                    }
+                }
+                FlowRepositoryContext.getInstance().save(nextRecord);
+                EventPusher.push(new FlowRecordEvent(nextRecord));
+            } else {
+                // 退回上一节点的情况
+                if (nextNode.isCode(node.getParentCode())) {
+                    IFlowOperator preOperator = FlowRepositoryContext.getInstance().getFlowRecordById(parentId).getOperatorUser();
+                    FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, preOperator, createOperatorUser);
+                    FlowRepositoryContext.getInstance().save(nextRecord);
+                } else {
+                    // 获取下一个节点的操作者
+                    List<? extends IFlowOperator> operators = nextNode.matchOutOperators(this);
+                    if (operators.isEmpty()) {
+                        // 如果没有找到下一个节点的操作者，则进入错误处理模式
+                        nextNode = nextNode.triggerErrorNode(this);
+                        operators = nextNode.matchErrorOperators(this);
+                        // 如果没有找到错误处理模式，则进入异常
+                        if (operators.isEmpty()) {
+
+                            String errMessage = "next node operator not found.";
+                            this.setError(errMessage);
+                            FlowRepositoryContext.getInstance().save(this);
+
+                            throw new RuntimeException(errMessage);
+                        }
+                    }
+                    // 创建下一个节点的记录
+                    for (IFlowOperator operator : operators) {
+                        FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, operator, createOperatorUser);
+                        FlowRepositoryContext.getInstance().save(nextRecord);
+                    }
+                }
+            }
+        }
+    }
+
+    private void setError(String errMessage) {
+        this.errMessage = errMessage;
+        this.state = RecodeState.ERROR;
+        this.updateTime();
     }
 
     /**
@@ -275,5 +313,12 @@ public class FlowRecord {
      */
     private void updateTime() {
         this.updateTime = System.currentTimeMillis();
+    }
+
+    /**
+     * 是否为会签流程
+     */
+    public boolean isSign() {
+        return node.getFlowType() == FlowType.SIGN;
     }
 }
