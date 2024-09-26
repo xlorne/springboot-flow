@@ -57,9 +57,9 @@ class FlowWorkBuilderTest {
             public FlowNode trigger(FlowRecord record) {
                 Leave leave = (Leave) record.getBindData();
                 if (leave.getLeaveDays() >= 3) {
-                    return record.getNode().getNextNodeByCode("boss");
+                    return record.getNextNodeByCode("boss");
                 } else {
-                    return record.getNode().getNextNodeByCode("depart");
+                    return record.getNextNodeByCode("depart");
                 }
             }
         };
@@ -67,14 +67,14 @@ class FlowWorkBuilderTest {
         IOutTrigger departOutTrigger = new IOutTrigger() {
             @Override
             public FlowNode trigger(FlowRecord record) {
-                return record.getNode().getNextNodeByCode("depart");
+                return record.getNextNodeByCode("depart");
             }
         };
 
         IOutTrigger bossOutTrigger = new IOutTrigger() {
             @Override
             public FlowNode trigger(FlowRecord record) {
-                return record.getNode().getNextNodeByCode("over");
+                return record.getNextNodeByCode("over");
             }
         };
 

@@ -119,6 +119,15 @@ public class FlowRecord {
 
 
     /**
+     * 通过编码获取节点
+     * @param code 节点编码
+     * @return 节点
+     */
+    public FlowNode getNextNodeByCode(String code){
+        return node.getNextNodeByCode(code);
+    }
+
+    /**
      * 提交流程
      * @param opinion 意见
      */
