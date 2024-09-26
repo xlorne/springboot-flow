@@ -4,7 +4,9 @@ import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
+import com.codingapi.flow.em.FlowStatus;
 import com.codingapi.flow.em.FlowType;
+import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.form.Leave;
 import com.codingapi.flow.matcher.AnyOperatorMatcher;
 import com.codingapi.flow.matcher.IOperatorMatcher;
@@ -14,6 +16,8 @@ import com.codingapi.flow.trigger.IOutTrigger;
 import com.codingapi.flow.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,16 +40,16 @@ class FlowWorkBuilderTest {
 
     @Test
     void builder() {
-        User admin = new User( "admin");
+        User admin = new User("admin");
         flowOperatorRepository.addOperator(admin);
 
         User user = new User("user");
         flowOperatorRepository.addOperator(user);
 
-        User depart = new User( "depart");
+        User depart = new User("depart");
         flowOperatorRepository.addOperator(depart);
 
-        User boss = new User( "boss");
+        User boss = new User("boss");
         flowOperatorRepository.addOperator(boss);
 
         IOperatorMatcher anyOperatorMatcher = new AnyOperatorMatcher();
@@ -106,10 +110,10 @@ class FlowWorkBuilderTest {
         User user = new User("user");
         flowOperatorRepository.addOperator(user);
 
-        User depart = new User( "depart");
+        User depart = new User("depart");
         flowOperatorRepository.addOperator(depart);
 
-        User boss = new User( "boss");
+        User boss = new User("boss");
         flowOperatorRepository.addOperator(boss);
 
         IOperatorMatcher anyOperatorMatcher = new AnyOperatorMatcher();
@@ -157,9 +161,25 @@ class FlowWorkBuilderTest {
 
                 .build();
 
+        // 创建请假数据
         Leave leave = new Leave(1, "desc", user, 1, "2020-01-01", "2020-01-05");
 
+        // 发起请假流程
         flowWork.createNode(leave, user);
+
+        // 老板的待办列表
+        List<FlowRecord> bossRecords = flowRecordRepository.findFlowRecordByOperatorId(boss.getId());
+        assertEquals(1, bossRecords.size());
+
+        assertEquals(bossRecords.get(0).getFlowStatus(), FlowStatus.RUNNING);
+        assertEquals(bossRecords.get(0).getNodeStatus(), NodeStatus.TODO);
+
+        // 用户的已办列表
+        List<FlowRecord> userRecords = flowRecordRepository.findFlowRecordByOperatorId(user.getId());
+        assertEquals(1, userRecords.size());
+
+        assertEquals(userRecords.get(0).getNodeStatus(), NodeStatus.DONE);
+
 
 
 
