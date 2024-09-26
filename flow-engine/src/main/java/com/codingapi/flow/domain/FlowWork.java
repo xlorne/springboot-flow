@@ -8,9 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 流程的设计，约定流程的节点配置与配置
  */
@@ -69,22 +66,9 @@ public class FlowWork {
      */
     public void createNode(IBindData bindData, IFlowOperator operatorUser) {
         node.verifyOperator(operatorUser);
-
-        List<FlowRecord> records = new ArrayList<>();
-        FlowRecord record = node.createRecord(null, bindData, operatorUser, operatorUser);
-        record.setNodeStatus(NodeStatus.DONE);
-        records.add(record);
-
-        FlowNode nextNode = node.triggerNextNode(record);
-        List<IFlowOperator> operators = nextNode.matchOperators(record);
-        for(IFlowOperator operator:operators){
-            records.add(nextNode.createRecord(null, bindData, operator, operatorUser));
-        }
-
-        records.forEach(r->{
-            FlowRepositoryContext.getInstance().save(r);
-            log.info("save record:{}",r);
-        });
+        long processId = System.currentTimeMillis();
+        FlowRecord record = node.createRecord(processId, bindData, operatorUser, operatorUser);
+        record.submit(null,bindData);
 
     }
 }

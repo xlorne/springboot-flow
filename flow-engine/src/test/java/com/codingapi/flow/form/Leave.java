@@ -6,6 +6,9 @@ import com.codingapi.flow.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 /**
  * 请假表单
  */
@@ -14,7 +17,7 @@ import lombok.Getter;
 public class Leave implements IBindData {
 
     /**
-     *  请假ID
+     * 请假ID
      */
     private long id;
 
@@ -29,7 +32,7 @@ public class Leave implements IBindData {
     private User user;
 
     /**
-     *  创建时间
+     * 创建时间
      */
     private long createTime;
 
@@ -43,8 +46,22 @@ public class Leave implements IBindData {
      */
     private String endDate;
 
-    @Override
-    public String toJsonSnapshot() {
-        return JSONObject.toJSONString(this);
+    /**
+     * 获取请假天数
+     *
+     * @return 请假天数
+     */
+    public int getLeaveDays() {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            long from = format.parse(startDate).getTime();
+            long to = format.parse(endDate).getTime();
+            return (int) ((to - from) / (1000 * 60 * 60 * 24));
+        } catch (Exception e) {
+            return 0;
+        }
     }
+
+
+
 }

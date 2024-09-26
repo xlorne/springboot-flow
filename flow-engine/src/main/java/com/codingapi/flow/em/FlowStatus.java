@@ -13,6 +13,6 @@ public enum FlowStatus {
     /**
      * 已完成
      */
-    OVER;
+    FINISH;
 
 }

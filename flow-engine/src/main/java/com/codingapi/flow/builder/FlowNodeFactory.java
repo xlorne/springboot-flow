@@ -22,7 +22,7 @@ public class FlowNodeFactory {
         flowNode.setCreateTime(System.currentTimeMillis());
         flowNode.setUpdateTime(System.currentTimeMillis());
         flowNode.setCreateUser(createUser);
-        flowNode.setOperatorMatcher(operatorMatcher);
+        flowNode.setOutOperatorMatcher(operatorMatcher);
         flowNode.setOutTrigger(outTrigger);
         return flowNode;
     }
@@ -53,7 +53,7 @@ public class FlowNodeFactory {
         flowNode.setCreateTime(System.currentTimeMillis());
         flowNode.setUpdateTime(System.currentTimeMillis());
         flowNode.setCreateUser(createUser);
-        flowNode.setOperatorMatcher(operatorMatcher);
+        flowNode.setOutOperatorMatcher(operatorMatcher);
         flowNode.setOutTrigger(outTrigger);
         return flowNode;
     }

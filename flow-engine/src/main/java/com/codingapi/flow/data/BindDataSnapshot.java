@@ -1,7 +1,9 @@
 package com.codingapi.flow.data;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.ToString;
 
 @Setter
@@ -22,6 +24,16 @@ public class BindDataSnapshot {
      */
     private long createTime;
 
+    /**
+     * 数据绑定类名称
+     */
+    private String bindDataClassName;
+
+
+    @SneakyThrows
+    public IBindData toBindData(){
+        return JSONObject.parseObject(snapshot,(Class<? extends IBindData>) Class.forName(bindDataClassName));
+    }
 
 
 }

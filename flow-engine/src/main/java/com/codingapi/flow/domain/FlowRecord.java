@@ -7,11 +7,12 @@ import com.codingapi.flow.em.FlowStatus;
 import com.codingapi.flow.em.NodeStatus;
 import com.codingapi.flow.em.RecodeState;
 import com.codingapi.flow.operator.IFlowOperator;
-import com.codingapi.flow.repository.FlowRecordRepository;
-import com.codingapi.flow.repository.FlowWorkRepository;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
 
 /**
  * 流程记录，记录流程的执行记录。数据中有关键的三个id，分别是流程设计id、节点id、流程id、流程记录id
@@ -23,6 +24,7 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
+@Slf4j
 public class FlowRecord {
 
     /**
@@ -66,7 +68,7 @@ public class FlowRecord {
      */
     private String opinion;
     /**
-     *  流程状态 ｜ 进行中、已完成
+     * 流程状态 ｜ 进行中、已完成
      */
     private FlowStatus flowStatus;
     /**
@@ -82,12 +84,67 @@ public class FlowRecord {
      */
     private BindDataSnapshot bindDataSnapshot;
 
+    /**
+     * 绑定数据
+     *
+     * @param bindData 绑定数据
+     */
     public void bindData(IBindData bindData) {
-        if(bindData!=null) {
+        if (bindData != null) {
             this.bindDataSnapshot = new BindDataSnapshot();
+            this.bindDataSnapshot.setBindDataClassName(bindData.getClass().getName());
             this.bindDataSnapshot.setCreateTime(System.currentTimeMillis());
             this.bindDataSnapshot.setSnapshot(bindData.toJsonSnapshot());
             FlowRepositoryContext.getInstance().save(this.bindDataSnapshot);
         }
+    }
+
+
+    /**
+     * 获取绑定数据
+     *
+     * @return 绑定数据
+     */
+    public IBindData getBindData() {
+        if (bindDataSnapshot != null) {
+            return bindDataSnapshot.toBindData();
+        }
+        return null;
+    }
+
+
+    /**
+     * 提交流程
+     *
+     * @param bindData 绑定数据
+     */
+    public void submit(String opinion, IBindData bindData) {
+        FlowNode nextNode = node.triggerNextNode(this);
+        // 是否为结束节点
+        if (nextNode.isOver()) {
+            FlowRecord nextRecord = nextNode.createRecord(processId, bindData, operatorUser, createOperatorUser);
+            nextRecord.setState(RecodeState.NORMAL);
+            nextRecord.setNodeStatus(NodeStatus.DONE);
+            nextRecord.setFlowStatus(FlowStatus.FINISH);
+            FlowRepositoryContext.getInstance().save(nextRecord);
+        } else {
+            // 获取下一个节点的操作者
+            List<IFlowOperator> operators = nextNode.matchOutOperators(this);
+            if (operators.isEmpty()) {
+                nextNode = nextNode.triggerErrorNode(this);
+                operators = nextNode.matchErrorOperators(this);
+                if (operators.isEmpty()) {
+                    throw new RuntimeException("next node operator not found.");
+                }
+            }
+            // 创建下一个节点的记录
+            for (IFlowOperator operator : operators) {
+                FlowRecord nextRecord = nextNode.createRecord(processId, bindData, operator, createOperatorUser);
+                FlowRepositoryContext.getInstance().save(nextRecord);
+            }
+        }
+        this.opinion = opinion;
+        this.nodeStatus = NodeStatus.DONE;
+        FlowRepositoryContext.getInstance().save(this);
     }
 }

@@ -1,5 +1,6 @@
 package com.codingapi.flow.builder;
 
+import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.domain.FlowNode;
 import com.codingapi.flow.domain.FlowRecord;
 import com.codingapi.flow.domain.FlowWork;
@@ -8,7 +9,6 @@ import com.codingapi.flow.form.Leave;
 import com.codingapi.flow.matcher.AnyOperatorMatcher;
 import com.codingapi.flow.matcher.IOperatorMatcher;
 import com.codingapi.flow.matcher.SpecifyOperatorMatcher;
-import com.codingapi.flow.context.FlowRepositoryContext;
 import com.codingapi.flow.repository.*;
 import com.codingapi.flow.trigger.IOutTrigger;
 import com.codingapi.flow.user.User;
@@ -55,7 +55,12 @@ class FlowWorkBuilderTest {
         IOutTrigger userOutTrigger = new IOutTrigger() {
             @Override
             public FlowNode trigger(FlowRecord record) {
-                return record.getNode().getNextNodeByCode("depart");
+                Leave leave = (Leave) record.getBindData();
+                if (leave.getLeaveDays() >= 3) {
+                    return record.getNode().getNextNodeByCode("boss");
+                } else {
+                    return record.getNode().getNextNodeByCode("depart");
+                }
             }
         };
 
@@ -114,7 +119,12 @@ class FlowWorkBuilderTest {
         IOutTrigger userOutTrigger = new IOutTrigger() {
             @Override
             public FlowNode trigger(FlowRecord record) {
-                return record.getNode().getNextNodeByCode("depart");
+                Leave leave = (Leave) record.getBindData();
+                if (leave.getLeaveDays() >= 3) {
+                    return record.getNode().getNextNodeByCode("boss");
+                } else {
+                    return record.getNode().getNextNodeByCode("depart");
+                }
             }
         };
 
@@ -141,11 +151,13 @@ class FlowWorkBuilderTest {
                 .addNode(FlowNodeFactory.node("部门经理审批", "depart", FlowType.NOT_SIGN, admin, departOperatorMatcher, departOutTrigger))
                 .addNode(FlowNodeFactory.node("总经理审批", "boss", FlowType.NOT_SIGN, admin, bossOperatorMatcher, bossOutTrigger))
                 .addNode(FlowNodeFactory.overNode("结束", admin))
+
                 .relations("start", "depart", "boss", "over")
                 .relations("start", "boss", "over")
+
                 .build();
 
-        Leave leave = new Leave(1, "desc", user, 1, "2020-01-01", "2020-01-03");
+        Leave leave = new Leave(1, "desc", user, 1, "2020-01-01", "2020-01-05");
 
         flowWork.createNode(leave, user);
 

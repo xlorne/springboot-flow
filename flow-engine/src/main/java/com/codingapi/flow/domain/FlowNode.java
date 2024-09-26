@@ -74,7 +74,7 @@ public class FlowNode {
      * 操作者匹配器
      */
     @JsonIgnore
-    private IOperatorMatcher operatorMatcher;
+    private IOperatorMatcher outOperatorMatcher;
     /**
      * 出口触发器
      */
@@ -106,6 +106,12 @@ public class FlowNode {
     @JsonIgnore
     private IErrTrigger errTrigger;
 
+    /**
+     * 异常操作者匹配器
+     */
+    @JsonIgnore
+    private IOperatorMatcher errorOperatorMatcher;
+
 
     /**
      * 添加下一个节点
@@ -128,20 +134,34 @@ public class FlowNode {
      * @param operator 操作者
      */
     public void verifyOperator(IFlowOperator operator) {
-        List<IFlowOperator> operators = OperatorMatcherContext.matcher(operatorMatcher, operator);
+        List<IFlowOperator> operators = OperatorMatcherContext.matcher(outOperatorMatcher, operator);
         List<Long> operatorIds = operators.stream().map(IFlowOperator::getId).toList();
         if (!operatorIds.contains(operator.getId())) {
             throw new RuntimeException("operator not match");
         }
     }
 
+    /**
+     * 创建流程记录
+     */
+    public FlowRecord createRecord(long processId,
+                                   IBindData bindData,
+                                   IFlowOperator operatorUser,
+                                   IFlowOperator createOperatorUser) {
+        return createRecord(null, processId, bindData, operatorUser, createOperatorUser);
+    }
+
+    /**
+     * 创建流程记录
+     */
     public FlowRecord createRecord(String opinion,
+                                   long processId,
                                    IBindData bindData,
                                    IFlowOperator operatorUser,
                                    IFlowOperator createOperatorUser) {
         FlowRecord record = new FlowRecord();
         record.bindData(bindData);
-        record.setProcessId(System.currentTimeMillis());
+        record.setProcessId(processId);
         record.setNode(this);
         record.setWorkId(flowWork.getId());
         record.setOpinion(opinion);
@@ -174,6 +194,13 @@ public class FlowNode {
         return null;
     }
 
+    public FlowNode triggerErrorNode(FlowRecord record) {
+        if (errTrigger != null) {
+            return errTrigger.trigger(record);
+        }
+        return null;
+    }
+
     public boolean isOver() {
         return CODE_OVER.equals(this.code);
     }
@@ -182,8 +209,22 @@ public class FlowNode {
         return CODE_START.equals(this.code);
     }
 
-    public List<IFlowOperator> matchOperators(FlowRecord record) {
-        return OperatorMatcherContext.matcher(operatorMatcher,record);
+    /**
+     * 匹配出口操作者
+     * @param record 流程记录
+     * @return 操作者
+     */
+    public List<IFlowOperator> matchOutOperators(FlowRecord record) {
+        return OperatorMatcherContext.matcher(outOperatorMatcher,record);
+    }
+
+    /**
+     * 匹配出口操作者
+     * @param record 流程记录
+     * @return 操作者
+     */
+    public List<IFlowOperator> matchErrorOperators(FlowRecord record) {
+        return OperatorMatcherContext.matcher(errorOperatorMatcher,record);
     }
 
     public FlowNode getNextNodeByCode(String depart) {

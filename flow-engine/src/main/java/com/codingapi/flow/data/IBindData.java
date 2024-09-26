@@ -1,16 +1,23 @@
 package com.codingapi.flow.data;
 
+import com.alibaba.fastjson.JSONObject;
+
 public interface IBindData {
 
     /**
      * 获取数据ID
+     *
      * @return 数据ID
      */
     long getId();
 
     /**
      * 数据快照
+     *
      * @return 数据快照
      */
-    String toJsonSnapshot();
+    default String toJsonSnapshot() {
+        return JSONObject.toJSONString(this);
+    }
+
 }
