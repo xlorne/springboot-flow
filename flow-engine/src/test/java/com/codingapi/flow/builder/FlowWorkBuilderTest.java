@@ -36,16 +36,16 @@ class FlowWorkBuilderTest {
 
     @Test
     void builder() {
-        User admin = new User(1, "admin");
+        User admin = new User( "admin");
         flowOperatorRepository.addOperator(admin);
 
-        User user = new User(2, "user");
+        User user = new User("user");
         flowOperatorRepository.addOperator(user);
 
-        User depart = new User(3, "depart");
+        User depart = new User( "depart");
         flowOperatorRepository.addOperator(depart);
 
-        User boss = new User(4, "boss");
+        User boss = new User( "boss");
         flowOperatorRepository.addOperator(boss);
 
         IOperatorMatcher anyOperatorMatcher = new AnyOperatorMatcher();
@@ -100,16 +100,16 @@ class FlowWorkBuilderTest {
     @Test
     void flow() {
 
-        User admin = new User(1, "admin");
+        User admin = new User("admin");
         flowOperatorRepository.addOperator(admin);
 
-        User user = new User(2, "user");
+        User user = new User("user");
         flowOperatorRepository.addOperator(user);
 
-        User depart = new User(3, "depart");
+        User depart = new User( "depart");
         flowOperatorRepository.addOperator(depart);
 
-        User boss = new User(4, "boss");
+        User boss = new User( "boss");
         flowOperatorRepository.addOperator(boss);
 
         IOperatorMatcher anyOperatorMatcher = new AnyOperatorMatcher();
@@ -160,6 +160,8 @@ class FlowWorkBuilderTest {
         Leave leave = new Leave(1, "desc", user, 1, "2020-01-01", "2020-01-05");
 
         flowWork.createNode(leave, user);
+
+
 
     }
 

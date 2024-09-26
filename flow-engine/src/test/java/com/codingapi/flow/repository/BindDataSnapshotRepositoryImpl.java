@@ -11,8 +11,8 @@ public class BindDataSnapshotRepositoryImpl implements BindDataSnapshotRepositor
 
     @Override
     public void save(BindDataSnapshot snapshot) {
-        snapshots.add(snapshot);
         if(snapshot.getId()==0){
+            snapshots.add(snapshot);
             snapshot.setId(snapshots.size());
         }
 

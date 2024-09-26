@@ -11,8 +11,8 @@ public class FlowNodeRepositoryImpl implements FlowNodeRepository{
 
     @Override
     public void save(FlowNode flowNode) {
-        nodes.add(flowNode);
         if(flowNode.getId()==0){
+            nodes.add(flowNode);
             flowNode.setId(nodes.size());
         }
     }

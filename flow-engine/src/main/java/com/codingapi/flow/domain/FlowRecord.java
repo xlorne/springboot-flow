@@ -126,6 +126,14 @@ public class FlowRecord {
             nextRecord.setState(RecodeState.NORMAL);
             nextRecord.setNodeStatus(NodeStatus.DONE);
             nextRecord.setFlowStatus(FlowStatus.FINISH);
+
+            List<FlowRecord> flowRecords = FlowRepositoryContext.getInstance().findFlowRepositoryByProcessId(processId);
+            if (!flowRecords.isEmpty()) {
+                for (FlowRecord flowRecord : flowRecords) {
+                    flowRecord.setFlowStatus(FlowStatus.FINISH);
+                    FlowRepositoryContext.getInstance().save(flowRecord);
+                }
+            }
             FlowRepositoryContext.getInstance().save(nextRecord);
         } else {
             // 获取下一个节点的操作者

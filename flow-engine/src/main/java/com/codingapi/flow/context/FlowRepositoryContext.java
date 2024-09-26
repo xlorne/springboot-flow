@@ -64,4 +64,7 @@ public class FlowRepositoryContext {
         bindDataSnapshotRepository.save(bindDataSnapshot);
     }
 
+    public List<FlowRecord> findFlowRepositoryByProcessId(long processId) {
+        return flowRecordRepository.findFlowRecordByProcessId(processId);
+    }
 }

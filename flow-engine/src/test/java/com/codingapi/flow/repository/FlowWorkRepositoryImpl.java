@@ -11,8 +11,8 @@ public class FlowWorkRepositoryImpl implements FlowWorkRepository{
 
     @Override
     public void save(FlowWork flowWork) {
-        works.add(flowWork);
         if(flowWork.getId()==0){
+            works.add(flowWork);
             flowWork.setId(works.size());
         }
 

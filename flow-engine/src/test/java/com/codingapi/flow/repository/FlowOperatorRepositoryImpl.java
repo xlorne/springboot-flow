@@ -10,8 +10,8 @@ public class FlowOperatorRepositoryImpl implements FlowOperatorRepository {
     private final List<IFlowOperator> operators = new ArrayList<>();
 
     public void addOperator(IFlowOperator operator) {
-        operators.add(operator);
         if(operator.getId()==0){
+            operators.add(operator);
             operator.setId(operators.size());
         }
     }

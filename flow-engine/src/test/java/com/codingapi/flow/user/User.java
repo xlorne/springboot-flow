@@ -16,8 +16,7 @@ public class User implements IFlowOperator {
     @Setter
     private String role;
 
-    public User(long id, String name) {
-        this.id = id;
+    public User(String name) {
         this.name = name;
         this.role = "user";
     }
