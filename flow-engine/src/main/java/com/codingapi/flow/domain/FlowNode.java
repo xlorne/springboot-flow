@@ -24,7 +24,8 @@ import java.util.List;
  */
 @Setter
 @Getter
-@ToString(exclude = {"flowWork", "operatorMatcher", "outTrigger", "next", "errTrigger", "titleCreator"})
+@ToString(exclude =
+        {"flowWork", "outOperatorMatcher", "outTrigger", "errTrigger","errOperatorMatcher", "titleCreator"})
 public class FlowNode {
 
     public static final String CODE_START = "start";
@@ -151,16 +152,18 @@ public class FlowNode {
      * 创建流程记录
      */
     public FlowRecord createRecord(long processId,
+                                   long parentId,
                                    IBindData bindData,
                                    IFlowOperator operatorUser,
                                    IFlowOperator createOperatorUser) {
-        return createRecord(null, processId, bindData, operatorUser, createOperatorUser);
+        return createRecord(null,parentId, processId, bindData, operatorUser, createOperatorUser);
     }
 
     /**
      * 创建流程记录
      */
     public FlowRecord createRecord(Opinion opinion,
+                                   long parentId,
                                    long processId,
                                    IBindData bindData,
                                    IFlowOperator operatorUser,
@@ -169,6 +172,7 @@ public class FlowNode {
         record.bindData(bindData);
         record.setProcessId(processId);
         record.setNode(this);
+        record.setParentId(parentId);
         record.setWork(flowWork);
         record.setOpinion(opinion);
         record.setOperatorUser(operatorUser);
@@ -235,4 +239,12 @@ public class FlowNode {
         return OperatorMatcher.matcher(errOperatorMatcher, record);
     }
 
+    /**
+     * 是否为指定节点
+     * @param code 节点编码
+     * @return 是否为指定节点
+     */
+    public boolean isCode(String code) {
+        return this.code.equals(code);
+    }
 }

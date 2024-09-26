@@ -17,6 +17,7 @@ import com.codingapi.flow.matcher.SpecifyOperatorMatcher;
 import com.codingapi.flow.repository.*;
 import com.codingapi.flow.trigger.IOutTrigger;
 import com.codingapi.flow.user.User;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Slf4j
 public class FlowWorkTest {
 
     private final UserRepository userRepository = new UserRepository();
@@ -83,9 +85,9 @@ public class FlowWorkTest {
         IOutTrigger bossOutTrigger = new IOutTrigger() {
             @Override
             public FlowNode trigger(FlowRecord record) {
-                if(record.getOpinion().isPass()) {
+                if (record.getOpinion().isPass()) {
                     return record.getNextNodeByCode("over");
-                }else {
+                } else {
                     // 驳回
                     return record.getPreNode();
                 }
@@ -108,12 +110,32 @@ public class FlowWorkTest {
 
         // 创建请假数据
         Leave leave = new Leave(1, "desc", user, 1, "2020-01-01", "2020-01-05");
+        log.info("leave days:{}", leave.getLeaveDays());
 
         // 发起请假流程
         flowWork.createNode(leave, user);
 
+        List<FlowRecord> userRecords = flowRecordRepository.findAllFlowRecordByOperatorId(user.getId());
+        // 用户的已办列表
+        assertEquals(1, userRecords.size());
+
+        FlowRecord userDoneRecord = userRecords.get(0);
+
+        // 撤回流程
+        userDoneRecord.recall();
+
+        // 用户的待办列表
+        userRecords = flowRecordRepository.findTodoFlowRecordByOperatorId(user.getId());
+        assertEquals(1, userRecords.size());
+
+        // 撤销后的流程
+        userDoneRecord = userRecords.get(0);
+        // 继续审批
+        userDoneRecord.submit(Opinion.pass("同意"));
+
+
         // 老板的待办列表
-        List<FlowRecord> bossRecords = flowRecordRepository.findFlowRecordByOperatorId(boss.getId());
+        List<FlowRecord> bossRecords = flowRecordRepository.findTodoFlowRecordByOperatorId(boss.getId());
         assertEquals(1, bossRecords.size());
 
         FlowRecord bossRecord = bossRecords.get(0);
@@ -121,23 +143,47 @@ public class FlowWorkTest {
         assertEquals(bossRecord.getFlowStatus(), FlowStatus.RUNNING);
         assertEquals(bossRecord.getNodeStatus(), NodeStatus.TODO);
 
-        // 用户的已办列表
-        List<FlowRecord> userRecords = flowRecordRepository.findFlowRecordByOperatorId(user.getId());
-        assertEquals(1, userRecords.size());
 
         assertEquals(userRecords.get(0).getNodeStatus(), NodeStatus.DONE);
 
-        // 批准请假
-        bossRecord.submit(Opinion.pass("同意"));
+        // 不批准请假
+        bossRecord.submit(Opinion.reject("最多给你3天假期"));
 
-        bossRecords = flowRecordRepository.findFlowRecordByOperatorId(boss.getId());
-        assertEquals(2, bossRecords.size());
+        bossRecords = flowRecordRepository.findDoneFlowRecordByOperatorId(boss.getId());
+        assertEquals(1, bossRecords.size());
 
         assertEquals(bossRecord.getNodeStatus(), NodeStatus.DONE);
-        assertEquals(bossRecord.getFlowStatus(), FlowStatus.FINISH);
+
+        // 用户的待办列表
+        userRecords = flowRecordRepository.findTodoFlowRecordByOperatorId(user.getId());
+        assertEquals(1, userRecords.size());
+
+        FlowRecord userTodoRecord = userRecords.get(0);
+
+        // 用户重新提交
+        Leave bindData = (Leave) userTodoRecord.getBindData();
+        bindData.setEndDate("2020-01-04");
+        userTodoRecord.submit(Opinion.pass("好的，领导，我只请3天假"), bindData);
+
+        // 用户的待办列表
+        userRecords = flowRecordRepository.findDoneFlowRecordByOperatorId(user.getId());
+        assertEquals(2, userRecords.size());
+
+        bossRecords = flowRecordRepository.findTodoFlowRecordByOperatorId(boss.getId());
+        assertEquals(1, bossRecords.size());
+
+        FlowRecord bossTodoRecord = bossRecords.get(0);
+        bossTodoRecord.submit(Opinion.pass("好的,批准了"));
+
+        bossRecords = flowRecordRepository.findDoneFlowRecordByOperatorId(boss.getId());
+        assertEquals(3, bossRecords.size());
+
+        FlowRecord bossDoneRecord = bossRecords.get(0);
+        assertEquals(bossDoneRecord.getNodeStatus(), NodeStatus.DONE);
+        assertEquals(bossDoneRecord.getFlowStatus(), FlowStatus.FINISH);
 
         // 本流程的所有记录
-        assertEquals(3, flowRecordRepository.findFlowRecordByProcessId(bossRecord.getProcessId()).size());
+        assertEquals(5, flowRecordRepository.findAllFlowRecordByProcessId(bossRecord.getProcessId()).size());
 
     }
 }

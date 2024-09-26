@@ -4,6 +4,7 @@ import com.codingapi.flow.data.IBindData;
 import com.codingapi.flow.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.text.SimpleDateFormat;
  * 请假表单
  */
 @Getter
+@Setter
 @AllArgsConstructor
 public class Leave implements IBindData {
 

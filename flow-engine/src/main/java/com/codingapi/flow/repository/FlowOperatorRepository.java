@@ -7,4 +7,7 @@ import java.util.List;
 public interface FlowOperatorRepository {
 
     List<? extends IFlowOperator> findOperatorByIds(List<Long> operatorIds);
+
+    IFlowOperator getOperatorById(long id);
+
 }

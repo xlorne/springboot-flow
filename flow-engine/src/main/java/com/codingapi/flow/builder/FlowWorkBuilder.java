@@ -104,6 +104,7 @@ public class FlowWorkBuilder {
                 if (nexNode == null) {
                     throw new RuntimeException(next+" not found node");
                 }
+                nexNode.setParentCode(first);
                 firstNode.addNextNode(nexNode);
                 relationNodes(Arrays.copyOfRange(codes, 1, length));
             }

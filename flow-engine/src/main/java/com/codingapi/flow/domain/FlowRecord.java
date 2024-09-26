@@ -39,6 +39,12 @@ public class FlowRecord {
      * 流程id
      */
     private long processId;
+
+    /**
+     * 父节点id
+     */
+    private long parentId;
+
     /**
      * 节点
      */
@@ -138,16 +144,35 @@ public class FlowRecord {
     }
 
     /**
+     * 保存流程
+     *
+     * @param opinion  意见
+     * @param bindData 绑定数据
+     */
+    public void save(Opinion opinion, IBindData bindData) {
+        if (this.nodeStatus == NodeStatus.TODO) {
+            this.opinion = opinion;
+            this.bindData(bindData);
+            FlowRepositoryContext.getInstance().save(this);
+        }
+    }
+
+    /**
      * 提交流程
      *
      * @param bindData 绑定数据
      */
     public void submit(Opinion opinion, IBindData bindData) {
-        this.opinion = opinion;
+        if (isDone()) {
+            throw new RuntimeException("node is done.");
+        }
+        // 保存意见
+        this.save(opinion, bindData);
+
         FlowNode nextNode = node.triggerNextNode(this);
         // 是否为结束节点
         if (nextNode.isOver()) {
-            FlowRecord nextRecord = nextNode.createRecord(processId, bindData, operatorUser, createOperatorUser);
+            FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, operatorUser, createOperatorUser);
             nextRecord.setState(RecodeState.NORMAL);
             nextRecord.setNodeStatus(NodeStatus.DONE);
             nextRecord.setFlowStatus(FlowStatus.FINISH);
@@ -161,26 +186,94 @@ public class FlowRecord {
             }
             FlowRepositoryContext.getInstance().save(nextRecord);
         } else {
-            // 获取下一个节点的操作者
-            List<? extends IFlowOperator> operators = nextNode.matchOutOperators(this);
-            if (operators.isEmpty()) {
-                nextNode = nextNode.triggerErrorNode(this);
-                operators = nextNode.matchErrorOperators(this);
-                if (operators.isEmpty()) {
-                    throw new RuntimeException("next node operator not found.");
-                }
-            }
-            // 创建下一个节点的记录
-            for (IFlowOperator operator : operators) {
-                FlowRecord nextRecord = nextNode.createRecord(processId, bindData, operator, createOperatorUser);
+            if(nextNode.isCode(node.getParentCode())){
+                IFlowOperator preOperator = FlowRepositoryContext.getInstance().getFlowRecordById(parentId).getOperatorUser();
+                FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, preOperator, createOperatorUser);
                 FlowRepositoryContext.getInstance().save(nextRecord);
+            }else {
+                // 获取下一个节点的操作者
+                List<? extends IFlowOperator> operators = nextNode.matchOutOperators(this);
+                if (operators.isEmpty()) {
+                    nextNode = nextNode.triggerErrorNode(this);
+                    operators = nextNode.matchErrorOperators(this);
+                    if (operators.isEmpty()) {
+                        throw new RuntimeException("next node operator not found.");
+                    }
+                }
+                // 创建下一个节点的记录ø
+                for (IFlowOperator operator : operators) {
+                    FlowRecord nextRecord = nextNode.createRecord(processId, id, bindData, operator, createOperatorUser);
+                    FlowRepositoryContext.getInstance().save(nextRecord);
+                }
             }
         }
         this.nodeStatus = NodeStatus.DONE;
         FlowRepositoryContext.getInstance().save(this);
     }
 
+    /**
+     * 获取上一个节点
+     */
     public FlowNode getPreNode() {
+        if (node.getParentCode() == null) {
+            return work.getFlowNode(FlowNode.CODE_START);
+        }
         return work.getFlowNode(node.getParentCode());
+    }
+
+    /**
+     * 撤回流程
+     */
+    public void recall() {
+        if (isTodo()) {
+            throw new RuntimeException("node is todo.");
+        }
+        if (isFinish()) {
+            throw new RuntimeException("node is finish.");
+        }
+        List<FlowRecord> flowRecords = FlowRepositoryContext.getInstance().findChildrenFlowRecordByParentId(id);
+
+        if (!flowRecords.isEmpty()) {
+
+            for (FlowRecord flowRecord : flowRecords) {
+                if (flowRecord.isDone()) {
+                    throw new RuntimeException("recall error,next node is done.");
+                }
+            }
+
+            for (FlowRecord flowRecord : flowRecords) {
+                FlowRepositoryContext.getInstance().delete(flowRecord);
+            }
+            this.updateTime();
+            this.nodeStatus = NodeStatus.TODO;
+        }
+    }
+
+    /**
+     * 是否结束
+     */
+    public boolean isDone() {
+        return this.nodeStatus == NodeStatus.DONE;
+    }
+
+    /**
+     * 是否待办
+     */
+    public boolean isTodo() {
+        return this.nodeStatus == NodeStatus.TODO;
+    }
+
+    /**
+     * 是否结束
+     */
+    public boolean isFinish() {
+        return this.flowStatus == FlowStatus.FINISH;
+    }
+
+    /**
+     * 更新时间
+     */
+    private void updateTime() {
+        this.updateTime = System.currentTimeMillis();
     }
 }

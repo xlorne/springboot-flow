@@ -58,11 +58,17 @@ public class FlowWork {
      */
     private String schema;
 
-    public FlowNode startNode(){
+    public FlowNode startNode() {
         return getFlowNode(FlowNode.CODE_START);
     }
 
-    public FlowNode getFlowNode(String code){
+    /**
+     * 获取节点
+     *
+     * @param code 节点编码
+     * @return 节点
+     */
+    public FlowNode getFlowNode(String code) {
         return nodes.stream().filter(node -> node.getCode().equals(code)).findFirst().orElse(null);
     }
 
@@ -76,8 +82,7 @@ public class FlowWork {
         FlowNode startNode = startNode();
         startNode.verifyOperator(operatorUser);
         long processId = System.currentTimeMillis();
-        FlowRecord record = startNode.createRecord(processId, bindData, operatorUser, operatorUser);
-        record.submit(null,bindData);
-
+        FlowRecord record = startNode.createRecord(processId, 0, bindData, operatorUser, operatorUser);
+        record.submit(null, bindData);
     }
 }
